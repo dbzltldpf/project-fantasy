@@ -17,7 +17,72 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'EXPERIMENTAL_Medium_Transform' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'hips' has scale animation
+      that will be discarded.\n\t'spine' has scale animation that will be discarded.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'chest'
+      has scale animation that will be discarded.\n\t'upperarm.l' has translation
+      animation that will be discarded.\n\t'upperarm.l' has scale animation that
+      will be discarded.\n\t'lowerarm.l' has scale animation that will be discarded.\n\t'upperarm.r'
+      has translation animation that will be discarded.\n\t'upperarm.r' has scale
+      animation that will be discarded.\n\t'lowerarm.r' has scale animation that
+      will be discarded.\n\t'head' has scale animation that will be discarded.\n\t'upperleg.l'
+      has translation animation that will be discarded.\n\t'upperleg.l' has scale
+      animation that will be discarded.\n\t'upperleg.r' has translation animation
+      that will be discarded.\n\t'upperleg.r' has scale animation that will be discarded.\n\nClip
+      'Skeletons_Awaken_Floor' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
+      has translation animation that will be discarded.\n\t'upperarm.r' has translation
+      animation that will be discarded.\n\t'upperleg.l' has translation animation
+      that will be discarded.\n\t'upperleg.r' has translation animation that will
+      be discarded.\n\nClip 'Skeletons_Awaken_Floor_Long' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'upperarm.l' has translation
+      animation that will be discarded.\n\t'upperarm.r' has translation animation
+      that will be discarded.\n\t'upperleg.l' has translation animation that will
+      be discarded.\n\t'upperleg.r' has translation animation that will be discarded.\n\nClip
+      'Skeletons_Awaken_Standing' has import animation warnings that might lower
+      retargeting quality:\nNote: Activate translation DOF on avatar to improve retargeting
+      quality.\n\t'chest' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'upperarm.l' has translation animation that will
+      be discarded.\n\t'upperarm.r' has translation animation that will be discarded.\n\t'upperleg.r'
+      has translation animation that will be discarded.\n\nClip 'Skeletons_Death'
+      has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
+      has translation animation that will be discarded.\n\t'upperleg.r' has translation
+      animation that will be discarded.\n\nClip 'Skeletons_Death_Resurrect' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'chest' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
+      has translation animation that will be discarded.\n\t'upperarm.r' has translation
+      animation that will be discarded.\n\t'upperleg.r' has translation animation
+      that will be discarded.\n\nClip 'Skeletons_Idle' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\nClip 'Skeletons_Spawn_Ground'
+      has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
+      has translation animation that will be discarded.\n\t'upperarm.r' has translation
+      animation that will be discarded.\n\t'upperleg.l' has translation animation
+      that will be discarded.\n\nClip 'Skeletons_Taunt' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'upperleg.r' has translation
+      animation that will be discarded.\n\nClip 'Skeletons_Taunt_Longer' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'chest' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'upperarm.r'
+      has translation animation that will be discarded.\n\t'upperleg.l' has translation
+      animation that will be discarded.\n\t'upperleg.r' has translation animation
+      that will be discarded.\n\nClip 'Skeletons_Walking' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'upperleg.l' has translation animation that
+      will be discarded.\n\t'upperleg.r' has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -83,7 +148,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human:
-    - boneName: hips
+    - boneName: root
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -220,58 +285,18 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Knight(Clone)
+    - name: Rogue(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Knight_Head
-      parentName: Knight(Clone)
-      position: {x: -0, y: 1.2158912, z: -0.0000001406604}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_Helmet
-      parentName: Knight(Clone)
-      position: {x: -0, y: 1.2158912, z: -0.0000001406604}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_HelmetVisor
-      parentName: Knight(Clone)
-      position: {x: -0, y: 1.7451358, z: 0.00058345794}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_Body
-      parentName: Knight(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_ArmLeft
-      parentName: Knight(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_LegLeft
-      parentName: Knight(Clone)
-      position: {x: -0.0000032901762, y: 0, z: 0}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_LegRight
-      parentName: Knight(Clone)
-      position: {x: -0.0000032901762, y: 0, z: 0}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_ArmRight
-      parentName: Knight(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Knight_Cape
-      parentName: Knight(Clone)
-      position: {x: -0, y: 1.2158912, z: -0.0000001406604}
+    - name: Rogue_Head
+      parentName: Rogue(Clone)
+      position: {x: 0.00000047683716, y: 1.2158737, z: 0}
       rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Rig_Medium
-      parentName: Knight(Clone)
+      parentName: Rogue(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -390,6 +415,36 @@ ModelImporter:
       position: {x: 0.00000001914704, y: 0.16565004, z: -0.00000001019159}
       rotation: {x: 2.5350583e-10, y: 0.9203549, z: -0.39108425, w: -0.00000008213901}
       scale: {x: 1, y: 0.9999976, z: 1.0000035}
+    - name: Rogue_LegLeft
+      parentName: Rogue(Clone)
+      position: {x: 0.000002861023, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rogue_LegRight
+      parentName: Rogue(Clone)
+      position: {x: 0.000002861023, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rogue_ArmLeft
+      parentName: Rogue(Clone)
+      position: {x: -0.00000166893, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rogue_ArmRight
+      parentName: Rogue(Clone)
+      position: {x: -0.00000166893, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rogue_Body
+      parentName: Rogue(Clone)
+      position: {x: 0.000002861023, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rogue_Cape
+      parentName: Rogue(Clone)
+      position: {x: 0.0000026226044, y: 1.2158737, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -402,7 +457,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 53a2b96ef04fdad46a154fb9c3e28494, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 5b8d370884cddd04b8a27f0177f126aa, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
