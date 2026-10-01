@@ -2873,6 +2873,9 @@ GameObject:
   - component: {fileID: 214369292}
   - component: {fileID: 214369291}
   - component: {fileID: 214369290}
+  - component: {fileID: 214369299}
+  - component: {fileID: 214369298}
+  - component: {fileID: 214369297}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -2909,7 +2912,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerController
   cameraTransform: {fileID: 1564652900}
-  attackComboData: {fileID: 11400000, guid: 379ed9c7e5325b64a8eba94e84ae15f8, type: 2}
   hitReactionData: {fileID: 11400000, guid: 3cd00a0767e8e7a40b89f18a7f9cbcbb, type: 2}
 --- !u!114 &214369291
 MonoBehaviour:
@@ -2957,12 +2959,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerAnimator
   animator: {fileID: 1193410210}
-  idleState: Idle_A
+  defaultIdleState: Idle_A
   walkState: Walking_B
   runState: Running_B
   airState: Jump_Idle
   hitState: Hit_A
   deathState: Death_A
+  guardState: Melee_Blocking
+  blockHitState: Melee_Block_Hit
   idleSpeedThreshold: 0.1
   runSpeedThreshold: 3.5
   locomotionCrossFade: 0.15
@@ -3021,7 +3025,59 @@ MonoBehaviour:
   attackAction: {fileID: 1120369429361536294, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpAction: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   sprintAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  guardAction: {fileID: 7495495280275840816, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  nextWeaponAction: {fileID: 7476244043514120974, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  previousWeaponAction: {fileID: 2411907206095950430, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   inputBufferTime: 0.2
+--- !u!114 &214369297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76fbba53ad966684c8320f76feeacb0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerLoadout
+  unarmedWeapon: {fileID: 11400000, guid: be5daa1c12919ac41a92e8149034a250, type: 2}
+  startingWeapons:
+  - {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
+  - {fileID: 11400000, guid: d54475956d59f3d4c8d997f683a17644, type: 2}
+  - {fileID: 11400000, guid: 9a2b87eb874da384480b9096e33b5b57, type: 2}
+  - {fileID: 11400000, guid: 8ffb78dc334e27e4bac28d3dee634412, type: 2}
+  - {fileID: 11400000, guid: 53167951fa572e145a84d2f630294e9a, type: 2}
+  - {fileID: 11400000, guid: 5728b5c35440ba947920577508a9754e, type: 2}
+  - {fileID: 11400000, guid: 541178b1d99370a4abc41f25562b128e, type: 2}
+  startingOffHand: {fileID: 11400000, guid: a5e613c5199475a45bcca609cf260ad4, type: 2}
+--- !u!114 &214369298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7769f38645709a847899639da3853e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.ShieldGuard
+  facingTransform: {fileID: 0}
+--- !u!114 &214369299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa34178c718f44141b7aeae3415c482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.EquipmentVisual
+  rightHandSlot: {fileID: 1453610160}
+  leftHandSlot: {fileID: 894091218}
 --- !u!1 &220313848
 GameObject:
   m_ObjectHideFlags: 0
@@ -11130,6 +11186,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4891787282750124, guid: 7087784e228be8745af45599a5130532, type: 3}
   m_PrefabInstance: {fileID: 885669336}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &894091218 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+  m_PrefabInstance: {fileID: 1193410208}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &895990575
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17661,6 +17722,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4931211907768612, guid: e88b7bb02ae149940a5a0cddf34fe370, type: 3}
   m_PrefabInstance: {fileID: 1451190638}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1453610160 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+  m_PrefabInstance: {fileID: 1193410208}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1466487755
 PrefabInstance:
