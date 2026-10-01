@@ -26,6 +26,18 @@ namespace ProjectFantasy.Player
                 return;
             }
 
+            if (Loadout.CanGuard && InputHandler.IsGuardHeld)
+            {
+                Controller.ChangeState(Controller.GuardState);
+                return;
+            }
+
+            int cycleDirection = InputHandler.ConsumeWeaponCycle();
+            if (cycleDirection != PlayerInputHandler.NoWeaponCycle)
+            {
+                Loadout.CycleWeapon(cycleDirection);
+            }
+
             ApplyMoveInput(MovementData.Acceleration, MovementData.Deceleration, deltaTime);
             PlayerAnimator.PlayLocomotion(Motor.HorizontalSpeed);
         }

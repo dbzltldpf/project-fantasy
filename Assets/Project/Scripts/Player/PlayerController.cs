@@ -1,20 +1,21 @@
 using System.Diagnostics;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Core;
+using ProjectFantasy.Weapon;
 using UnityEngine;
 
 namespace ProjectFantasy.Player
 {
     // 플레이어 컴포넌트 조립과 상태 머신 구동
     [RequireComponent(typeof(PlayerInputHandler), typeof(PlayerMotor), typeof(PlayerAnimator))]
-    [RequireComponent(typeof(MeleeAttacker), typeof(Health))]
+    [RequireComponent(typeof(MeleeAttacker), typeof(Health), typeof(PlayerLoadout))]
+    [RequireComponent(typeof(ShieldGuard))]
     [DisallowMultipleComponent]
     public sealed class PlayerController : MonoBehaviour
     {
         private const float MaxMoveInputMagnitude = 1f;
 
         [SerializeField] private Transform cameraTransform;
-        [SerializeField] private AttackComboData attackComboData;
         [SerializeField] private HitReactionData hitReactionData;
 
         private StateMachine<PlayerStateBase> stateMachine;
@@ -24,13 +25,17 @@ namespace ProjectFantasy.Player
         public PlayerMotor Motor { get; private set; }
         public PlayerAnimator PlayerAnimator { get; private set; }
         public MeleeAttacker Attacker { get; private set; }
-        public AttackComboData AttackComboData => attackComboData;
+        public PlayerLoadout Loadout { get; private set; }
+        public ShieldGuard ShieldGuard { get; private set; }
         public HitReactionData HitReactionData => hitReactionData;
-        public bool CanAttack => attackComboData != null && attackComboData.StepCount > 0;
+
+        public AttackComboData AttackComboData => Loadout.CurrentWeapon != null ? Loadout.CurrentWeapon.ComboData : null;
+        public bool CanAttack => AttackComboData != null && AttackComboData.StepCount > 0;
 
         public PlayerLocomotionState LocomotionState { get; private set; }
         public PlayerAirState AirState { get; private set; }
         public PlayerAttackState AttackState { get; private set; }
+        public PlayerGuardState GuardState { get; private set; }
         public PlayerHitState HitState { get; private set; }
         public PlayerDeadState DeadState { get; private set; }
 
@@ -40,6 +45,8 @@ namespace ProjectFantasy.Player
             Motor = GetComponent<PlayerMotor>();
             PlayerAnimator = GetComponent<PlayerAnimator>();
             Attacker = GetComponent<MeleeAttacker>();
+            Loadout = GetComponent<PlayerLoadout>();
+            ShieldGuard = GetComponent<ShieldGuard>();
             health = GetComponent<Health>();
 
             if (cameraTransform == null && Camera.main != null) cameraTransform = Camera.main.transform;
@@ -50,18 +57,22 @@ namespace ProjectFantasy.Player
         private void OnEnable()
         {
             health.Damaged += HandleDamaged;
+            health.Blocked += HandleBlocked;
             health.Died += HandleDied;
+            Loadout.WeaponChanged += HandleWeaponChanged;
         }
 
         private void OnDisable()
         {
             health.Damaged -= HandleDamaged;
+            health.Blocked -= HandleBlocked;
             health.Died -= HandleDied;
+            Loadout.WeaponChanged -= HandleWeaponChanged;
         }
 
         private void Start()
         {
-            ValidateAttackStates();
+            ValidateWeaponStates();
             stateMachine.Initialize(LocomotionState);
         }
 
@@ -94,21 +105,41 @@ namespace ProjectFantasy.Player
             LocomotionState = new PlayerLocomotionState(this);
             AirState = new PlayerAirState(this);
             AttackState = new PlayerAttackState(this);
+            GuardState = new PlayerGuardState(this);
             HitState = new PlayerHitState(this);
             DeadState = new PlayerDeadState(this);
             stateMachine = new StateMachine<PlayerStateBase>();
         }
 
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
-        private void ValidateAttackStates()
+        private void ValidateWeaponStates()
         {
-            if (!CanAttack) return;
-
-            for (int i = 0; i < attackComboData.StepCount; i++)
+            ValidateWeapon(Loadout.UnarmedWeapon);
+            foreach (WeaponData weapon in Loadout.OwnedWeapons)
             {
-                PlayerAnimator.ValidateState(attackComboData.GetStep(i).StateName);
+                ValidateWeapon(weapon);
             }
         }
+
+        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        private void ValidateWeapon(WeaponData weapon)
+        {
+            if (weapon == null)
+            {
+                UnityEngine.Debug.LogError($"[{nameof(PlayerController)}] 맨손(Unarmed) 무기 데이터가 지정되지 않았습니다.", this);
+                return;
+            }
+
+            PlayerAnimator.ValidateState(weapon.IdleStateName);
+            if (weapon.ComboData == null) return;
+
+            for (int i = 0; i < weapon.ComboData.StepCount; i++)
+            {
+                PlayerAnimator.ValidateState(weapon.ComboData.GetStep(i).StateName);
+            }
+        }
+
+        private void HandleWeaponChanged(WeaponData weapon) => PlayerAnimator.SetIdleState(weapon.IdleStateHash);
 
         private void HandleDamaged(DamageInfo damageInfo)
         {
@@ -117,6 +148,8 @@ namespace ProjectFantasy.Player
             HitState.SetDamageInfo(damageInfo);
             ChangeState(HitState);
         }
+
+        private void HandleBlocked(DamageInfo damageInfo) => GuardState.OnBlocked(damageInfo);
 
         private void HandleDied() => ChangeState(DeadState);
     }
