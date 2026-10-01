@@ -19,63 +19,83 @@ ModelImporter:
     animationImportErrors: 
     animationImportWarnings: "\nClip 'Cheering' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'upperarm.l' has translation
+      to improve retargeting quality.\n\t'hips' has translation animation that will
+      be discarded.\n\t'hips' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'chest' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'upperarm.l' has translation
       animation that will be discarded.\n\t'upperarm.r' has translation animation
       that will be discarded.\n\nClip 'Lie_Down' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'upperarm.l' has translation
+      to improve retargeting quality.\n\t'hips' has translation animation that will
+      be discarded.\n\t'hips' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'chest' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'upperarm.l' has translation
       animation that will be discarded.\n\t'upperarm.r' has translation animation
       that will be discarded.\n\t'upperleg.l' has translation animation that will
       be discarded.\n\t'upperleg.r' has translation animation that will be discarded.\n\nClip
-      'Lie_StandUp' has import animation warnings that might lower retargeting quality:\nNote:
-      Activate translation DOF on avatar to improve retargeting quality.\n\t'chest'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
+      'Lie_Idle' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'hips'
+      has translation animation that will be discarded.\n\nClip 'Lie_StandUp' has
+      import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'hips' has translation
+      animation that will be discarded.\n\t'hips' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'chest' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
       has translation animation that will be discarded.\n\t'upperarm.r' has translation
       animation that will be discarded.\n\t'upperleg.l' has translation animation
       that will be discarded.\n\t'upperleg.r' has translation animation that will
       be discarded.\n\nClip 'Push_Ups' has import animation warnings that might lower
       retargeting quality:\nNote: Activate translation DOF on avatar to improve retargeting
-      quality.\n\t'chest' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Sit_Chair_Down' has import animation warnings
-      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'upperleg.l' has translation
-      animation that will be discarded.\n\t'upperleg.r' has translation animation
-      that will be discarded.\n\nClip 'Sit_Chair_Idle' has import animation warnings
-      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Sit_Chair_StandUp'
+      quality.\n\t'hips' has translation animation that will be discarded.\n\t'hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Sit_Chair_Down' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'hips'
+      has translation animation that will be discarded.\n\t'hips' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'chest' is
+      inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperleg.l'
+      has translation animation that will be discarded.\n\t'upperleg.r' has translation
+      animation that will be discarded.\n\nClip 'Sit_Chair_Idle' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'chest' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'Sit_Chair_StandUp'
       has import animation warnings that might lower retargeting quality:\nNote:
-      Activate translation DOF on avatar to improve retargeting quality.\n\t'chest'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperleg.l'
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'hips'
+      has translation animation that will be discarded.\n\t'hips' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'chest' is
+      inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperleg.l'
       has translation animation that will be discarded.\n\t'upperleg.r' has translation
       animation that will be discarded.\n\nClip 'Sit_Floor_Down' has import animation
       warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'chest' is inbetween humanoid
+      DOF on avatar to improve retargeting quality.\n\t'hips' has translation animation
+      that will be discarded.\n\t'hips' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'chest' is inbetween humanoid
       transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
       has translation animation that will be discarded.\n\t'upperarm.r' has translation
       animation that will be discarded.\n\t'upperleg.l' has translation animation
       that will be discarded.\n\t'upperleg.r' has translation animation that will
       be discarded.\n\nClip 'Sit_Floor_Idle' has import animation warnings that might
       lower retargeting quality:\nNote: Activate translation DOF on avatar to improve
-      retargeting quality.\n\t'chest' is inbetween humanoid transforms and has rotation
-      animation that will be discarded.\n\nClip 'Sit_Floor_StandUp' has import animation
-      warnings that might lower retargeting quality:\nNote: Activate translation
-      DOF on avatar to improve retargeting quality.\n\t'chest' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
+      retargeting quality.\n\t'hips' has translation animation that will be discarded.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Sit_Floor_StandUp' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'hips'
+      has translation animation that will be discarded.\n\t'hips' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'chest' is
+      inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.l'
       has translation animation that will be discarded.\n\t'upperarm.r' has translation
       animation that will be discarded.\n\t'upperleg.l' has translation animation
       that will be discarded.\n\t'upperleg.r' has translation animation that will
       be discarded.\n\nClip 'Sit_Ups' has import animation warnings that might lower
       retargeting quality:\nNote: Activate translation DOF on avatar to improve retargeting
-      quality.\n\t'chest' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Waving' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'chest' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'upperarm.r' has translation
-      animation that will be discarded.\n"
+      quality.\n\t'hips' has translation animation that will be discarded.\n\t'hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'Waving' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'hips'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'chest'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'upperarm.r'
+      has translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -87,7 +107,1281 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: T-Pose
+      takeName: T-Pose
+      internalID: -8312538846858333772
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Cheering
+      takeName: Cheering
+      internalID: -3554408864086334942
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Lie_Down
+      takeName: Lie_Down
+      internalID: -6400525968468801866
+      firstFrame: 0
+      lastFrame: 90
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Lie_Idle
+      takeName: Lie_Idle
+      internalID: 1569655004370500264
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Lie_StandUp
+      takeName: Lie_StandUp
+      internalID: -6781150235111872194
+      firstFrame: 0
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Push_Ups
+      takeName: Push_Ups
+      internalID: 7109596313260351717
+      firstFrame: 0
+      lastFrame: 31
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Chair_Down
+      takeName: Sit_Chair_Down
+      internalID: 3145453540645391641
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Chair_Idle
+      takeName: Sit_Chair_Idle
+      internalID: 7779023693546330386
+      firstFrame: 0
+      lastFrame: 108
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Chair_StandUp
+      takeName: Sit_Chair_StandUp
+      internalID: -5731682596848902973
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Floor_Down
+      takeName: Sit_Floor_Down
+      internalID: -134765771845422922
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Floor_Idle
+      takeName: Sit_Floor_Idle
+      internalID: 1789385927864635141
+      firstFrame: 0
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Floor_StandUp
+      takeName: Sit_Floor_StandUp
+      internalID: 2401692041250751285
+      firstFrame: 0
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Sit_Ups
+      takeName: Sit_Ups
+      internalID: 7803031104487891924
+      firstFrame: 0
+      lastFrame: 52
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Waving
+      takeName: Waving
+      internalID: 3848355206397108983
+      firstFrame: 0
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Mannequin_ArmLeft
+        weight: 0
+      - path: Mannequin_ArmRight
+        weight: 0
+      - path: Mannequin_Body
+        weight: 0
+      - path: Mannequin_Head
+        weight: 0
+      - path: Mannequin_LegLeft
+        weight: 0
+      - path: Mannequin_LegRight
+        weight: 0
+      - path: Rig_Medium
+        weight: 1
+      - path: Rig_Medium/root
+        weight: 1
+      - path: Rig_Medium/root/hips
+        weight: 1
+      - path: Rig_Medium/root/hips/spine
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/head
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.l/lowerarm.l/wrist.l/hand.l/handslot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r
+        weight: 1
+      - path: Rig_Medium/root/hips/spine/chest/upperarm.r/lowerarm.r/wrist.r/hand.r/handslot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.l/lowerleg.l/foot.l/toes.l
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r
+        weight: 1
+      - path: Rig_Medium/root/hips/upperleg.r/lowerleg.r/foot.r/toes.r
+        weight: 1
+      maskType: 1
+      maskSource: {fileID: 31900000, guid: 146270ab57034844ebcf6356a38f9525, type: 2}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
