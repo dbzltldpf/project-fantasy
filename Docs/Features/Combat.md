@@ -1,28 +1,32 @@
 # Combat
 
 ## 개요
-체력·피격 무적, 근접 타격 판정, 콤보/피격 반응 데이터. 플레이어와 적이 공용으로 사용한다.
+체력·피격 무적·방어(가드), 근접 타격 판정, 콤보/피격 반응 데이터. 플레이어와 적이 공용으로 사용한다.
 
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, `HealthChanged` / `Damaged` / `Died` 이벤트 |
-| [MeleeAttacker.cs](../../Assets/Project/Scripts/Combat/MeleeAttacker.cs) | 구체 범위 타격 판정, 한 번 휘두를 때 대상당 1회 타격 |
-| [AttackStep.cs](../../Assets/Project/Scripts/Combat/Data/AttackStep.cs) | 콤보 한 단계의 타이밍·데미지·전진 스텝 |
-| [AttackComboData.cs](../../Assets/Project/Scripts/Combat/Data/AttackComboData.cs) | 무기별 콤보 단계 배열 (SO) |
+| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 방어 판정 위임, `HealthChanged` / `Damaged` / `Blocked` / `Died` 이벤트 |
+| [ShieldGuard.cs](../../Assets/Project/Scripts/Combat/ShieldGuard.cs) | `IDamageBlocker` 구현, 가드 중 정면 각도 내 공격 방어 |
+| [MeleeAttacker.cs](../../Assets/Project/Scripts/Combat/MeleeAttacker.cs) | 구체 범위 타격 판정, 한 번 휘두를 때 대상당 1회 타격, 무기별 판정 범위 교체 |
+| [AttackStep.cs](../../Assets/Project/Scripts/Combat/Data/AttackStep.cs) | 콤보 한 단계의 타이밍·데미지 배율·전진 스텝, 타이밍 순서 검증 |
+| [AttackComboData.cs](../../Assets/Project/Scripts/Combat/Data/AttackComboData.cs) | 무기 종류별 콤보 단계 배열 (SO) |
 | [HitReactionData.cs](../../Assets/Project/Scripts/Combat/Data/HitReactionData.cs) | 피격 경직·넉백 (SO) |
 
 ## 동작 흐름
 ### 공격 한 단계 타임라인 (기본값, 초)
 ```
-0.00 ──── 0.15 ── 0.20 ─── 0.30 ── 0.35 ────────── 0.70
-|전진 스텝|       |히트 윈도우 ────────|              |종료
-                           |콤보 입력 가능 ─────────────|
+0.00 ─── 0.15 ── 0.20 ──── 0.35 ── 0.45 ──────── 0.70
+         |입력 예약 가능 ─────────────────────────|
+                 |히트 윈도우 ─|
+                                   ▲ 예약 입력이 있으면 여기서 다음 단계
 ```
-- **전진 스텝**: `lungeDuration` 동안 `lungeSpeed`로 바라보는 방향 이동
-- **히트 윈도우**: `hitStartTime ~ hitEndTime` 동안 매 프레임 `MeleeAttacker.TickHit()`
-- **콤보 입력**: `comboInputTime` 이후 공격 입력(선입력 포함)이 있으면 즉시 다음 단계
-- **종료**: `duration` 도달 시 Locomotion 복귀
+- **입력 예약**: `comboInputStartTime` 이후 공격 입력(선입력 포함)은 예약만 함
+- **전이 시점**: `comboTransitionTime`에 예약이 있으면 다음 단계 시작 → 히트·팔로스루가 잘리지 않음
+- **히트 윈도우**: `hitStartTime ~ hitEndTime` 동안 매 프레임 `MeleeAttacker.TickHit()` (근접 무기만)
+- **전진 스텝**: `lungeDuration` 동안 `lungeSpeed`로 이동 (기본 0, 제자리 클립이라 미끄러짐 주의)
+- **종료**: 예약이 없으면 `duration`까지 재생 후 Locomotion 복귀
+- 값 변경 시 `OnValidate`가 순서(히트 시작 ≤ 히트 끝 ≤ 전이 ≤ 전체 길이)를 검사해 경고
 
 ### 타격 판정 (MeleeAttacker)
 1. `BeginSwing(damage)` → 이번 스윙 타격 목록 초기화
@@ -31,25 +35,31 @@
 4. `DamageInfo`(데미지, 타격 지점, 수평 방향, 가해자) 전달
 5. `EndSwing()` → 종료
 
-### 피격 (Health)
-- 사망 상태, 무적 중, 0 이하 데미지는 무시
-- 피해 적용 → 무적 시간 시작 → `HealthChanged` → `Damaged` → (체력 0이면) `Died`
+### 피격 / 방어 (Health)
+```
+TakeDamage
+ ├─ 사망·무적·0 이하 데미지 → 무시
+ ├─ IDamageBlocker.TryBlock == true → Blocked 이벤트 후 종료 (피해 없음)
+ └─ 피해 적용 → 무적 시작 → HealthChanged → Damaged → (체력 0) Died
+```
+- `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어.
 
 ## 데이터 파라미터
 ### AttackStep (콤보 단계별)
 | 필드 | 기본값 | 의미 |
 |---|---|---|
 | stateName | Melee_1H_Attack_Slice_Horizontal | 애니메이터 상태 이름 (전체 이름) |
-| damage | 10 | 데미지 |
+| damageMultiplier | 1 | 데미지 배율 (무기 공격력 × 배율) |
 | duration | 0.7 | 단계 전체 길이 |
 | hitStartTime / hitEndTime | 0.2 / 0.35 | 히트 윈도우 |
-| comboInputTime | 0.3 | 다음 단계 연계 가능 시점 |
-| lungeSpeed / lungeDuration | 3 / 0.15 | 전진 스텝 |
+| comboInputStartTime | 0.15 | 다음 공격 입력 예약 시작 |
+| comboTransitionTime | 0.45 | 예약된 다음 단계로 전이하는 시점 |
+| lungeSpeed / lungeDuration | 0 / 0.15 | 전진 스텝 |
 
 ### AttackComboData
 | 필드 | 기본값 | 의미 |
 |---|---|---|
-| steps | — | 콤보 단계 배열 (현재 3단: Slice_Horizontal → Slice_Diagonal → Chop) |
+| steps | — | 콤보 단계 배열 (무기 종류별 에셋: 1H / 2H / Unarmed / 원거리) |
 | crossFadeDuration | 0.1 | 공격 애니메이션 전환 시간 |
 
 ### HitReactionData
@@ -64,21 +74,25 @@
 |---|---|---|---|
 | Health | maxHealth | 100 | 최대 체력 |
 | Health | invincibleDuration | 0.5 | 피격 후 무적 시간 |
-| MeleeAttacker | hitOffset / hitRadius | (0, 1, 1) / 0.8 | 판정 구체 위치(로컬)·반경, 선택 시 Gizmo 표시 |
+| MeleeAttacker | hitOffset / hitRadius | (0, 1, 1) / 0.8 | 판정 구체 기본값 (장착 무기 데이터로 덮어씀), 선택 시 Gizmo |
 | MeleeAttacker | targetLayers | Everything | 타격 대상 레이어 |
+| ShieldGuard | facingTransform | 자신 | 정면 기준 Transform |
 
 ## 에디터 설정
-- `Project/Data`에서 Create → ProjectFantasy → Combat → Attack Combo Data / Hit Reaction Data 생성
-- 콤보 단계의 `stateName`은 애니메이터 상태의 **전체 이름**으로 입력 (예: `Diagonal` ❌ → `Melee_1H_Attack_Slice_Diagonal` ✅)
+- `Create → ProjectFantasy → Combat → Attack Combo Data / Hit Reaction Data`
+- 콤보 단계의 `stateName`은 애니메이터 상태 **전체 이름** (예: `Diagonal` ❌ → `Melee_1H_Attack_Slice_Diagonal` ✅)
+- 빈 배열에 단계를 추가하면 Unity가 코드 기본값 대신 **0으로 채움** → 타이밍 값 직접 입력 필요
 - MeleeAttacker `targetLayers`에서 **Player 레이어 제외** 권장
 
 ## 주의사항 / 확장 포인트
-- 새 적은 `Health`만 붙이면 바로 타격 대상이 된다 (`IDamageable`).
-- 무기 교체 시 `AttackComboData` 에셋만 바꾸면 된다 (한손검/양손검 콤보 분리).
-- 예정: 방패 가드(Melee_Block 클립 존재), 차지 공격, 점프 공격(Melee_1H_Attack_Jump_Chop).
+- 새 적은 `Health`만 붙이면 타격 대상, `ShieldGuard`까지 붙이면 방패 방어 가능.
+- 히트 타이밍은 클립마다 Animation 창에서 칼이 지나가는 구간을 보고 맞출 것.
+- 예정: **액션 타임라인**(프레임 기반 이벤트 구간, 칼날 스윕 판정, 히트스톱, 재생 속도 배율, 에디터 미리보기)으로 초 단위 타이밍 대체.
 
 ## 변경 이력
 | 날짜 | 내용 |
 |---|---|
 | 2026-09-30 | 최초 작성 (Health, MeleeAttacker, AttackComboData, HitReactionData) |
 | 2026-09-30 | `AttackStep.StateName` 공개 (애니메이터 상태 검증용) |
+| 2026-10-01 | 방어 판정(`IDamageBlocker`, `ShieldGuard`, `Blocked` 이벤트), `MeleeAttacker.SetHitShape`, 데미지 → 배율(`damageMultiplier`) |
+| 2026-10-01 | 콤보 입력 예약/전이 시점 분리(`comboInputStartTime`, `comboTransitionTime`), 타이밍 순서 검증, 원거리·마법 무기 근접 판정 제외 |

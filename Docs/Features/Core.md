@@ -9,7 +9,9 @@
 | [IState.cs](../../Assets/Project/Scripts/Core/StateMachine/IState.cs) | 상태 인터페이스 (`Enter` / `Tick` / `Exit`) |
 | [StateMachine.cs](../../Assets/Project/Scripts/Core/StateMachine/StateMachine.cs) | 제네릭 상태 머신, 상태 전이만 담당 |
 | [IDamageable.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageable.cs) | 피해를 받을 수 있는 대상 (`IsAlive`, `TakeDamage`) |
+| [IDamageBlocker.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageBlocker.cs) | 피해 적용 전 방어 여부 판정 (`TryBlock`), Health가 호출 |
 | [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자) |
+| [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` 하위 계층 이름 탐색 (초기화 전용) |
 
 ## 동작 흐름
 ### StateMachine\<TState\>
@@ -30,3 +32,4 @@
 | 날짜 | 내용 |
 |---|---|
 | 2026-09-30 | 최초 작성 (StateMachine, IState, IDamageable, DamageInfo) |
+| 2026-10-01 | `IDamageBlocker`, `Utils/TransformExtensions` 추가 |
