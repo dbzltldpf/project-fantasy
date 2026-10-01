@@ -30,6 +30,13 @@ namespace ProjectFantasy.Combat
             if (hitOrigin == null) hitOrigin = transform;
         }
 
+        // 장착 무기에 맞춰 판정 범위 교체
+        public void SetHitShape(Vector3 offset, float radius)
+        {
+            hitOffset = offset;
+            hitRadius = radius;
+        }
+
         public void BeginSwing(int damage)
         {
             currentDamage = damage;
