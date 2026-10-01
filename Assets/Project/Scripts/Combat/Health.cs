@@ -11,6 +11,7 @@ namespace ProjectFantasy.Combat
         [SerializeField, Min(1)] private int maxHealth = 100;
         [SerializeField, Min(0f)] private float invincibleDuration = 0.5f;
 
+        private IDamageBlocker damageBlocker;
         private float invincibleEndTime;
 
         public int MaxHealth => maxHealth;
@@ -20,16 +21,24 @@ namespace ProjectFantasy.Combat
 
         public event Action<int, int> HealthChanged;
         public event Action<DamageInfo> Damaged;
+        public event Action<DamageInfo> Blocked;
         public event Action Died;
 
         private void Awake()
         {
             CurrentHealth = maxHealth;
+            damageBlocker = GetComponent<IDamageBlocker>();
         }
 
         public void TakeDamage(in DamageInfo damageInfo)
         {
             if (!IsAlive || IsInvincible || damageInfo.Amount <= 0) return;
+
+            if (damageBlocker != null && damageBlocker.TryBlock(damageInfo))
+            {
+                Blocked?.Invoke(damageInfo);
+                return;
+            }
 
             CurrentHealth = Mathf.Max(0, CurrentHealth - damageInfo.Amount);
             invincibleEndTime = Time.time + invincibleDuration;

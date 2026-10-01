@@ -18,9 +18,11 @@ namespace ProjectFantasy.Combat
 
         private void OnValidate()
         {
-            foreach (AttackStep step in steps)
+            for (int i = 0; i < steps.Length; i++)
             {
-                step?.InvalidateCache();
+                if (steps[i] == null) continue;
+                steps[i].InvalidateCache();
+                steps[i].Validate(this, i);
             }
         }
     }

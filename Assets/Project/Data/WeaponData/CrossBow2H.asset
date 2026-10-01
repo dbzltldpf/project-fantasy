@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8f8501d4b26f454baaae61aba04a619, type: 3}
+  m_Name: CrossBow2H
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.WeaponData
+  displayName: 1H
+  modelPrefab: {fileID: 3989796310135439970, guid: 7f53053c209a3eb4faf863b6291cc00c, type: 3}
+  gripPosition: {x: 0, y: 0, z: 0}
+  gripRotation: {x: 0, y: 260, z: 0}
+  weaponType: 6
+  gripHand: 0
+  occupiesOffHand: 1
+  attackPower: 10
+  comboData: {fileID: 0}
+  hitOffset: {x: 0, y: 1, z: 1}
+  hitRadius: 0.8
+  idleStateName: Ranged_2H_Aiming

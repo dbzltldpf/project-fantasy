@@ -5,7 +5,7 @@
 ## 흐름
 ```mermaid
 flowchart LR
-    A["/feature-start 기능명"] --> B["feature/NN-기능명 에서 작업"]
+    A["/feature-start 기능명"] --> B["feature/기능명 에서 작업"]
     B --> C["/push"]
     C --> B
     C --> D{"버그 없음 +<br/>기능 완료?"}
@@ -16,7 +16,7 @@ flowchart LR
 ## 커맨드 (Claude Code)
 | 커맨드 | 동작 |
 |---|---|
-| `/feature-start <기능명>` | main 최신화(pull) → `feature/NN-기능명` 생성·전환 (NN 자동 증가) |
+| `/feature-start <기능명>` | main 최신화(pull) → `feature/기능명` 생성·전환 |
 | `/push` | 변경사항을 의미 단위로 나눠 커밋 → 현재 feature 브랜치 push |
 | `/feature-finish` | 사용자 확인 → main pull → `merge --no-ff` → main push → 브랜치 삭제 여부 확인 |
 
@@ -24,8 +24,13 @@ flowchart LR
 
 ## 규칙
 ### 브랜치
-- 형식: `feature/NN-기능명` (영문 소문자 kebab-case, 예: `feature/02-lock-on`)
+- 형식: `feature/기능명` (영문 소문자 kebab-case, 예: `feature/lock-on`), 번호는 붙이지 않음
 - main에 직접 커밋 금지
+
+### 릴리즈 태그
+- main에 SemVer 형식 `vMAJOR.MINOR.PATCH` 태그로 릴리즈를 구분 (예: `v0.1.0`)
+- 정식 출시 전은 `0.x`: 기능 묶음 완성 시 MINOR, 버그 수정만 있을 때 PATCH 증가
+- 첫 태그 `v0.1.0`은 계획한 기능을 모두 main에 병합한 뒤 찍는다
 
 ### 커밋 메시지
 `타입: 한국어 설명`

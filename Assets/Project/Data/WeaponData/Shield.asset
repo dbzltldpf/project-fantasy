@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f8be3c711075ea4aa46a30704b5170d, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.ShieldData
+  displayName: 
+  modelPrefab: {fileID: 7695284558064108283, guid: 1081e7cec2b6bf94e857927f4de17c85, type: 3}
+  gripPosition: {x: 0, y: 0, z: 0}
+  gripRotation: {x: 0, y: 0, z: 0}
+  guardAngle: 120
+  blockKnockbackSpeed: 2
+  blockStunDuration: 0.3

@@ -5,9 +5,10 @@
 ## 목차
 | 문서 | 내용 |
 |---|---|
-| [Core](Features/Core.md) | 상태 머신, 피해 인터페이스 등 공용 코드 |
-| [Player](Features/Player.md) | 플레이어 입력·이동·애니메이션·상태(FSM) |
-| [Combat](Features/Combat.md) | 체력, 근접 타격 판정, 콤보/피격 데이터 |
+| [Core](Features/Core.md) | 상태 머신, 피해/방어 인터페이스, 유틸 등 공용 코드 |
+| [Player](Features/Player.md) | 플레이어 입력·이동·애니메이션·상태(FSM)·가드 |
+| [Combat](Features/Combat.md) | 체력·방어, 근접 타격 판정, 콤보/피격 데이터 |
+| [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 무기 교체, 애니메이션 마스크 임포트 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라 |
 | [Git 워크플로우](GitWorkflow.md) | 브랜치·커밋 규칙, `/feature-start` `/push` `/feature-finish` |
 
@@ -16,16 +17,17 @@
 ```
 Assets/Project/Scripts/
 ├─ Core/          StateMachine/, Interfaces/, Types/
-├─ Player/        PlayerController, PlayerInputHandler, PlayerMotor, PlayerAnimator, States/, Data/
-├─ Combat/        Health, MeleeAttacker, Data/
+├─ Player/        PlayerController, PlayerInputHandler, PlayerMotor, PlayerAnimator, PlayerLoadout, States/, Data/
+├─ Combat/        Health, ShieldGuard, MeleeAttacker, Data/
+├─ Weapon/        WeaponType, EquipHand, EquipmentVisual, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
 ├─ Enemy/         (예정)
 ├─ UI/            (예정)
-└─ Utils/         (예정)
+└─ Utils/         TransformExtensions
 ```
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.CameraSystem`
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.Utils`
 
 ## 변경 이력
 | 날짜 | 문서 | 내용 |
@@ -33,3 +35,6 @@ Assets/Project/Scripts/
 | 2026-09-30 | Core, Player, Combat, Camera | 1단계: 이동·점프·3단 콤보·피격/사망·3인칭 카메라 구현 |
 | 2026-09-30 | Player | 기본 걷기 / 달리기 버튼 시 달리기로 변경, 애니메이터 상태 누락 검증 추가 |
 | 2026-09-30 | GitWorkflow | Git 브랜치/커밋 규칙 및 자동화 커맨드 추가 |
+| 2026-09-30 | GitWorkflow | 브랜치 번호 제거(`feature/기능명`), 릴리즈는 SemVer 태그로 구분 |
+| 2026-10-01 | Weapon, Combat, Player, Core | 2단계: 무기 장착·교체, 무기 종류별 콤보/대기 모션, 방패 가드, 데미지 배율, 콤보 입력 예약 |
+| 2026-10-01 | Weapon | Wand/Staff/Bow/Crossbow 추가, 쥐는 손·보조 손 점유, 보조 장비(방패/마법서) 규칙, WeaponSocketMask 임포트 절차 |
