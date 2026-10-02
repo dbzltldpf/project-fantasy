@@ -20,6 +20,9 @@ namespace ProjectFantasy.CameraSystem
         [SerializeField, Min(0f)] private float distance = 5f;
         [SerializeField, Min(0f)] private float targetHeight = 1.5f;
         [SerializeField, Min(0f)] private float followSmoothTime = 0.05f;
+        [Tooltip("카메라 오른쪽(+)/왼쪽(-) 어깨 오프셋")]
+        [SerializeField] private float shoulderOffset;
+        [SerializeField, Range(1f, 179f)] private float fieldOfView = 60f;
 
         [Header("Collision")]
         [SerializeField] private LayerMask collisionLayers = Physics.DefaultRaycastLayers;
@@ -39,6 +42,8 @@ namespace ProjectFantasy.CameraSystem
         public float Distance => distance;
         public float TargetHeight => targetHeight;
         public float FollowSmoothTime => followSmoothTime;
+        public float ShoulderOffset => shoulderOffset;
+        public float FieldOfView => fieldOfView;
         public LayerMask CollisionLayers => collisionLayers;
         public float CollisionRadius => collisionRadius;
         public float MinDistance => minDistance;
