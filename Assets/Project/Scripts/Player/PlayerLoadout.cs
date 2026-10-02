@@ -77,10 +77,26 @@ namespace ProjectFantasy.Player
             equipmentVisual.Show(CurrentWeapon.GripHand, CurrentWeapon);
             if (CurrentWeapon.IsHeldInLeftHand) equipmentVisual.Hide(EquipHand.Right);
 
-            attacker.SetHitShape(CurrentWeapon.HitOffset, CurrentWeapon.HitRadius);
+            ApplyHitShape();
             RefreshOffHand();
 
             WeaponChanged?.Invoke(CurrentWeapon);
+        }
+
+        // 칼날 정보가 있으면 무기 모델 궤적 판정, 없으면 몸 기준 구체 판정
+        private void ApplyHitShape()
+        {
+            attacker.SetHitShape(CurrentWeapon.HitOffset, CurrentWeapon.HitRadius);
+
+            Transform model = equipmentVisual.GetActiveModel(CurrentWeapon.GripHand);
+            if (CurrentWeapon.HasBlade && model != null)
+            {
+                attacker.SetBlade(model, CurrentWeapon.BladeBase, CurrentWeapon.BladeTip, CurrentWeapon.BladeRadius);
+            }
+            else
+            {
+                attacker.ClearBlade();
+            }
         }
 
         // 무기와 함께 들 수 없는 보조 장비는 숨김, 방패일 때만 가드 활성화

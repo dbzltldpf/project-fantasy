@@ -7,7 +7,7 @@
 |---|---|
 | [Core](Features/Core.md) | 상태 머신, 피해/방어 인터페이스, 유틸 등 공용 코드 |
 | [Player](Features/Player.md) | 플레이어 입력·이동·애니메이션·상태(FSM)·가드 |
-| [Combat](Features/Combat.md) | 체력·방어, 근접 타격 판정, 콤보/피격 데이터 |
+| [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링 |
 | [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 무기 교체, 애니메이션 마스크 임포트 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
@@ -21,7 +21,7 @@
 Assets/Project/Scripts/
 ├─ Core/          StateMachine/, Interfaces/, Types/
 ├─ Player/        PlayerController, Input, Motor, Animator, Loadout, RangedWeapon, AmmoVisual, MagicCaster, AimPresenter, States/, Data/
-├─ Combat/        Health, ShieldGuard, MeleeAttacker, RangedAttacker, TrainingDummy, Projectile/, Effects/, Data/
+├─ Combat/        Health, ShieldGuard, MeleeAttacker, WeaponTrace, HitStop, RangedAttacker, TrainingDummy, Action/(Events/, Editor/), Projectile/, Effects/, Data/
 ├─ Weapon/        WeaponType, EquipHand, EquipmentVisual, AmmoPouch, Data/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
@@ -43,3 +43,5 @@ Assets/Project/Scripts/
 | 2026-10-01 | Weapon, Combat, Player, Core | 2단계: 무기 장착·교체, 무기 종류별 콤보/대기 모션, 방패 가드, 데미지 배율, 콤보 입력 예약 |
 | 2026-10-01 | Weapon | Wand/Staff/Bow/Crossbow 추가, 쥐는 손·보조 손 점유, 보조 장비(방패/마법서) 규칙, WeaponSocketMask 임포트 절차 |
 | 2026-10-02 | RangedCombat, Magic, UI, Camera, Combat, Player, Weapon, Core | 3단계: 원거리 전투(조준·발사·장전·투사체·경로 미리보기), 마법(직선 마법탄·지면 범위), 숄더뷰, 조준점, 데미지 숫자, 훈련용 허수아비, 이펙트 풀링, 클립 Root 설정 |
+| 2026-10-02 | Combat, Player, Weapon | 액션 타임라인 Phase 1: 프레임 단위 ActionData·이벤트, 칼날 궤적 판정, 히트스톱, 재생 속도 배율, 초 단위 AttackStep 제거 |
+| 2026-10-02 | Combat, Weapon | 액션 타임라인 Phase 2: Action Timeline 에디터 창(트랙 드래그 편집, 프레임 스크럽, Scene 뷰 자세·칼날 궤적 미리보기) |

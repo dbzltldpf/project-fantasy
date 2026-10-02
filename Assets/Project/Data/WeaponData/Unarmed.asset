@@ -17,8 +17,14 @@ MonoBehaviour:
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
   weaponType: 0
+  gripHand: 0
+  occupiesOffHand: 0
+  allowsShield: 1
   attackPower: 10
   comboData: {fileID: 11400000, guid: 9236a524e0e3a02458a24ba940f363a4, type: 2}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  bladeBase: {x: 0, y: 0, z: 0}
+  bladeTip: {x: 0, y: 0, z: 0}
+  bladeRadius: 0.1
   idleStateName: Melee_Unarmed_Idle

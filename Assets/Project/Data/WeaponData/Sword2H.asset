@@ -19,8 +19,12 @@ MonoBehaviour:
   weaponType: 2
   gripHand: 0
   occupiesOffHand: 1
+  allowsShield: 1
   attackPower: 10
   comboData: {fileID: 11400000, guid: 9834f6cf860aa154abfc8ca69ce9bfcb, type: 2}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  bladeBase: {x: 0, y: 0.65, z: 0}
+  bladeTip: {x: 0, y: 1.88, z: 0}
+  bladeRadius: 0.1
   idleStateName: Melee_2H_Idle

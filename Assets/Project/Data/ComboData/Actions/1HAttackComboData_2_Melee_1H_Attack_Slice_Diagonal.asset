@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711cd0bca8cbfbd4794ba0a7d621252e, type: 3}
+  m_Name: 1HAttackComboData_2_Melee_1H_Attack_Slice_Diagonal
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.ActionData
+  clip: {fileID: 7400000, guid: 4a1c5b0b56ee4444aa26fc9bb3942ff8, type: 2}
+  stateName: 
+  lengthFrames: 25
+  playbackSpeed: 1
+  crossFadeDuration: 0.1
+  events:
+  - rid: 1646186660429561942
+  - rid: 1646186660429561943
+  references:
+    version: 2
+    RefIds:
+    - rid: 1646186660429561942
+      type: {class: HitWindowEvent, ns: ProjectFantasy.Combat, asm: Assembly-CSharp}
+      data:
+        startFrame: 6
+        endFrame: 15
+        damageMultiplier: 1
+        hitStopDuration: 0.06
+    - rid: 1646186660429561943
+      type: {class: ComboWindowEvent, ns: ProjectFantasy.Combat, asm: Assembly-CSharp}
+      data:
+        startFrame: 11
+        endFrame: 21
+        transitionFrame: 15

@@ -12,23 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4116c9646b4996048a3e1a741a458070, type: 3}
   m_Name: UnarmedAttackComboData
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.AttackComboData
-  steps:
-  - stateName: Melee_Unarmed_Attack_Punch_A
-    damageMultiplier: 1
-    duration: 0.7
-    hitStartTime: 0.2
-    hitEndTime: 0.35
-    comboInputTime: 0.3
-    comboTransitionTime: 0.45
-    lungeSpeed: 0
-    lungeDuration: 0.15
-  - stateName: Melee_Unarmed_Attack_Kick
-    damageMultiplier: 1
-    duration: 0.7
-    hitStartTime: 0.2
-    hitEndTime: 0.35
-    comboInputTime: 0.3
-    comboTransitionTime: 0.45
-    lungeSpeed: 0
-    lungeDuration: 0.15
-  crossFadeDuration: 0.1
+  actions:
+  - {fileID: 11400000, guid: b8ee4350799cba643aad9b7f5f15339d, type: 2}
+  - {fileID: 11400000, guid: 90242b382566d4b44bab7e4b115d58fa, type: 2}

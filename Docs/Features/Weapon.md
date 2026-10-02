@@ -15,7 +15,7 @@
 | [SpellbookData.cs](../../Assets/Project/Scripts/Weapon/Data/SpellbookData.cs) | 마법서: 마법 위력 배율 (SO) |
 | [RangedWeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/RangedWeaponData.cs) / [AmmoData.cs](../../Assets/Project/Scripts/Weapon/Data/AmmoData.cs) / [AmmoPouch.cs](../../Assets/Project/Scripts/Weapon/AmmoPouch.cs) | 활·석궁, 화살, 화살 보유 수 ([Ranged Combat](RangedCombat.md)) |
 | [MagicWeaponData.cs](../../Assets/Project/Scripts/Magic/Data/MagicWeaponData.cs) | Wand·Staff ([Magic](Magic.md)) |
-| [EquipmentVisual.cs](../../Assets/Project/Scripts/Weapon/EquipmentVisual.cs) | `handslot.r` / `handslot.l`에 모델 부착, 미리 생성 후 활성/비활성 전환 |
+| [EquipmentVisual.cs](../../Assets/Project/Scripts/Weapon/EquipmentVisual.cs) | `handslot.r` / `handslot.l`에 모델 부착, 미리 생성 후 활성/비활성 전환, `GetHandSlot`(에디터 미리보기 공용) |
 | [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 플레이어 보유 무기/보조 장비, 무기 순환, 장착 적용 |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` (손 본 자동 탐색) |
 
@@ -25,6 +25,7 @@
 무기 선택
  ├─ EquipmentVisual.Show(gripHand)   // 쥐는 손에 모델 활성 (활은 왼손 → 오른손 비움)
  ├─ MeleeAttacker.SetHitShape        // 무기별 근접 판정 위치·반경
+ ├─ MeleeAttacker.SetBlade / ClearBlade  // 칼날이 설정된 무기는 모델 칼날 궤적 판정
  ├─ 보조 장비 갱신                     // CanEquipWith == false 면 숨김, 방패일 때만 가드 활성
  └─ WeaponChanged → PlayerAnimator.SetIdleState (무기별 대기 모션)
 ```
@@ -49,7 +50,7 @@
 - 보유 무기가 2개 이상일 때만 순환
 
 ### 데미지
-`최종 데미지 = WeaponData.attackPower × AttackStep.damageMultiplier` (반올림)
+`최종 데미지 = WeaponData.attackPower × HitWindowEvent.damageMultiplier` (반올림)
 - 같은 종류 무기는 콤보 에셋 하나를 공유하고 공격력만 다르게 설정.
 - 활·석궁은 화살 피해 = `attackPower` ([Ranged Combat](RangedCombat.md)), Wand·Staff는 `attackPower × 마법 배율 × 마법서 배율` ([Magic](Magic.md)).
 
@@ -66,7 +67,9 @@
 | allowsShield | true | 보조 손 방패 허용 (Staff false → 마법서만) |
 | attackPower | 10 | 공격력 |
 | comboData | — | 사용할 콤보 (AttackComboData) |
-| hitOffset / hitRadius | (0, 1, 1) / 0.8 | 근접 판정 구체 (캐릭터 로컬) |
+| hitOffset / hitRadius | (0, 1, 1) / 0.8 | 근접 판정 구체 (캐릭터 로컬, 칼날 미설정 시 사용) |
+| bladeBase / bladeTip | 0 / 0 | 칼날 시작·끝 (무기 모델 로컬), 같으면 칼날 판정 안 함 |
+| bladeRadius | 0.1 | 칼날 판정 두께 (반지름) |
 | idleStateName | Idle_A | 이 무기를 들었을 때 대기 모션 |
 
 ### ShieldData / SpellbookData
@@ -102,6 +105,8 @@
 ## 주의사항 / 확장 포인트
 - `unarmedWeapon`은 **필수**. 비어 있으면 시작 시 콘솔 에러.
 - 무기 모델이 손에서 어긋나면 먼저 클립 마스크(1번)를 확인. grip 보정은 마지막 수단.
+- 칼날 값은 Action Timeline 창 Scene 미리보기(노란 선)로 확인하며 조정 ([Combat](Combat.md)). 플레이 중 값 변경은 무기 교체 시 반영.
+  - Sword1H: Base (0, 0.2, 0), Tip (0, 1, 0) / Sword2H: Base (0, 0.65, 0), Tip (0, 1.88, 0) / Radius 0.1
 - 적(스켈레톤 등)은 `EquipmentVisual` + `WeaponData`를 그대로 재사용 가능.
 - 클립 Root Transform은 Rotation/Y/XZ 모두 **Bake Into Pose ✓ + Based Upon: Original** (FBX 재추출 시 .anim에 재적용).
 - 예정: 보조 장비 교체/인벤토리, 필드 무기 줍기.
@@ -112,3 +117,4 @@
 | 2026-10-01 | 최초 작성 (무기/방패 데이터, 손 소켓 장착, 무기 교체, 종류별 콤보·대기 모션, WeaponSocketMask 임포트 절차) |
 | 2026-10-01 | Wand/Staff/Bow/Crossbow 추가, 쥐는 손(`gripHand`)·보조 손 점유(`occupiesOffHand`), 보조 장비 일반화(방패/마법서) |
 | 2026-10-02 | `WeaponData` 상속 허용(RangedWeaponData, MagicWeaponData), `allowsShield` 추가, 클립 Root Transform 설정 |
+| 2026-10-02 | 칼날 궤적 판정용 `bladeBase` / `bladeTip` / `bladeRadius` 추가 |

@@ -3,26 +3,22 @@ using UnityEngine;
 
 namespace ProjectFantasy.Combat
 {
-    // 무기별 콤보 구성 데이터
+    // 무기별 콤보 구성 (단계마다 ActionData 하나)
     [CreateAssetMenu(fileName = "AttackComboData", menuName = "ProjectFantasy/Combat/Attack Combo Data")]
     public sealed class AttackComboData : ScriptableObject
     {
-        [SerializeField] private AttackStep[] steps = Array.Empty<AttackStep>();
-        [SerializeField, Min(0f)] private float crossFadeDuration = 0.1f;
+        [SerializeField] private ActionData[] actions = Array.Empty<ActionData>();
 
-        public int StepCount => steps.Length;
-        public float CrossFadeDuration => crossFadeDuration;
+        public int ActionCount => actions.Length;
 
-        public AttackStep GetStep(int index) => steps[index];
-        public bool HasNextStep(int index) => index + 1 < steps.Length;
+        public ActionData GetAction(int index) => actions[index];
+        public bool HasNextAction(int index) => index + 1 < actions.Length;
 
         private void OnValidate()
         {
-            for (int i = 0; i < steps.Length; i++)
+            for (int i = 0; i < actions.Length; i++)
             {
-                if (steps[i] == null) continue;
-                steps[i].InvalidateCache();
-                steps[i].Validate(this, i);
+                if (actions[i] == null) Debug.LogWarning($"[{name}] Action {i}이 비어 있습니다.", this);
             }
         }
     }

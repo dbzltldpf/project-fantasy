@@ -25,7 +25,7 @@ namespace ProjectFantasy.Weapon
             if (rightHandSlot == null || leftHandSlot == null) FindHandSlots();
         }
 
-        public void Preload(EquipmentData data, EquipHand hand) => GetOrCreateModel(data, GetSlot(hand));
+        public void Preload(EquipmentData data, EquipHand hand) => GetOrCreateModel(data, GetHandSlot(hand));
 
         // data가 null이면 해당 손을 비움
         public void Show(EquipHand hand, EquipmentData data)
@@ -33,7 +33,7 @@ namespace ProjectFantasy.Weapon
             int index = (int)hand;
             if (activeModels[index] != null) activeModels[index].SetActive(false);
 
-            activeModels[index] = GetOrCreateModel(data, GetSlot(hand));
+            activeModels[index] = GetOrCreateModel(data, GetHandSlot(hand));
             if (activeModels[index] != null) activeModels[index].SetActive(true);
         }
 
@@ -45,7 +45,12 @@ namespace ProjectFantasy.Weapon
             return model != null ? model.transform : null;
         }
 
-        private Transform GetSlot(EquipHand hand) => hand == EquipHand.Left ? leftHandSlot : rightHandSlot;
+        // 손 소켓 (에디터 미리보기 등 Awake 전 호출 대비 지연 탐색)
+        public Transform GetHandSlot(EquipHand hand)
+        {
+            if (rightHandSlot == null || leftHandSlot == null) FindHandSlots();
+            return hand == EquipHand.Left ? leftHandSlot : rightHandSlot;
+        }
 
         private GameObject GetOrCreateModel(EquipmentData data, Transform slot)
         {
