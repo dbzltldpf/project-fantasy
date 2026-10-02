@@ -13,6 +13,7 @@ namespace ProjectFantasy.Player
     [RequireComponent(typeof(MeleeAttacker), typeof(Health), typeof(PlayerLoadout))]
     [RequireComponent(typeof(ShieldGuard), typeof(PlayerRangedWeapon), typeof(RangedAttacker))]
     [RequireComponent(typeof(PlayerAmmoVisual), typeof(PlayerMagicCaster), typeof(SpellCaster))]
+    [RequireComponent(typeof(HitStop))]
     [DisallowMultipleComponent]
     public sealed class PlayerController : MonoBehaviour
     {
@@ -28,6 +29,7 @@ namespace ProjectFantasy.Player
 
         private StateMachine<PlayerStateBase> stateMachine;
         private Health health;
+        private HitStop hitStop;
         private Vector3 cachedAimPoint;
         private int cachedAimFrame = InvalidFrame;
 
@@ -46,7 +48,7 @@ namespace ProjectFantasy.Player
         public TrajectoryPreview TrajectoryPreview => trajectoryPreview;
 
         public AttackComboData AttackComboData => Loadout.CurrentWeapon != null ? Loadout.CurrentWeapon.ComboData : null;
-        public bool CanAttack => AttackComboData != null && AttackComboData.StepCount > 0;
+        public bool CanAttack => AttackComboData != null && AttackComboData.ActionCount > 0;
         public bool IsAimViewActive { get; private set; }
 
         public PlayerLocomotionState LocomotionState { get; private set; }
@@ -78,6 +80,7 @@ namespace ProjectFantasy.Player
             MagicCaster = GetComponent<PlayerMagicCaster>();
             SpellCaster = GetComponent<SpellCaster>();
             health = GetComponent<Health>();
+            hitStop = GetComponent<HitStop>();
 
             if (cameraTransform == null && Camera.main != null) cameraTransform = Camera.main.transform;
 
@@ -108,8 +111,11 @@ namespace ProjectFantasy.Player
             stateMachine.Initialize(LocomotionState);
         }
 
+        // 히트스톱 중에는 상태 시계·이동 모두 정지
         private void Update()
         {
+            if (hitStop.IsActive) return;
+
             float deltaTime = Time.deltaTime;
             stateMachine.Tick(deltaTime);
             Motor.Tick(deltaTime);
@@ -232,9 +238,16 @@ namespace ProjectFantasy.Player
 
             if (weapon.ComboData == null) return;
 
-            for (int i = 0; i < weapon.ComboData.StepCount; i++)
+            for (int i = 0; i < weapon.ComboData.ActionCount; i++)
             {
-                PlayerAnimator.ValidateState(weapon.ComboData.GetStep(i).StateName);
+                ActionData action = weapon.ComboData.GetAction(i);
+                if (action == null)
+                {
+                    UnityEngine.Debug.LogError($"[{nameof(PlayerController)}] '{weapon.ComboData.name}'의 Action {i}이 비어 있습니다.", weapon.ComboData);
+                    continue;
+                }
+
+                PlayerAnimator.ValidateState(action.StateName);
             }
         }
 

@@ -3,41 +3,41 @@ using UnityEngine;
 
 namespace ProjectFantasy.Player
 {
-    // 콤보 공격 (히트 윈도우, 입력 예약 → 전이 시점 연계, 전진 스텝)
-    public sealed class PlayerAttackState : PlayerStateBase
+    // 콤보 공격: ActionPlayer로 액션 타임라인 재생, 이벤트 요청(판정·콤보 창·전진)을 처리
+    public sealed class PlayerAttackState : PlayerStateBase, IActionContext
     {
-        private const int FirstStepIndex = 0;
+        private const int FirstComboIndex = 0;
 
-        private AttackStep currentStep;
-        private Vector3 lungeDirection;
+        private readonly ActionPlayer actionPlayer;
+        private Vector3 moveDirection;
+        private float moveSpeed;
         private int comboIndex;
-        private float elapsedTime;
+        private int comboTransitionFrame;
+        private bool isComboWindowOpen;
         private bool hasQueuedAttack;
 
         private AttackComboData ComboData => Controller.AttackComboData;
 
-        public PlayerAttackState(PlayerController controller) : base(controller) { }
+        public PlayerAttackState(PlayerController controller) : base(controller)
+        {
+            actionPlayer = new ActionPlayer(this);
+        }
 
         public override void Enter()
         {
-            StartStep(FirstStepIndex);
+            StartAction(FirstComboIndex);
         }
 
         public override void Tick(float deltaTime)
         {
-            elapsedTime += deltaTime;
+            actionPlayer.Tick(deltaTime);
+            if (!actionPlayer.IsPlaying) return;
 
-            Motor.SetVelocityImmediate(currentStep.IsLunging(elapsedTime) ? lungeDirection * currentStep.LungeSpeed : Vector3.zero);
-
-            // 원거리/마법 무기는 근접 판정 없음 (발사체는 원거리 전투 기능에서 처리)
-            if (Loadout.CurrentWeapon.HasMeleeHit && currentStep.IsInHitWindow(elapsedTime))
-            {
-                Attacker.TickHit();
-            }
+            Motor.SetVelocityImmediate(moveDirection * (moveSpeed * actionPlayer.Current.PlaybackSpeed));
 
             if (TryChainCombo()) return;
 
-            if (currentStep.IsFinished(elapsedTime))
+            if (actionPlayer.IsFinished)
             {
                 Controller.ChangeState(Controller.LocomotionState);
             }
@@ -45,38 +45,56 @@ namespace ProjectFantasy.Player
 
         public override void Exit()
         {
+            actionPlayer.Stop();
             Attacker.EndSwing();
         }
 
-        // 입력 창에서는 예약만, 전이 시점에 다음 단계 시작
+        // 콤보 창에서는 예약만, 전이 프레임에 다음 액션 시작
         private bool TryChainCombo()
         {
-            if (!ComboData.HasNextStep(comboIndex)) return false;
+            if (!ComboData.HasNextAction(comboIndex)) return false;
 
-            if (!hasQueuedAttack && currentStep.CanQueueCombo(elapsedTime))
+            if (isComboWindowOpen && !hasQueuedAttack)
             {
                 hasQueuedAttack = InputHandler.ConsumeAttack();
             }
 
-            if (!hasQueuedAttack || !currentStep.CanTransitionCombo(elapsedTime)) return false;
+            if (!hasQueuedAttack || actionPlayer.CurrentFrame < comboTransitionFrame) return false;
 
-            StartStep(comboIndex + 1);
+            StartAction(comboIndex + 1);
             return true;
         }
 
-        private void StartStep(int stepIndex)
+        private void StartAction(int index)
         {
-            comboIndex = stepIndex;
-            currentStep = ComboData.GetStep(stepIndex);
-            elapsedTime = 0f;
+            comboIndex = index;
             hasQueuedAttack = false;
+            ActionData action = ComboData.GetAction(index);
 
             // 입력 방향으로 즉시 회전 후 공격
             Motor.SnapRotation(Controller.GetCameraRelativeMove());
-            lungeDirection = Controller.transform.forward;
+            moveDirection = Controller.transform.forward;
 
-            Attacker.BeginSwing(Mathf.RoundToInt(Loadout.CurrentWeapon.AttackPower * currentStep.DamageMultiplier));
-            PlayerAnimator.PlayAttack(currentStep.StateHash, ComboData.CrossFadeDuration);
+            PlayerAnimator.PlayAction(action.StateHash, action.CrossFadeDuration, action.PlaybackSpeed);
+            actionPlayer.Play(action);
         }
+
+        void IActionContext.BeginHit(float damageMultiplier, float hitStopDuration)
+        {
+            int damage = Mathf.RoundToInt(Loadout.CurrentWeapon.AttackPower * damageMultiplier);
+            Attacker.BeginSwing(damage, hitStopDuration);
+        }
+
+        void IActionContext.TickHit() => Attacker.TickHit();
+        void IActionContext.EndHit() => Attacker.EndSwing();
+
+        void IActionContext.OpenComboWindow(int transitionFrame)
+        {
+            isComboWindowOpen = true;
+            comboTransitionFrame = transitionFrame;
+        }
+
+        void IActionContext.CloseComboWindow() => isComboWindowOpen = false;
+        void IActionContext.SetMoveSpeed(float speed) => moveSpeed = speed;
     }
 }

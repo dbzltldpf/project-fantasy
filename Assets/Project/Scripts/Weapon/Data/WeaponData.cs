@@ -22,6 +22,12 @@ namespace ProjectFantasy.Weapon
         [SerializeField] private Vector3 hitOffset = new Vector3(0f, 1f, 1f);
         [SerializeField, Min(0f)] private float hitRadius = 0.8f;
 
+        [Header("Blade Trace")]
+        [Tooltip("무기 모델 로컬 기준 칼날 시작/끝 (같으면 위의 구체 판정 사용)")]
+        [SerializeField] private Vector3 bladeBase;
+        [SerializeField] private Vector3 bladeTip;
+        [SerializeField, Min(0f)] private float bladeRadius = 0.1f;
+
         [Header("Animation")]
         [SerializeField] private string idleStateName = "Idle_A";
 
@@ -39,6 +45,10 @@ namespace ProjectFantasy.Weapon
         public AttackComboData ComboData => comboData;
         public Vector3 HitOffset => hitOffset;
         public float HitRadius => hitRadius;
+        public bool HasBlade => ModelPrefab != null && bladeBase != bladeTip && bladeRadius > 0f;
+        public Vector3 BladeBase => bladeBase;
+        public Vector3 BladeTip => bladeTip;
+        public float BladeRadius => bladeRadius;
         public string IdleStateName => idleStateName;
 
         public int IdleStateHash

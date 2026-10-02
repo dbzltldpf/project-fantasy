@@ -19,6 +19,8 @@ namespace ProjectFantasy.Player
         [SerializeField] private Animator animator;
         [Tooltip("조준 대기 상태의 Speed Multiplier로 연결할 Float 파라미터")]
         [SerializeField] private string poseSpeedParameter = "PoseSpeed";
+        [Tooltip("액션 상태의 Speed Multiplier로 연결할 Float 파라미터 (ActionData 재생 속도)")]
+        [SerializeField] private string actionSpeedParameter = "ActionSpeed";
 
         [Header("State Names")]
         [SerializeField, FormerlySerializedAs("idleState")] private string defaultIdleState = "Idle_A";
@@ -58,6 +60,8 @@ namespace ProjectFantasy.Player
 
         private int poseSpeedHash;
         private bool hasPoseSpeedParameter;
+        private int actionSpeedHash;
+        private bool hasActionSpeedParameter;
         private int holdStateHash = NoState;
         private float holdNormalizedTime;
         private bool isPoseFrozen;
@@ -86,6 +90,8 @@ namespace ProjectFantasy.Player
 
             poseSpeedHash = Animator.StringToHash(poseSpeedParameter);
             hasPoseSpeedParameter = HasFloatParameter(poseSpeedHash);
+            actionSpeedHash = Animator.StringToHash(actionSpeedParameter);
+            hasActionSpeedParameter = HasFloatParameter(actionSpeedHash);
 
             ValidateBaseStates();
         }
@@ -119,8 +125,14 @@ namespace ProjectFantasy.Player
         public void PlayBlockHit() => CrossFade(blockHitHash, actionCrossFade, true);
         public void PlayHit() => CrossFade(hitHash, actionCrossFade, true);
         public void PlayDeath() => CrossFade(deathHash, actionCrossFade, true);
-        public void PlayAttack(int stateHash, float crossFadeDuration) => CrossFade(stateHash, crossFadeDuration, true);
         public void PlayAction(int stateHash) => CrossFade(stateHash, actionCrossFade, true);
+
+        // 액션 타임라인 재생 (애니메이션 속도 = 이벤트 시계 속도)
+        public void PlayAction(int stateHash, float crossFadeDuration, float playbackSpeed)
+        {
+            if (hasActionSpeedParameter) animator.SetFloat(actionSpeedHash, playbackSpeed);
+            CrossFade(stateHash, crossFadeDuration, true);
+        }
 
         // 조준 중 이동: 캐릭터 로컬 이동 방향으로 전진/후진/좌우 스트레이프 분기
         // holdNormalizedTime: 조준 대기 자세를 멈출 정규화 시간 (1이면 고정 안 함)
@@ -169,6 +181,11 @@ namespace ProjectFantasy.Player
             if (!hasPoseSpeedParameter)
             {
                 Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{poseSpeedParameter}'가 없어 조준 자세 고정이 비활성화됩니다.", this);
+            }
+
+            if (!hasActionSpeedParameter)
+            {
+                Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{actionSpeedParameter}'가 없어 액션 재생 속도 배율이 비활성화됩니다.", this);
             }
         }
 
