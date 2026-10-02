@@ -1,7 +1,7 @@
 # Player
 
 ## 개요
-카메라 기준 이동, 걷기/달리기, 점프, 콤보 공격, 방패 가드, 무기 교체, 피격/사망을 처리하는 플레이어 캐릭터. 기준 캐릭터는 KayKit **Rogue**.
+카메라 기준 이동, 걷기/달리기, 점프, 콤보 공격, 방패 가드, 원거리 조준·발사, 마법 시전, 무기 교체, 피격/사망을 처리하는 플레이어 캐릭터. 기준 캐릭터는 KayKit **Rogue**.
 
 ## 구성 스크립트
 | 파일 | 책임 |
@@ -11,8 +11,11 @@
 | [PlayerMotor.cs](../../Assets/Project/Scripts/Player/PlayerMotor.cs) | CharacterController 이동, 가속/감속, 중력, 접지, 회전 |
 | [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 |
 | [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 보유 무기/보조 장비, 무기 순환, 장착 적용 ([Weapon](Weapon.md) 참고) |
+| [PlayerRangedWeapon.cs](../../Assets/Project/Scripts/Player/PlayerRangedWeapon.cs) / [PlayerAmmoVisual.cs](../../Assets/Project/Scripts/Player/PlayerAmmoVisual.cs) | 원거리 발사·장전 규칙, 화살 표시 ([Ranged Combat](RangedCombat.md)) |
+| [PlayerMagicCaster.cs](../../Assets/Project/Scripts/Player/PlayerMagicCaster.cs) | 마법 쿨타임·데미지 ([Magic](Magic.md)) |
+| [PlayerAimPresenter.cs](../../Assets/Project/Scripts/Player/PlayerAimPresenter.cs) | 조준 뷰 → 카메라 숄더뷰·조준점 |
 | [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프 튜닝 데이터 (SO) |
-| [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Hit`, `Dead` |
+| [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Aim`, `RangedFire`, `Reload`, `Cast`, `SpellTarget`, `Hit`, `Dead` |
 
 ## 동작 흐름
 ### 프레임 처리 순서
@@ -47,6 +50,19 @@ flowchart LR
 | Air | 점프·낙하. 공중 가속(airAcceleration)으로 제어, 코요테 타임 내 점프 허용 |
 | Attack | 입력 방향으로 즉시 회전 → 히트 윈도우 동안 타격 판정(근접 무기만) → 예약 입력 시 전이 시점에 다음 단계 |
 | Guard | 방패 가드 홀드. 느린 이동(guardMoveSpeed), 막으면 Block_Hit + 넉백 경직, 가드 중 공격 가능 |
+| Aim / RangedFire / Reload | 활·석궁 조준·발사·장전 ([Ranged Combat](RangedCombat.md)) |
+| Cast / SpellTarget | 마법 시전 / Staff 마법진 조준 ([Magic](Magic.md)) |
+
+**좌클릭·우클릭 분기** (`PlayerStateBase.TryStartPrimaryAction / TryStartSecondaryAction`)
+| 장착 무기 | 좌클릭 | 우클릭 홀드 |
+|---|---|---|
+| 근접 / 맨손 | 콤보 공격 | 방패 가드 |
+| 활 / 양손 석궁 | 발사 | 조준 모드 |
+| 한손 석궁 | 발사 | 방패 가드 |
+| Wand | 마법탄 | 방패 가드 |
+| Staff | (조준 모드에서) 시전 | 마법진 조준 모드 |
+
+- 상태마다 `UsesAimView`를 선언하고, 상태 전이 시 `PlayerController.AimViewChanged`로 숄더뷰·조준점을 전환한다.
 | Hit | 입력 버퍼 초기화, 가해 방향을 바라보며 넉백 후 경직 |
 | Dead | 종료 상태. 입력 무시, 사망 애니메이션 |
 
@@ -62,7 +78,7 @@ flowchart LR
 | Attack | 마우스 왼쪽 | West 버튼 | 선입력 버퍼 |
 | Jump | Space | South 버튼 | 선입력 버퍼 |
 | Sprint | Left Shift | 왼쪽 스틱 누름 | 홀드 |
-| Guard | 마우스 오른쪽 | 왼쪽 트리거 | 홀드 |
+| Secondary (구 Guard) | 마우스 오른쪽 | 왼쪽 트리거 | 홀드 (무기에 따라 가드/조준) |
 | Next / Previous | 2 / 1 | D-pad 오른쪽 / 왼쪽 | 선입력 버퍼 (무기 교체) |
 
 ### 선입력 / 코요테 타임
@@ -76,6 +92,7 @@ flowchart LR
 | walkSpeed | 2 | 기본 이동 속도 (m/s) |
 | runSpeed | 5 | 달리기 버튼 입력 시 속도 |
 | guardMoveSpeed | 1.2 | 가드 중 이동 속도 |
+| aimMoveSpeed | 1.5 | 조준 모드 이동 속도 |
 | acceleration / deceleration | 30 / 40 | 지상 가속·감속 (m/s²) |
 | airAcceleration | 8 | 공중 가감속 |
 | rotationSpeed | 720 | 회전 속도 (°/s) |
@@ -92,6 +109,12 @@ flowchart LR
 | PlayerAnimator | idleSpeedThreshold | 0.1 | 이 속도 미만이면 Idle |
 | PlayerAnimator | runSpeedThreshold | 3.5 | 이 속도 이상이면 Run |
 | PlayerAnimator | locomotionCrossFade / actionCrossFade | 0.15 / 0.1 | 전환 시간 |
+| PlayerAnimator | poseSpeedParameter | PoseSpeed | 조준 대기 자세 고정용 Float 파라미터 |
+| PlayerController | minAimFacingDistance | 1.5 | 조준 지점이 가까우면 카메라 정면을 바라봄 |
+
+### 조준 자세 고정
+- 조준 대기 클립의 **마지막 프레임이 조준 자세**면 Loop만 끄면 된다 (활, 양손 석궁).
+- 들어올림→내림이 한 클립인 경우(`Ranged_Magic_Raise`): 상태 Speed Multiplier를 `PoseSpeed`로 연결하고 데이터의 hold time(정규화 시간)을 지정 → 도달 시 `PoseSpeed = 0`, 다른 모션 전환 시 1로 복구.
 
 ## 에디터 설정
 1. **애니메이터(`Player.controller`)** – 아래 상태가 있어야 한다. 전이 화살표는 불필요(코드에서 CrossFade). 무기별 콤보·대기 상태는 [Weapon](Weapon.md) 참고.
@@ -102,10 +125,13 @@ flowchart LR
    | 공중 | `Jump_Idle` | Rig_Medium_MovementBasic |
    | 피격 / 사망 | `Hit_A` / `Death_A` | Rig_Medium_General |
    | 가드 / 막기 | `Melee_Blocking` / `Melee_Block_Hit` | Rig_Medium_CombatMelee |
+   | 조준 이동 | `Walking_Backwards` / `Running_Strafe_Left` / `Running_Strafe_Right` (Loop) | Rig_Medium_MovementAdvanced |
 
-2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, CharacterController).
+   Float 파라미터 `PoseSpeed`(기본 1) 추가, 자세 고정이 필요한 조준 대기 상태의 Speed Multiplier에 연결.
+
+2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, PlayerRangedWeapon, RangedAttacker, PlayerAmmoVisual, PlayerMagicCaster, SpellCaster, CharacterController). 이미 있는 오브젝트는 RequireComponent가 자동 추가되지 않으므로 수동 추가.
    - CharacterController Height/Center를 캐릭터 크기에 맞춤
-   - InputHandler에 `InputSystem_Actions`의 Player/Move, Attack, Jump, Sprint, Guard, Next, Previous 연결
+   - InputHandler에 `InputSystem_Actions`의 Player/Move, Attack, Jump, Sprint, Secondary, Next, Previous 연결
    - Movement / HitReaction 데이터 연결 (콤보는 무기 데이터에서 가져옴), Layer를 **Player**로 지정
 
 ## 주의사항 / 확장 포인트
@@ -113,7 +139,7 @@ flowchart LR
 - `walkSpeed`를 `runSpeedThreshold`(3.5) 이상으로 올리면 걷기에도 Run 애니메이션이 나온다. 두 값을 함께 조정.
 - 루트 모션은 사용하지 않음 (`applyRootMotion = false`), 이동은 전부 PlayerMotor가 담당.
 - 가드 중 이동은 전신 가드 모션이라 발이 미끄러져 보임 → 상체 레이어(Avatar Mask) 도입 시 개선.
-- 예정: 원거리 전투(조준·발사), 주목(락온), 회피/저스트 회피, 스태미나, 점프 시작/착지 애니메이션.
+- 예정: 주목(락온), 회피/저스트 회피, 스태미나, 점프 시작/착지 애니메이션.
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -121,3 +147,4 @@ flowchart LR
 | 2026-09-30 | 최초 작성 (이동, 점프, 3단 콤보, 피격, 사망) |
 | 2026-09-30 | 기본 걷기 / 달리기 버튼 시 달리기로 변경 (`sprintSpeed`, `walkInputThreshold` 제거), 애니메이터 상태 누락 검증 추가 |
 | 2026-10-01 | Guard 상태, 무기 교체 입력, `PlayerLoadout` 연동, 무기별 대기 모션, 콤보 입력 예약 방식 |
+| 2026-10-02 | 원거리(Aim/RangedFire/Reload)·마법(Cast/SpellTarget) 상태, 좌/우클릭 무기별 분기, 조준 뷰 이벤트, 스트레이프 이동, 조준 자세 고정, Guard 입력 → Secondary |

@@ -12,6 +12,7 @@
 | [IDamageBlocker.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageBlocker.cs) | 피해 적용 전 방어 여부 판정 (`TryBlock`), Health가 호출 |
 | [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자) |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` 하위 계층 이름 탐색 (초기화 전용) |
+| [PrefabPool.cs](../../Assets/Project/Scripts/Utils/PrefabPool.cs) | 프리팹별 컴포넌트 풀 `PrefabPool<T>` (투사체·데미지 숫자 공용, 외부 파괴 인스턴스 건너뜀) |
 
 ## 동작 흐름
 ### StateMachine\<TState\>
@@ -33,3 +34,4 @@
 |---|---|
 | 2026-09-30 | 최초 작성 (StateMachine, IState, IDamageable, DamageInfo) |
 | 2026-10-01 | `IDamageBlocker`, `Utils/TransformExtensions` 추가 |
+| 2026-10-02 | `Utils/PrefabPool<T>` 추가 |
