@@ -12,6 +12,7 @@ namespace ProjectFantasy.Player
         [SerializeField, Min(0f)] private float walkSpeed = 2f;
         [SerializeField, Min(0f)] private float runSpeed = 5f;
         [SerializeField, Min(0f)] private float guardMoveSpeed = 1.2f;
+        [SerializeField, Min(0f)] private float aimMoveSpeed = 1.5f;
 
         [Header("Acceleration")]
         [SerializeField, Min(0f)] private float acceleration = 30f;
@@ -31,6 +32,7 @@ namespace ProjectFantasy.Player
         public float WalkSpeed => walkSpeed;
         public float RunSpeed => runSpeed;
         public float GuardMoveSpeed => guardMoveSpeed;
+        public float AimMoveSpeed => aimMoveSpeed;
         public float Acceleration => acceleration;
         public float Deceleration => deceleration;
         public float AirAcceleration => airAcceleration;

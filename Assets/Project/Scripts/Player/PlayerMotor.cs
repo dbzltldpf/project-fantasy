@@ -22,6 +22,7 @@ namespace ProjectFantasy.Player
         public bool IsGrounded { get; private set; }
         public bool IsRising => verticalVelocity > 0f;
         public float HorizontalSpeed => horizontalVelocity.magnitude;
+        public Vector3 HorizontalVelocity => horizontalVelocity;
 
         // 코요테 타임을 넘겨 지면을 벗어난 상태
         public bool IsAirborne => Time.time - lastGroundedTime > movementData.CoyoteTime;
