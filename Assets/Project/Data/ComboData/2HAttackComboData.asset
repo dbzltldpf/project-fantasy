@@ -12,32 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4116c9646b4996048a3e1a741a458070, type: 3}
   m_Name: 2HAttackComboData
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.AttackComboData
-  steps:
-  - stateName: Melee_2H_Attack_Slice
-    damageMultiplier: 1
-    duration: 1
-    hitStartTime: 0.2
-    hitEndTime: 0.35
-    comboInputStartTime: 0.3
-    comboTransitionTime: 1
-    lungeSpeed: 0
-    lungeDuration: 0.15
-  - stateName: Melee_2H_Attack_Chop
-    damageMultiplier: 1
-    duration: 1.5
-    hitStartTime: 0.2
-    hitEndTime: 0.35
-    comboInputStartTime: 0.8
-    comboTransitionTime: 1
-    lungeSpeed: 0
-    lungeDuration: 0.15
-  - stateName: Melee_2H_Attack_Spin
-    damageMultiplier: 1.5
-    duration: 2
-    hitStartTime: 0.2
-    hitEndTime: 0.35
-    comboInputStartTime: 0.3
-    comboTransitionTime: 0.45
-    lungeSpeed: 0
-    lungeDuration: 0.15
-  crossFadeDuration: 0.1
+  actions:
+  - {fileID: 11400000, guid: 4efd8647842a06846b6e46802d1e54d2, type: 2}
+  - {fileID: 11400000, guid: c2f99da907a5035448bbfedb263d2695, type: 2}
+  - {fileID: 11400000, guid: 705b6da12b7912f4c9fe379da8db8619, type: 2}

@@ -2882,6 +2882,7 @@ GameObject:
   - component: {fileID: 214369300}
   - component: {fileID: 214369305}
   - component: {fileID: 214369304}
+  - component: {fileID: 214369306}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -2969,6 +2970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerAnimator
   animator: {fileID: 1193410210}
   poseSpeedParameter: PoseSpeed
+  actionSpeedParameter: ActionSpeed
   defaultIdleState: Idle_A
   walkState: Walking_B
   runState: Running_B
@@ -3184,6 +3186,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe4684eabde74b74180e8398d180a34f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerMagicCaster
+--- !u!114 &214369306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adfbb468333ccf84aa6ff665289ae564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.HitStop
+  animator: {fileID: 1193410210}
 --- !u!1 &220313848
 GameObject:
   m_ObjectHideFlags: 0
@@ -14583,23 +14598,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.5114166
+      value: -23.640999
       objectReference: {fileID: 0}
     - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 107.315216
+      value: 38.340664
       objectReference: {fileID: 0}
     - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -19.836224
+      value: -30.3009
       objectReference: {fileID: 0}
     - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.0000002626506
+      value: 0.00000033708451
       objectReference: {fileID: 0}
     - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.0000032934045
+      value: -0.0000042267384
       objectReference: {fileID: 0}
     - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -14651,27 +14666,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -4.2658343
+      value: -8.97774
       objectReference: {fileID: 0}
     - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -72.992584
+      value: -49.99505
       objectReference: {fileID: 0}
     - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 12.969323
+      value: 21.252005
       objectReference: {fileID: 0}
     - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -1.1834247
+      value: 0.0000001682755
       objectReference: {fileID: 0}
     - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.814422
+      value: 0.0000015899701
       objectReference: {fileID: 0}
     - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -49.366234
+      value: -87.50656
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
