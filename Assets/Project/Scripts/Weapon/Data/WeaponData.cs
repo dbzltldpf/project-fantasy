@@ -6,13 +6,15 @@ namespace ProjectFantasy.Weapon
 {
     // 무기 종류·쥐는 손·공격력·콤보·판정 범위·대기 모션
     [CreateAssetMenu(fileName = "WeaponData", menuName = "ProjectFantasy/Weapon/Weapon Data")]
-    public sealed class WeaponData : EquipmentData
+    public class WeaponData : EquipmentData
     {
         [Header("Type")]
         [SerializeField] private WeaponType weaponType = WeaponType.OneHanded;
         [SerializeField] private EquipHand gripHand = EquipHand.Right;
         [Tooltip("보조 손(왼손)까지 사용하는 무기 (양손검, 양손 석궁 등)")]
         [SerializeField] private bool occupiesOffHand;
+        [Tooltip("보조 손에 방패 장착 허용 (Staff는 마법서만)")]
+        [SerializeField] private bool allowsShield = true;
 
         [Header("Combat")]
         [SerializeField, Min(0)] private int attackPower = 10;
@@ -30,6 +32,7 @@ namespace ProjectFantasy.Weapon
         public EquipHand GripHand => gripHand;
         public bool IsHeldInLeftHand => gripHand == EquipHand.Left;
         public bool OccupiesOffHand => occupiesOffHand || IsHeldInLeftHand;
+        public bool AllowsShield => allowsShield;
         public bool IsMagic => weaponType == WeaponType.Wand || weaponType == WeaponType.Staff;
         public bool HasMeleeHit => weaponType == WeaponType.Unarmed || weaponType == WeaponType.OneHanded || weaponType == WeaponType.TwoHanded;
         public int AttackPower => attackPower;
@@ -51,6 +54,6 @@ namespace ProjectFantasy.Weapon
             }
         }
 
-        private void OnValidate() => isHashCached = false;
+        protected virtual void OnValidate() => isHashCached = false;
     }
 }

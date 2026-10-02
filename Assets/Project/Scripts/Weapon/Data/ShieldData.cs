@@ -15,6 +15,6 @@ namespace ProjectFantasy.Weapon
         public float BlockKnockbackSpeed => blockKnockbackSpeed;
         public float BlockStunDuration => blockStunDuration;
 
-        public override bool CanEquipWith(WeaponData weapon) => !weapon.OccupiesOffHand;
+        public override bool CanEquipWith(WeaponData weapon) => !weapon.OccupiesOffHand && weapon.AllowsShield;
     }
 }
