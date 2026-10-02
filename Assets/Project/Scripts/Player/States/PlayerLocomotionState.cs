@@ -7,11 +7,7 @@ namespace ProjectFantasy.Player
 
         public override void Tick(float deltaTime)
         {
-            if (Controller.CanAttack && InputHandler.ConsumeAttack())
-            {
-                Controller.ChangeState(Controller.AttackState);
-                return;
-            }
+            if (TryStartPrimaryAction()) return;
 
             if (Motor.CanJump && InputHandler.ConsumeJump())
             {
@@ -26,9 +22,11 @@ namespace ProjectFantasy.Player
                 return;
             }
 
-            if (Loadout.CanGuard && InputHandler.IsGuardHeld)
+            if (TryStartSecondaryAction()) return;
+
+            if (RangedWeapon.NeedsReload)
             {
-                Controller.ChangeState(Controller.GuardState);
+                Controller.ChangeState(Controller.ReloadState);
                 return;
             }
 

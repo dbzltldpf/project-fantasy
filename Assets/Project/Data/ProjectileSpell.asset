@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4b9200e38f736f4da41ed9833852350, type: 3}
+  m_Name: ProjectileSpell
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Magic.ProjectileSpellData
+  displayName: 
+  castStateName: Ranged_Magic_Shoot
+  releaseTime: 0.3
+  castDuration: 0.8
+  cooldown: 1
+  damageMultiplier: 1
+  projectilePrefab: {fileID: 907025890569955238, guid: 3fcb355d8c4b82f40acf4ad836bf546b, type: 3}
+  speed: 30
+  lifetime: 3
+  impactEffectPrefab: {fileID: 5094813014700351310, guid: 35703001998066a4a9616f147f608b90, type: 3}
+  impactEffectDuration: 1

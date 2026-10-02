@@ -38,17 +38,14 @@ namespace ProjectFantasy.Player
                 return;
             }
 
-            if (!InputHandler.IsGuardHeld || !Loadout.CanGuard || Motor.IsAirborne)
+            if (!InputHandler.IsSecondaryHeld || !Loadout.CanGuard || Motor.IsAirborne)
             {
                 Controller.ChangeState(Motor.IsAirborne ? Controller.AirState : Controller.LocomotionState);
                 return;
             }
 
-            if (Controller.CanAttack && InputHandler.ConsumeAttack())
-            {
-                Controller.ChangeState(Controller.AttackState);
-                return;
-            }
+            // 가드 중 좌클릭: 근접 공격 또는 한손 석궁 발사
+            if (TryStartPrimaryAction()) return;
 
             ApplyMoveInput(MovementData.GuardMoveSpeed, MovementData.Acceleration, MovementData.Deceleration, deltaTime);
         }

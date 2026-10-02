@@ -55,5 +55,13 @@ namespace ProjectFantasy.Combat
             CurrentHealth = Mathf.Min(maxHealth, CurrentHealth + amount);
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
         }
+
+        // 최대 체력으로 복구 (사망 상태 포함, 리스폰·허수아비용)
+        public void RestoreFull()
+        {
+            CurrentHealth = maxHealth;
+            invincibleEndTime = 0f;
+            HealthChanged?.Invoke(CurrentHealth, maxHealth);
+        }
     }
 }

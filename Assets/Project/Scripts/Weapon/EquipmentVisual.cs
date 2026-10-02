@@ -39,6 +39,12 @@ namespace ProjectFantasy.Weapon
 
         public void Hide(EquipHand hand) => Show(hand, null);
 
+        public Transform GetActiveModel(EquipHand hand)
+        {
+            GameObject model = activeModels[(int)hand];
+            return model != null ? model.transform : null;
+        }
+
         private Transform GetSlot(EquipHand hand) => hand == EquipHand.Left ? leftHandSlot : rightHandSlot;
 
         private GameObject GetOrCreateModel(EquipmentData data, Transform slot)

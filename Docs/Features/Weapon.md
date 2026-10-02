@@ -13,6 +13,8 @@
 | [OffHandData.cs](../../Assets/Project/Scripts/Weapon/Data/OffHandData.cs) | 보조 장비 베이스, `CanEquipWith(weapon)`로 동시 장착 가능 여부 판정 |
 | [ShieldData.cs](../../Assets/Project/Scripts/Weapon/Data/ShieldData.cs) | 방패: 가드 각도, 막기 넉백/경직 (SO) |
 | [SpellbookData.cs](../../Assets/Project/Scripts/Weapon/Data/SpellbookData.cs) | 마법서: 마법 위력 배율 (SO) |
+| [RangedWeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/RangedWeaponData.cs) / [AmmoData.cs](../../Assets/Project/Scripts/Weapon/Data/AmmoData.cs) / [AmmoPouch.cs](../../Assets/Project/Scripts/Weapon/AmmoPouch.cs) | 활·석궁, 화살, 화살 보유 수 ([Ranged Combat](RangedCombat.md)) |
+| [MagicWeaponData.cs](../../Assets/Project/Scripts/Magic/Data/MagicWeaponData.cs) | Wand·Staff ([Magic](Magic.md)) |
 | [EquipmentVisual.cs](../../Assets/Project/Scripts/Weapon/EquipmentVisual.cs) | `handslot.r` / `handslot.l`에 모델 부착, 미리 생성 후 활성/비활성 전환 |
 | [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 플레이어 보유 무기/보조 장비, 무기 순환, 장착 적용 |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` (손 본 자동 탐색) |
@@ -33,7 +35,8 @@
 | 무기 | 방패 | 마법서 |
 |---|---|---|
 | 맨손, 한손 근접, 한손 석궁 | ✅ | ❌ |
-| Wand / Staff (한손 마법) | ✅ | ✅ |
+| Wand (한손 마법) | ✅ | ✅ |
+| Staff (`allowsShield = false`) | ❌ | ✅ |
 | 양손검, 양손 석궁 (`occupiesOffHand`) | ❌ | ❌ |
 | 활 (왼손) | ❌ | ❌ |
 
@@ -48,7 +51,7 @@
 ### 데미지
 `최종 데미지 = WeaponData.attackPower × AttackStep.damageMultiplier` (반올림)
 - 같은 종류 무기는 콤보 에셋 하나를 공유하고 공격력만 다르게 설정.
-- 원거리·마법 무기(`HasMeleeHit == false`)는 근접 판정 없이 모션만 재생 (발사체는 원거리 전투 기능에서 처리).
+- 활·석궁은 화살 피해 = `attackPower` ([Ranged Combat](RangedCombat.md)), Wand·Staff는 `attackPower × 마법 배율 × 마법서 배율` ([Magic](Magic.md)).
 
 ## 데이터 파라미터
 ### WeaponData
@@ -60,6 +63,7 @@
 | weaponType | OneHanded | 무기 종류 |
 | gripHand | Right | 쥐는 손 (활은 Left) |
 | occupiesOffHand | false | 보조 손까지 사용 (양손검, 양손 석궁) |
+| allowsShield | true | 보조 손 방패 허용 (Staff false → 마법서만) |
 | attackPower | 10 | 공격력 |
 | comboData | — | 사용할 콤보 (AttackComboData) |
 | hitOffset / hitRadius | (0, 1, 1) / 0.8 | 근접 판정 구체 (캐릭터 로컬) |
@@ -84,11 +88,11 @@
    | 맨손 | — | Unarmed | Right | ❌ | `Melee_Unarmed_Idle` | Punch_A → Kick |
    | 한손검 | `sword_1handed` | OneHanded | Right | ❌ | `Idle_A` | 1H Slice_Horizontal → Slice_Diagonal → Chop |
    | 양손검 | `sword_2handed` | TwoHanded | Right | ✅ | `Melee_2H_Idle` | 2H Slice → Chop → Spin |
-   | 지팡이 | `wand` | Wand | Right | ❌ | `Idle_A` | `Ranged_Magic_Shoot` |
-   | 스태프 | `staff` | Staff | Right | ❌ | `Idle_A` | `Ranged_Magic_Spellcasting` (공격력↑, duration↑) |
-   | 활 | `bow` | Bow | **Left** | (자동) | `Ranged_Bow_Idle` | `Ranged_Bow_Release` |
-   | 한손 석궁 | `crossbow_1handed` | Crossbow | Right | ❌ | `Idle_A` | `Ranged_1H_Shoot` |
-   | 양손 석궁 | `crossbow_2handed` | Crossbow | Right | ✅ | `Ranged_2H_Aiming` | `Ranged_2H_Shoot` |
+   | 지팡이 | `wand` | Wand (**MagicWeaponData**) | Right | ❌ | `Idle_A` | — (Spell: 직선 마법탄) |
+   | 스태프 | `staff` | Staff (**MagicWeaponData**, allowsShield ❌) | Right | ❌ | `Idle_A` | — (Spell: 범위 마법) |
+   | 활 | `bow` | Bow (**RangedWeaponData**) | **Left** | (자동) | `Ranged_Bow_Idle` | — (발사 모션은 무기 데이터) |
+   | 한손 석궁 | `crossbow_1handed` | Crossbow (**RangedWeaponData**) | Right | ❌ | `Idle_A` | — |
+   | 양손 석궁 | `crossbow_2handed` | Crossbow (**RangedWeaponData**) | Right | ✅ | `Ranged_2H_Aiming` | — |
 
 3. **애니메이터** – 위 콤보·대기 상태를 `Player.controller`에 추가 (상태 이름 = 클립 이름)
 4. **Rogue 프리팹/씬** – `PlayerLoadout`, `EquipmentVisual`, `ShieldGuard` 추가
@@ -99,10 +103,12 @@
 - `unarmedWeapon`은 **필수**. 비어 있으면 시작 시 콘솔 에러.
 - 무기 모델이 손에서 어긋나면 먼저 클립 마스크(1번)를 확인. grip 보정은 마지막 수단.
 - 적(스켈레톤 등)은 `EquipmentVisual` + `WeaponData`를 그대로 재사용 가능.
-- 예정: 원거리 전투(조준·발사·화살 수량·석궁 장전), 보조 장비 교체/인벤토리, 필드 무기 줍기.
+- 클립 Root Transform은 Rotation/Y/XZ 모두 **Bake Into Pose ✓ + Based Upon: Original** (FBX 재추출 시 .anim에 재적용).
+- 예정: 보조 장비 교체/인벤토리, 필드 무기 줍기.
 
 ## 변경 이력
 | 날짜 | 내용 |
 |---|---|
 | 2026-10-01 | 최초 작성 (무기/방패 데이터, 손 소켓 장착, 무기 교체, 종류별 콤보·대기 모션, WeaponSocketMask 임포트 절차) |
 | 2026-10-01 | Wand/Staff/Bow/Crossbow 추가, 쥐는 손(`gripHand`)·보조 손 점유(`occupiesOffHand`), 보조 장비 일반화(방패/마법서) |
+| 2026-10-02 | `WeaponData` 상속 허용(RangedWeaponData, MagicWeaponData), `allowsShield` 추가, 클립 Root Transform 설정 |

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace ProjectFantasy.Player
 {
@@ -15,7 +16,8 @@ namespace ProjectFantasy.Player
         [SerializeField] private InputActionReference attackAction;
         [SerializeField] private InputActionReference jumpAction;
         [SerializeField] private InputActionReference sprintAction;
-        [SerializeField] private InputActionReference guardAction;
+        [Tooltip("무기에 따라 가드 또는 조준")]
+        [SerializeField, FormerlySerializedAs("guardAction")] private InputActionReference secondaryAction;
         [SerializeField] private InputActionReference nextWeaponAction;
         [SerializeField] private InputActionReference previousWeaponAction;
         [SerializeField, Min(0f)] private float inputBufferTime = 0.2f;
@@ -27,7 +29,7 @@ namespace ProjectFantasy.Player
 
         public Vector2 MoveInput => moveAction.action.ReadValue<Vector2>();
         public bool IsSprintHeld => sprintAction.action.IsPressed();
-        public bool IsGuardHeld => guardAction.action.IsPressed();
+        public bool IsSecondaryHeld => secondaryAction.action.IsPressed();
 
         private void OnEnable()
         {
@@ -40,7 +42,7 @@ namespace ProjectFantasy.Player
             attackAction.action.Enable();
             jumpAction.action.Enable();
             sprintAction.action.Enable();
-            guardAction.action.Enable();
+            secondaryAction.action.Enable();
             nextWeaponAction.action.Enable();
             previousWeaponAction.action.Enable();
         }

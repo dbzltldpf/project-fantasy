@@ -18,9 +18,11 @@ MonoBehaviour:
   defaultPitch: 15
   minPitch: -30
   maxPitch: 70
-  distance: 5
-  targetHeight: 1.5
+  distance: 7
+  targetHeight: 3
   followSmoothTime: 0.05
+  shoulderOffset: 0
+  fieldOfView: 60
   collisionLayers:
     serializedVersion: 2
     m_Bits: 51
