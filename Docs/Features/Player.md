@@ -48,7 +48,7 @@ flowchart LR
 |---|---|
 | Locomotion | 지상 이동, 무기 교체. 애니메이션은 수평 속도로 Idle/Walk/Run 자동 분기 |
 | Air | 점프·낙하. 공중 가속(airAcceleration)으로 제어, 코요테 타임 내 점프 허용 |
-| Attack | 입력 방향으로 즉시 회전 → 히트 윈도우 동안 타격 판정(근접 무기만) → 예약 입력 시 전이 시점에 다음 단계 |
+| Attack | 입력 방향으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션 ([Combat](Combat.md)) |
 | Guard | 방패 가드 홀드. 느린 이동(guardMoveSpeed), 막으면 Block_Hit + 넉백 경직, 가드 중 공격 가능 |
 | Aim / RangedFire / Reload | 활·석궁 조준·발사·장전 ([Ranged Combat](RangedCombat.md)) |
 | Cast / SpellTarget | 마법 시전 / Staff 마법진 조준 ([Magic](Magic.md)) |
@@ -110,6 +110,7 @@ flowchart LR
 | PlayerAnimator | runSpeedThreshold | 3.5 | 이 속도 이상이면 Run |
 | PlayerAnimator | locomotionCrossFade / actionCrossFade | 0.15 / 0.1 | 전환 시간 |
 | PlayerAnimator | poseSpeedParameter | PoseSpeed | 조준 대기 자세 고정용 Float 파라미터 |
+| PlayerAnimator | actionSpeedParameter | ActionSpeed | 액션 재생 속도용 Float 파라미터 (공격 상태 Speed Multiplier) |
 | PlayerController | minAimFacingDistance | 1.5 | 조준 지점이 가까우면 카메라 정면을 바라봄 |
 
 ### 조준 자세 고정
@@ -128,8 +129,9 @@ flowchart LR
    | 조준 이동 | `Walking_Backwards` / `Running_Strafe_Left` / `Running_Strafe_Right` (Loop) | Rig_Medium_MovementAdvanced |
 
    Float 파라미터 `PoseSpeed`(기본 1) 추가, 자세 고정이 필요한 조준 대기 상태의 Speed Multiplier에 연결.
+   Float 파라미터 `ActionSpeed`(기본 1) 추가, 모든 공격 상태의 Speed Multiplier에 연결.
 
-2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, PlayerRangedWeapon, RangedAttacker, PlayerAmmoVisual, PlayerMagicCaster, SpellCaster, CharacterController). 이미 있는 오브젝트는 RequireComponent가 자동 추가되지 않으므로 수동 추가.
+2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, PlayerRangedWeapon, RangedAttacker, PlayerAmmoVisual, PlayerMagicCaster, SpellCaster, HitStop, CharacterController). 이미 있는 오브젝트는 RequireComponent가 자동 추가되지 않으므로 수동 추가.
    - CharacterController Height/Center를 캐릭터 크기에 맞춤
    - InputHandler에 `InputSystem_Actions`의 Player/Move, Attack, Jump, Sprint, Secondary, Next, Previous 연결
    - Movement / HitReaction 데이터 연결 (콤보는 무기 데이터에서 가져옴), Layer를 **Player**로 지정
@@ -148,3 +150,4 @@ flowchart LR
 | 2026-09-30 | 기본 걷기 / 달리기 버튼 시 달리기로 변경 (`sprintSpeed`, `walkInputThreshold` 제거), 애니메이터 상태 누락 검증 추가 |
 | 2026-10-01 | Guard 상태, 무기 교체 입력, `PlayerLoadout` 연동, 무기별 대기 모션, 콤보 입력 예약 방식 |
 | 2026-10-02 | 원거리(Aim/RangedFire/Reload)·마법(Cast/SpellTarget) 상태, 좌/우클릭 무기별 분기, 조준 뷰 이벤트, 스트레이프 이동, 조준 자세 고정, Guard 입력 → Secondary |
+| 2026-10-02 | Attack 상태를 액션 타임라인(`ActionPlayer`) 기반으로 전환, `HitStop` 중 상태·이동 정지, `ActionSpeed` 파라미터 |
