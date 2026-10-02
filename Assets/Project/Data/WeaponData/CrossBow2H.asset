@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8f8501d4b26f454baaae61aba04a619, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c3e9a41d5b84f2e9a6d0c1b8f4e2a73, type: 3}
   m_Name: CrossBow2H
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.WeaponData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
   displayName: 1H
   modelPrefab: {fileID: 3989796310135439970, guid: 7f53053c209a3eb4faf863b6291cc00c, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
@@ -24,3 +24,18 @@ MonoBehaviour:
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
   idleStateName: Ranged_2H_Aiming
+  ammo: {fileID: 11400000, guid: 5e28021103141734fb9b4e419ac706ef, type: 2}
+  canAim: 1
+  requiresReload: 1
+  muzzleOffset: {x: 0.2, y: 1.4, z: 0.6}
+  launchSpeed: 50
+  windupStateName: 
+  windupDuration: 0
+  fireStateName: Ranged_2H_Shoot
+  releaseTime: 0.05
+  fireDuration: 1
+  aimIdleStateName: Ranged_2H_Aiming
+  reloadStateName: Ranged_2H_Reload
+  reloadDuration: 1.6
+  loadedAmmoPosition: {x: 0, y: 0.197, z: 0.586}
+  loadedAmmoRotation: {x: 0, y: 0, z: 0}

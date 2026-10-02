@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8f8501d4b26f454baaae61aba04a619, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e8b2f6a9c1d4e7b8a3f5d2c6b9e1a04, type: 3}
   m_Name: Staff
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.WeaponData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Magic.MagicWeaponData
   displayName: 1H
   modelPrefab: {fileID: 7234197409275064413, guid: 86226a6bd0f45524d8b51b0bcfb991fb, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
@@ -19,8 +19,11 @@ MonoBehaviour:
   weaponType: 4
   gripHand: 0
   occupiesOffHand: 0
+  allowsShield: 0
   attackPower: 10
   comboData: {fileID: 0}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
   idleStateName: Idle_A
+  spell: {fileID: 11400000, guid: ed1872b067f2bfd41bd6e9423c280694, type: 2}
+  muzzleOffset: {x: 0.3, y: 1.5, z: 0.6}

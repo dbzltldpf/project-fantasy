@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a283c764c799204dad4e5f792afd72c, type: 3}
+  m_Name: AreaSpell
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Magic.AreaSpellData
+  displayName: 
+  castStateName: Ranged_Magic_Spellcasting
+  releaseTime: 0.3
+  castDuration: 0.8
+  cooldown: 1
+  damageMultiplier: 1
+  maxRange: 15
+  targetingIdleStateName: Ranged_Magic_Raise
+  targetingHoldTime: 0.55
+  indicatorPrefab: {fileID: 4858998234035974263, guid: 1238075c0376f9b4f9f179fc797e22c9, type: 3}
+  indicatorScale: 1
+  radius: 3
+  activationDelay: 0.6
+  areaEffectPrefab: {fileID: 3707427028824197763, guid: cab9bb22eaf930649ab180f617abeaa1, type: 3}

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8f8501d4b26f454baaae61aba04a619, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c3e9a41d5b84f2e9a6d0c1b8f4e2a73, type: 3}
   m_Name: Bow
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.WeaponData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
   displayName: 1H
   modelPrefab: {fileID: 4185748966335835586, guid: 6be720861463ce34b831a8b870a941ba, type: 3}
-  gripPosition: {x: 0, y: 0, z: 0}
-  gripRotation: {x: 0, y: 130, z: 0}
+  gripPosition: {x: 0.008, y: 0.06, z: 0.106}
+  gripRotation: {x: 0, y: 180, z: 8.286996}
   weaponType: 5
   gripHand: 1
   occupiesOffHand: 0
@@ -24,3 +24,18 @@ MonoBehaviour:
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
   idleStateName: Ranged_Bow_Idle
+  ammo: {fileID: 11400000, guid: c67906aa7ab71b847af82b5bd941b7e5, type: 2}
+  canAim: 1
+  requiresReload: 0
+  muzzleOffset: {x: 0.2, y: 1.2, z: 0.8}
+  launchSpeed: 40
+  windupStateName: Ranged_Bow_Draw
+  windupDuration: 1
+  fireStateName: Ranged_Bow_Release
+  releaseTime: 0.05
+  fireDuration: 0.6
+  aimIdleStateName: Ranged_Bow_Aiming_Idle
+  reloadStateName: 
+  reloadDuration: 1
+  loadedAmmoPosition: {x: 0.044, y: 0.473, z: -0.014}
+  loadedAmmoRotation: {x: 270, y: 0, z: 0}

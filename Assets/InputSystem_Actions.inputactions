@@ -87,7 +87,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Guard",
+                    "name": "Secondary",
                     "type": "Button",
                     "id": "3b9f6c2e-8d41-4a57-9e2c-5f1a7d0b4c83",
                     "expectedControlType": "Button",
@@ -104,7 +104,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Guard",
+                    "action": "Secondary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -115,7 +115,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Guard",
+                    "action": "Secondary",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
