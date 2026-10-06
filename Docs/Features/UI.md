@@ -1,7 +1,7 @@
 # UI
 
 ## 개요
-조준점과 월드 공간 데미지 숫자. 게임플레이 코드는 UI를 직접 참조하지 않고 이벤트(Presenter/Emitter)로 연결한다.
+조준점, 월드 공간 데미지 숫자, 인벤토리 창·퀵슬롯 바·HUD. 게임플레이 코드는 UI를 직접 참조하지 않고 이벤트(Presenter/Emitter)로 연결한다.
 
 ## 구성 스크립트
 | 파일 | 책임 |
@@ -10,10 +10,14 @@
 | [DamageNumberEmitter.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberEmitter.cs) | `Health.Damaged` 구독 → 스포너에 표시 요청 (허수아비·적 공용) |
 | [DamageNumberSpawner.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberSpawner.cs) | 씬 단위 데미지 숫자 생성·풀링, 겹침 방지 랜덤 오프셋 |
 | [DamageNumber.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumber.cs) | 떠오르며 사라지는 TextMeshPro 숫자, 카메라 방향 빌보드, `SetText`로 GC 없음 |
+| [Inventory/](../../Assets/Project/Scripts/UI/Inventory/) | 인벤토리 창, 아이템 칸, 우클릭 메뉴, 드래그 고스트, 능력치 비교 문구 ([Inventory](Inventory.md)) |
+| [HUD/](../../Assets/Project/Scripts/UI/HUD/) | 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구 |
+| [Editor/InventoryUIBuilder.cs](../../Assets/Project/Scripts/UI/Editor/InventoryUIBuilder.cs) | 인벤토리 UI 계층 일괄 생성 메뉴 |
 
 ## 동작 흐름
 ```
 조준: PlayerController.AimViewChanged → PlayerAimPresenter → CrosshairView.SetVisible / ThirdPersonCamera.SetAiming
+아이템: Inventory·QuickSlots·IItemActions 변경 → PlayerMenuPresenter / PlayerHudPresenter → InventoryWindow · QuickSlotBarView · AmmoCounterView · NoticeView
 피해: Health.Damaged → DamageNumberEmitter → DamageNumberSpawner.Spawn(피해량, 타격 지점) → DamageNumber (수명 후 풀 반환)
 ```
 
@@ -36,3 +40,4 @@
 | 날짜 | 내용 |
 |---|---|
 | 2026-10-02 | 최초 작성 (조준점, 데미지 숫자) |
+| 2026-10-06 | 인벤토리 창·퀵슬롯 바·화살 수·줍기 안내·안내 문구, UI 빌더 메뉴, 한글 폰트(Pretendard 기본, Black Han Sans 제목, MaruBuri 대화) |
