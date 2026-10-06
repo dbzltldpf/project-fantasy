@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b89a5c211a6596e4caab467c09628a86, type: 3}
   m_Name: ArrowBow
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.AmmoData
-  displayName: 
+  displayName: "\uD654\uC0B4"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 99
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 5553235356068071823, guid: e11817c401a75124f9d96139f2a43f4f, type: 3}
   gripPosition: {x: 0.044, y: 0.473, z: -0.014}
   gripRotation: {x: 270, y: 0, z: 0}
@@ -20,3 +24,4 @@ MonoBehaviour:
   gravity: 6
   lifetime: 5
   stickDuration: 10
+  impactEffectPrefab: {fileID: 0}

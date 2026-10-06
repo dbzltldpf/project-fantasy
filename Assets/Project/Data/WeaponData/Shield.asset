@@ -12,10 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f8be3c711075ea4aa46a30704b5170d, type: 3}
   m_Name: Shield
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.ShieldData
-  displayName: 
+  displayName: "\uCCA0 \uBC29\uD328"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 7695284558064108283, guid: 1081e7cec2b6bf94e857927f4de17c85, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
   guardAngle: 120
   blockKnockbackSpeed: 2
   blockStunDuration: 0.3
+  defenseRange:
+    min: 20
+    max: 30
+  magicDefenseRange:
+    min: 3
+    max: 6

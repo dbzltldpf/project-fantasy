@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4b9200e38f736f4da41ed9833852350, type: 3}
   m_Name: ProjectileSpell
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Magic.ProjectileSpellData
-  displayName: 
+  displayName: "\uAE30\uBCF8\uB9C8"
   castStateName: Ranged_Magic_Shoot
   releaseTime: 0.3
   castDuration: 0.8
@@ -22,4 +22,3 @@ MonoBehaviour:
   speed: 30
   lifetime: 3
   impactEffectPrefab: {fileID: 5094813014700351310, guid: 35703001998066a4a9616f147f608b90, type: 3}
-  impactEffectDuration: 1

@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ed3997f4ddf9d46ab34ab56784247a, type: 3}
+  m_Name: InventoryData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.InventorySystem.InventoryData
+  capacity: 30
+  quickSlotCount: 8
+  startingItems:
+  - item: {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: d54475956d59f3d4c8d997f683a17644, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 9a2b87eb874da384480b9096e33b5b57, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 8ffb78dc334e27e4bac28d3dee634412, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 53167951fa572e145a84d2f630294e9a, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 5728b5c35440ba947920577508a9754e, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 541178b1d99370a4abc41f25562b128e, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: a5e613c5199475a45bcca609cf260ad4, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 1d836203d7af35d4481ee86923c944a6, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: c8a2fe4cec4ee224d951ec7689a7f1c6, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: c67906aa7ab71b847af82b5bd941b7e5, type: 2}
+    count: 30
+  - item: {fileID: 11400000, guid: 5e28021103141734fb9b4e419ac706ef, type: 2}
+    count: 20
+  - item: {fileID: 11400000, guid: ccb8d80bd34136a4887a8128e6cea801, type: 2}
+    count: 5
+  startingQuickSlots:
+  - {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
+  - {fileID: 11400000, guid: 9a2b87eb874da384480b9096e33b5b57, type: 2}
+  - {fileID: 11400000, guid: 541178b1d99370a4abc41f25562b128e, type: 2}
+  - {fileID: 11400000, guid: ccb8d80bd34136a4887a8128e6cea801, type: 2}

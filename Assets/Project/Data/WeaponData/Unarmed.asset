@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f8501d4b26f454baaae61aba04a619, type: 3}
   m_Name: Unarmed
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.WeaponData
-  displayName: Unarmed
+  displayName: "\uB9E8\uC190"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 0}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
@@ -20,7 +24,9 @@ MonoBehaviour:
   gripHand: 0
   occupiesOffHand: 0
   allowsShield: 1
-  attackPower: 10
+  attackPowerRange:
+    min: 5
+    max: 5
   comboData: {fileID: 11400000, guid: 9236a524e0e3a02458a24ba940f363a4, type: 2}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
