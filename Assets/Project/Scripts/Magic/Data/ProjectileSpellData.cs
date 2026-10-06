@@ -12,8 +12,11 @@ namespace ProjectFantasy.Magic
         private const float NoStickDuration = 0f;
 
         [Header("Projectile")]
+        [Tooltip("마법탄 프리팹")]
         [SerializeField] private Projectile projectilePrefab;
+        [Tooltip("마법탄 속도 (m/s)")]
         [SerializeField, Min(0f)] private float speed = 30f;
+        [Tooltip("최대 비행 시간 (초)")]
         [SerializeField, Min(0f)] private float lifetime = 3f;
 
         [Header("Impact")]

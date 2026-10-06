@@ -6,8 +6,11 @@ namespace ProjectFantasy.Combat
     [CreateAssetMenu(fileName = "HitReactionData", menuName = "ProjectFantasy/Combat/Hit Reaction Data")]
     public sealed class HitReactionData : ScriptableObject
     {
+        [Tooltip("피격 경직 시간 (초)")]
         [SerializeField, Min(0f)] private float stunDuration = 0.4f;
+        [Tooltip("넉백 초기 속도 (m/s)")]
         [SerializeField, Min(0f)] private float knockbackSpeed = 4f;
+        [Tooltip("넉백 감속 (m/s²)")]
         [SerializeField, Min(0f)] private float knockbackDeceleration = 12f;
 
         public float StunDuration => stunDuration;

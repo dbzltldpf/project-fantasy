@@ -10,11 +10,19 @@ namespace ProjectFantasy.Combat
     {
         private const int HitBufferSize = 16;
 
+        private static readonly Vector3 DefaultHitOffset = new Vector3(0f, 1f, 1f);
+        private const float DefaultHitRadius = 0.8f;
+
+        [Tooltip("몸 기준 판정의 원점·방향 (비우면 자신)")]
         [SerializeField] private Transform hitOrigin;
-        [SerializeField] private Vector3 hitOffset = new Vector3(0f, 1f, 1f);
-        [SerializeField, Min(0f)] private float hitRadius = 0.8f;
+        [Tooltip("타격 대상 레이어 (자기 레이어 제외 권장)")]
         [SerializeField] private LayerMask targetLayers = Physics.AllLayers;
+        [Tooltip("선택 시 판정 범위 Gizmo 색")]
         [SerializeField] private Color gizmoColor = Color.red;
+
+        // 장착 무기 데이터가 SetHitShape로 덮어씀 (인스펙터 노출 안 함)
+        private Vector3 hitOffset = DefaultHitOffset;
+        private float hitRadius = DefaultHitRadius;
 
         private readonly Collider[] hitBuffer = new Collider[HitBufferSize];
         private readonly HashSet<IDamageable> hitTargets = new HashSet<IDamageable>();

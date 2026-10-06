@@ -81,7 +81,7 @@ namespace ProjectFantasy.Player
 
         void IActionContext.BeginHit(float damageMultiplier, float hitStopDuration)
         {
-            int damage = Mathf.RoundToInt(Loadout.CurrentWeapon.AttackPower * damageMultiplier);
+            int damage = Mathf.RoundToInt(Loadout.WeaponStats.AttackPower * damageMultiplier);
             Attacker.BeginSwing(damage, hitStopDuration);
         }
 

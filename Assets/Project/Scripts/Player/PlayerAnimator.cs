@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace ProjectFantasy.Player
@@ -16,34 +15,10 @@ namespace ProjectFantasy.Player
         private const float FrozenPoseSpeed = 0f;
         private const float NoHoldTime = 1f;
 
+        [Tooltip("비우면 자식에서 자동 탐색")]
         [SerializeField] private Animator animator;
-        [Tooltip("조준 대기 상태의 Speed Multiplier로 연결할 Float 파라미터")]
-        [SerializeField] private string poseSpeedParameter = "PoseSpeed";
-        [Tooltip("액션 상태의 Speed Multiplier로 연결할 Float 파라미터 (ActionData 재생 속도)")]
-        [SerializeField] private string actionSpeedParameter = "ActionSpeed";
-
-        [Header("State Names")]
-        [SerializeField, FormerlySerializedAs("idleState")] private string defaultIdleState = "Idle_A";
-        [SerializeField] private string walkState = "Walking_B";
-        [SerializeField] private string runState = "Running_B";
-        [SerializeField] private string airState = "Jump_Idle";
-        [SerializeField] private string hitState = "Hit_A";
-        [SerializeField] private string deathState = "Death_A";
-        [SerializeField] private string guardState = "Melee_Blocking";
-        [SerializeField] private string blockHitState = "Melee_Block_Hit";
-
-        [Header("Aim Locomotion")]
-        [SerializeField] private string walkBackwardState = "Walking_Backwards";
-        [SerializeField] private string strafeLeftState = "Running_Strafe_Left";
-        [SerializeField] private string strafeRightState = "Running_Strafe_Right";
-
-        [Header("Locomotion")]
-        [SerializeField, Min(0f)] private float idleSpeedThreshold = 0.1f;
-        [SerializeField, Min(0f)] private float runSpeedThreshold = 3.5f;
-
-        [Header("Transition")]
-        [SerializeField, Min(0f)] private float locomotionCrossFade = 0.15f;
-        [SerializeField, Min(0f)] private float actionCrossFade = 0.1f;
+        [Tooltip("상태 이름·파라미터·전환 시간 (애니메이터 컨트롤러와 맞춘 데이터)")]
+        [SerializeField] private PlayerAnimationData data;
 
         private int idleHash;
         private int walkHash;
@@ -53,6 +28,7 @@ namespace ProjectFantasy.Player
         private int deathHash;
         private int guardHash;
         private int blockHitHash;
+        private int pickUpHash;
         private int walkBackwardHash;
         private int strafeLeftHash;
         private int strafeRightHash;
@@ -76,21 +52,22 @@ namespace ProjectFantasy.Player
             if (animator == null) animator = GetComponentInChildren<Animator>();
             animator.applyRootMotion = false;
 
-            idleHash = Animator.StringToHash(defaultIdleState);
-            walkHash = Animator.StringToHash(walkState);
-            runHash = Animator.StringToHash(runState);
-            airHash = Animator.StringToHash(airState);
-            hitHash = Animator.StringToHash(hitState);
-            deathHash = Animator.StringToHash(deathState);
-            guardHash = Animator.StringToHash(guardState);
-            blockHitHash = Animator.StringToHash(blockHitState);
-            walkBackwardHash = Animator.StringToHash(walkBackwardState);
-            strafeLeftHash = Animator.StringToHash(strafeLeftState);
-            strafeRightHash = Animator.StringToHash(strafeRightState);
+            idleHash = Animator.StringToHash(data.DefaultIdleState);
+            walkHash = Animator.StringToHash(data.WalkState);
+            runHash = Animator.StringToHash(data.RunState);
+            airHash = Animator.StringToHash(data.AirState);
+            hitHash = Animator.StringToHash(data.HitState);
+            deathHash = Animator.StringToHash(data.DeathState);
+            guardHash = Animator.StringToHash(data.GuardState);
+            blockHitHash = Animator.StringToHash(data.BlockHitState);
+            pickUpHash = Animator.StringToHash(data.PickUpState);
+            walkBackwardHash = Animator.StringToHash(data.WalkBackwardState);
+            strafeLeftHash = Animator.StringToHash(data.StrafeLeftState);
+            strafeRightHash = Animator.StringToHash(data.StrafeRightState);
 
-            poseSpeedHash = Animator.StringToHash(poseSpeedParameter);
+            poseSpeedHash = Animator.StringToHash(data.PoseSpeedParameter);
             hasPoseSpeedParameter = HasFloatParameter(poseSpeedHash);
-            actionSpeedHash = Animator.StringToHash(actionSpeedParameter);
+            actionSpeedHash = Animator.StringToHash(data.ActionSpeedParameter);
             hasActionSpeedParameter = HasFloatParameter(actionSpeedHash);
 
             ValidateBaseStates();
@@ -114,18 +91,19 @@ namespace ProjectFantasy.Player
 
         public void PlayLocomotion(float horizontalSpeed)
         {
-            int targetHash = horizontalSpeed < idleSpeedThreshold ? idleHash
-                : horizontalSpeed < runSpeedThreshold ? walkHash
+            int targetHash = horizontalSpeed < data.IdleSpeedThreshold ? idleHash
+                : horizontalSpeed < data.RunSpeedThreshold ? walkHash
                 : runHash;
-            CrossFade(targetHash, locomotionCrossFade, false);
+            CrossFade(targetHash, data.LocomotionCrossFade, false);
         }
 
-        public void PlayAir() => CrossFade(airHash, locomotionCrossFade, false);
-        public void PlayGuard() => CrossFade(guardHash, actionCrossFade, false);
-        public void PlayBlockHit() => CrossFade(blockHitHash, actionCrossFade, true);
-        public void PlayHit() => CrossFade(hitHash, actionCrossFade, true);
-        public void PlayDeath() => CrossFade(deathHash, actionCrossFade, true);
-        public void PlayAction(int stateHash) => CrossFade(stateHash, actionCrossFade, true);
+        public void PlayAir() => CrossFade(airHash, data.LocomotionCrossFade, false);
+        public void PlayGuard() => CrossFade(guardHash, data.ActionCrossFade, false);
+        public void PlayBlockHit() => CrossFade(blockHitHash, data.ActionCrossFade, true);
+        public void PlayHit() => CrossFade(hitHash, data.ActionCrossFade, true);
+        public void PlayDeath() => CrossFade(deathHash, data.ActionCrossFade, true);
+        public void PlayPickUp() => CrossFade(pickUpHash, data.ActionCrossFade, true);
+        public void PlayAction(int stateHash) => CrossFade(stateHash, data.ActionCrossFade, true);
 
         // 액션 타임라인 재생 (애니메이션 속도 = 이벤트 시계 속도)
         public void PlayAction(int stateHash, float crossFadeDuration, float playbackSpeed)
@@ -140,12 +118,12 @@ namespace ProjectFantasy.Player
         {
             float absForward = Mathf.Abs(localVelocity.z);
             float absSide = Mathf.Abs(localVelocity.x);
-            bool isMoving = absForward >= idleSpeedThreshold || absSide >= idleSpeedThreshold;
+            bool isMoving = absForward >= data.IdleSpeedThreshold || absSide >= data.IdleSpeedThreshold;
 
             int targetHash = !isMoving ? aimIdleHash
                 : absForward >= absSide ? (localVelocity.z >= 0f ? walkHash : walkBackwardHash)
                 : (localVelocity.x >= 0f ? strafeRightHash : strafeLeftHash);
-            CrossFade(targetHash, locomotionCrossFade, false);
+            CrossFade(targetHash, data.LocomotionCrossFade, false);
 
             if (targetHash == aimIdleHash && holdNormalizedTime < NoHoldTime)
             {
@@ -166,26 +144,27 @@ namespace ProjectFantasy.Player
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         private void ValidateBaseStates()
         {
-            ValidateState(defaultIdleState);
-            ValidateState(walkState);
-            ValidateState(runState);
-            ValidateState(airState);
-            ValidateState(hitState);
-            ValidateState(deathState);
-            ValidateState(guardState);
-            ValidateState(walkBackwardState);
-            ValidateState(strafeLeftState);
-            ValidateState(strafeRightState);
-            ValidateState(blockHitState);
+            ValidateState(data.DefaultIdleState);
+            ValidateState(data.WalkState);
+            ValidateState(data.RunState);
+            ValidateState(data.AirState);
+            ValidateState(data.HitState);
+            ValidateState(data.DeathState);
+            ValidateState(data.GuardState);
+            ValidateState(data.WalkBackwardState);
+            ValidateState(data.StrafeLeftState);
+            ValidateState(data.StrafeRightState);
+            ValidateState(data.BlockHitState);
+            ValidateState(data.PickUpState);
 
             if (!hasPoseSpeedParameter)
             {
-                Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{poseSpeedParameter}'가 없어 조준 자세 고정이 비활성화됩니다.", this);
+                Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{data.PoseSpeedParameter}'가 없어 조준 자세 고정이 비활성화됩니다.", this);
             }
 
             if (!hasActionSpeedParameter)
             {
-                Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{actionSpeedParameter}'가 없어 액션 재생 속도 배율이 비활성화됩니다.", this);
+                Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{data.ActionSpeedParameter}'가 없어 액션 재생 속도 배율이 비활성화됩니다.", this);
             }
         }
 

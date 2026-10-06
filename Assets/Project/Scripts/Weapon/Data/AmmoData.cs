@@ -1,4 +1,5 @@
 using ProjectFantasy.Combat;
+using ProjectFantasy.Items;
 using UnityEngine;
 
 namespace ProjectFantasy.Weapon
@@ -8,10 +9,14 @@ namespace ProjectFantasy.Weapon
     public sealed class AmmoData : EquipmentData
     {
         private const bool SticksOnHit = true;
+        private const int AmmoMaxStack = 99;
 
         [Header("Projectile")]
+        [Tooltip("날아가는 화살 프리팹 (Projectile)")]
         [SerializeField] private Projectile projectilePrefab;
+        [Tooltip("화살 중력 (m/s², 클수록 빨리 떨어짐)")]
         [SerializeField, Min(0f)] private float gravity = 9.81f;
+        [Tooltip("최대 비행 시간 (초)")]
         [SerializeField, Min(0f)] private float lifetime = 5f;
         [Tooltip("박힌 뒤 사라질 때까지 시간")]
         [SerializeField, Min(0f)] private float stickDuration = 10f;
@@ -19,6 +24,9 @@ namespace ProjectFantasy.Weapon
         [Header("Impact")]
         [Tooltip("1회 재생 이펙트 (Looping 끈 Prefab Variant)")]
         [SerializeField] private GameObject impactEffectPrefab;
+
+        public override ItemCategory Category => ItemCategory.Ammo;
+        protected override int DefaultMaxStack => AmmoMaxStack;
 
         public Projectile ProjectilePrefab => projectilePrefab;
 

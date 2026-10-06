@@ -12,8 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01bffc9249ab49942bdfce841c5a3b88, type: 3}
   m_Name: Spellbook
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.SpellbookData
-  displayName: 
+  displayName: "\uB9C8\uBC95\uCC45"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 9145687753931659127, guid: 8532a212547ec144282361629aa47297, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  gradeTable: {fileID: 0}
   magicPowerMultiplier: 1.2

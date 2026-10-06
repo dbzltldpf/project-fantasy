@@ -7,6 +7,7 @@ namespace ProjectFantasy.Combat
     [CreateAssetMenu(fileName = "AttackComboData", menuName = "ProjectFantasy/Combat/Attack Combo Data")]
     public sealed class AttackComboData : ScriptableObject
     {
+        [Tooltip("콤보 순서대로 ActionData (1타, 2타 …)")]
         [SerializeField] private ActionData[] actions = Array.Empty<ActionData>();
 
         public int ActionCount => actions.Length;

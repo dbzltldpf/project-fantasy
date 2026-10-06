@@ -11,7 +11,7 @@
 
 - **쿨타임**: 마법별 재사용 대기 (시전 시작 시 적용), 대기 중 좌클릭 무시.
 - **Staff 범위 마법**: 시전 시작 시 조준 모드 해제 → 시전 모션 → 시전 위치에 마법진이 남고 `activationDelay` 후 범위 피해 → 시전 종료 시 우클릭 유지면 조준 모드 복귀.
-- **데미지**: `무기 attackPower × 마법 damageMultiplier × 마법서 magicPowerMultiplier(장착 시)` 반올림.
+- **데미지**: `장착 개체 마법력 × 마법 damageMultiplier × 마법서 magicPowerMultiplier(활성 시)` 반올림, 피해 종류는 **마법**(받는 쪽 마법 방어력 적용).
 
 ## 구성 스크립트
 | 파일 | 책임 |
@@ -79,7 +79,7 @@ PlayerCastState
 | SpellCaster | areaDamageLayers | Default | 범위 피해 대상 (**Player 제외**) |
 | SpellCaster | groundLayers | Default | 마법진 지면 (**캐릭터·투사체 제외**) |
 | SpellCaster | maxTargetingRayDistance / groundProbeHeight | 100 / 10 | 지면 탐색 레이 |
-| SpellbookData | magicPowerMultiplier | 1.2 | 마법 데미지 배율 |
+| SpellbookData | magicPowerMultiplier | 1.2 | 마법 데미지 배율 (무기와 호환되어 활성일 때만) |
 
 ## 에디터 설정
 1. **이펙트**: Hovl `Magic effects pack` 머티리얼을 Render Pipeline Converter(Built-in → URP, Material Upgrade)로 변환, Bloom 권장.
@@ -100,3 +100,4 @@ PlayerCastState
 | 날짜 | 내용 |
 |---|---|
 | 2026-10-02 | 최초 작성 (Wand 직선 마법탄, Staff 지면 범위 마법·마법진 조준, 쿨타임, 마법서 배율, 시전 중 조준 해제) |
+| 2026-10-06 | 피해 기준을 마법력(개체 굴림)으로 변경, 마법 피해 종류, Staff 범위 마법 배율 1.5·쿨타임 3 |

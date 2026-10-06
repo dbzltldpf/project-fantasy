@@ -1,86 +1,104 @@
 using System;
-using System.Collections.Generic;
 using ProjectFantasy.Combat;
+using ProjectFantasy.InventorySystem;
+using ProjectFantasy.Items;
 using ProjectFantasy.Weapon;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace ProjectFantasy.Player
 {
-    // 보유 무기/보조 장비 관리와 장착 적용 (모델, 판정 범위, 가드)
+    // 장착 무기·보조 장비 개체 적용 (모델, 판정, 가드·방어력), 무기와 맞지 않는 보조 장비는 비활성 유지
     [RequireComponent(typeof(EquipmentVisual), typeof(MeleeAttacker), typeof(ShieldGuard))]
+    [RequireComponent(typeof(Inventory))]
     [DisallowMultipleComponent]
     public sealed class PlayerLoadout : MonoBehaviour
     {
-        private const int UnarmedIndex = -1;
-        private const int FirstWeaponIndex = 0;
-        private const int MinCycleCount = 2;
-
+        [Tooltip("무기가 없을 때 쓰는 맨손 데이터 (필수)")]
         [SerializeField] private WeaponData unarmedWeapon;
-        [SerializeField] private WeaponData[] startingWeapons = Array.Empty<WeaponData>();
+        [Tooltip("시작 시 장착할 무기 종류 (가방의 첫 개체)")]
+        [SerializeField] private WeaponData startingWeapon;
+        [Tooltip("시작 시 장착할 보조 장비 종류 (가방의 첫 개체)")]
         [SerializeField, FormerlySerializedAs("startingShield")] private OffHandData startingOffHand;
 
-        private readonly List<WeaponData> ownedWeapons = new List<WeaponData>();
         private EquipmentVisual equipmentVisual;
         private MeleeAttacker attacker;
         private ShieldGuard shieldGuard;
-        private OffHandData currentOffHand;
-        private int currentIndex = UnarmedIndex;
+        private Inventory inventory;
 
+        public ItemInstance WeaponInstance { get; private set; }
+        public ItemInstance OffHandInstance { get; private set; }
         public WeaponData CurrentWeapon { get; private set; }
-        public OffHandData CurrentOffHand => currentOffHand;
-        public ShieldData CurrentShield => currentOffHand as ShieldData;
+        public OffHandData CurrentOffHand => OffHandInstance?.Data as OffHandData;
+        public bool IsOffHandActive { get; private set; }
+        // 효과가 적용 중인 보조 장비만 (비활성이면 null)
+        public OffHandData ActiveOffHand => IsOffHandActive ? CurrentOffHand : null;
+        public ShieldData ActiveShield => ActiveOffHand as ShieldData;
         public WeaponData UnarmedWeapon => unarmedWeapon;
-        public IReadOnlyList<WeaponData> OwnedWeapons => ownedWeapons;
+        public bool IsUnarmed => WeaponInstance == null;
         public bool CanGuard => shieldGuard.HasShield;
 
+        // 맨손은 데이터 기본값
+        public ItemStats WeaponStats => WeaponInstance != null ? WeaponInstance.Stats : unarmedWeapon.BaseStats;
+
         public event Action<WeaponData> WeaponChanged;
+        public event Action<OffHandData> OffHandChanged;
+        // 무기 교체로 보조 장비가 활성↔비활성 전환될 때
+        public event Action<bool> OffHandActiveChanged;
 
         private void Awake()
         {
             equipmentVisual = GetComponent<EquipmentVisual>();
             attacker = GetComponent<MeleeAttacker>();
             shieldGuard = GetComponent<ShieldGuard>();
-
-            foreach (WeaponData weapon in startingWeapons)
-            {
-                if (weapon == null) continue;
-                ownedWeapons.Add(weapon);
-                equipmentVisual.Preload(weapon, weapon.GripHand);
-            }
-
-            currentOffHand = startingOffHand;
-            equipmentVisual.Preload(currentOffHand, EquipHand.Left);
+            inventory = GetComponent<Inventory>();
         }
 
+        private void OnEnable() => inventory.Changed += HandleInventoryChanged;
+        private void OnDisable() => inventory.Changed -= HandleInventoryChanged;
+
+        // 가방 개체가 만들어진 뒤(Awake 이후) 시작 장비 장착
         private void Start()
         {
-            EquipIndex(ownedWeapons.Count > 0 ? FirstWeaponIndex : UnarmedIndex);
+            PreloadInventoryModels();
+            OffHandInstance = startingOffHand != null ? inventory.FindFirstInstance(startingOffHand) : null;
+            EquipWeapon(startingWeapon != null ? inventory.FindFirstInstance(startingWeapon) : null);
         }
 
-        // direction: +1 다음, -1 이전
-        public void CycleWeapon(int direction)
-        {
-            int count = ownedWeapons.Count;
-            if (count < MinCycleCount) return;
+        public bool IsEquipped(ItemInstance instance) => instance != null && (instance == WeaponInstance || instance == OffHandInstance);
 
-            int nextIndex = ((currentIndex + direction) % count + count) % count;
-            EquipIndex(nextIndex);
-        }
+        public bool CanEquipOffHand(OffHandData offHand) => offHand != null && offHand.CanEquipWith(CurrentWeapon);
 
-        private void EquipIndex(int index)
+        // null이면 맨손
+        public void EquipWeapon(ItemInstance instance)
         {
-            currentIndex = index;
-            CurrentWeapon = index == UnarmedIndex ? unarmedWeapon : ownedWeapons[index];
+            WeaponData weapon = instance?.Data as WeaponData;
+            WeaponInstance = weapon != null ? instance : null;
+            CurrentWeapon = weapon != null ? weapon : unarmedWeapon;
             if (CurrentWeapon == null) return;
 
             equipmentVisual.Show(CurrentWeapon.GripHand, CurrentWeapon);
             if (CurrentWeapon.IsHeldInLeftHand) equipmentVisual.Hide(EquipHand.Right);
 
             ApplyHitShape();
-            RefreshOffHand();
+            RefreshOffHand(true);
 
             WeaponChanged?.Invoke(CurrentWeapon);
+        }
+
+        public void EquipOffHand(ItemInstance instance)
+        {
+            OffHandInstance = instance?.Data is OffHandData ? instance : null;
+            RefreshOffHand(false);
+            OffHandChanged?.Invoke(CurrentOffHand);
+        }
+
+        public void Unequip(ItemInstance instance)
+        {
+            if (instance == null) return;
+
+            if (instance == WeaponInstance) EquipWeapon(null);
+            else if (instance == OffHandInstance) EquipOffHand(null);
         }
 
         // 칼날 정보가 있으면 무기 모델 궤적 판정, 없으면 몸 기준 구체 판정
@@ -99,16 +117,49 @@ namespace ProjectFantasy.Player
             }
         }
 
-        // 무기와 함께 들 수 없는 보조 장비는 숨김, 방패일 때만 가드 활성화
-        private void RefreshOffHand()
+        // 무기와 맞지 않는 보조 장비는 숨기고 효과 해제(장착은 유지), 방패면 가드·방어력 적용
+        private void RefreshOffHand(bool notifyActiveChange)
         {
-            bool canEquip = currentOffHand != null && currentOffHand.CanEquipWith(CurrentWeapon);
+            if (CurrentWeapon == null) return;
 
-            if (canEquip) equipmentVisual.Show(EquipHand.Left, currentOffHand);
+            OffHandData offHand = CurrentOffHand;
+            bool isActive = offHand != null && offHand.CanEquipWith(CurrentWeapon);
+            bool wasActive = IsOffHandActive;
+            IsOffHandActive = isActive;
+
+            if (isActive) equipmentVisual.Show(EquipHand.Left, offHand);
             else if (!CurrentWeapon.IsHeldInLeftHand) equipmentVisual.Hide(EquipHand.Left);
 
-            if (canEquip && currentOffHand is ShieldData shield) shieldGuard.EnableShield(shield.GuardAngle);
-            else shieldGuard.DisableShield();
+            if (isActive && offHand is ShieldData shield)
+            {
+                ItemStats stats = OffHandInstance.Stats;
+                shieldGuard.EnableShield(shield.GuardAngle, stats.Defense, stats.MagicDefense);
+            }
+            else
+            {
+                shieldGuard.DisableShield();
+            }
+
+            if (notifyActiveChange && offHand != null && wasActive != isActive) OffHandActiveChanged?.Invoke(isActive);
+        }
+
+        private void HandleInventoryChanged()
+        {
+            PreloadInventoryModels();
+
+            if (WeaponInstance != null && !inventory.Contains(WeaponInstance)) EquipWeapon(null);
+            if (OffHandInstance != null && !inventory.Contains(OffHandInstance)) EquipOffHand(null);
+        }
+
+        // 장착 전에 모델을 미리 생성해 교체 시 Instantiate 방지 (이미 생성된 모델은 캐시 조회만)
+        private void PreloadInventoryModels()
+        {
+            for (int i = 0; i < inventory.Capacity; i++)
+            {
+                ItemData item = inventory.GetSlot(i).Item;
+                if (item is WeaponData weapon) equipmentVisual.Preload(weapon, weapon.GripHand);
+                else if (item is OffHandData offHand) equipmentVisual.Preload(offHand, EquipHand.Left);
+            }
         }
     }
 }

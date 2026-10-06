@@ -12,17 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3e9a41d5b84f2e9a6d0c1b8f4e2a73, type: 3}
   m_Name: Bow
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
-  displayName: 1H
+  displayName: "\uD65C"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 4185748966335835586, guid: 6be720861463ce34b831a8b870a941ba, type: 3}
   gripPosition: {x: 0.008, y: 0.06, z: 0.106}
   gripRotation: {x: 0, y: 180, z: 8.286996}
+  gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
   weaponType: 5
   gripHand: 1
   occupiesOffHand: 0
-  attackPower: 10
+  allowsShield: 1
+  attackPowerRange:
+    min: 10
+    max: 14
   comboData: {fileID: 0}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  bladeBase: {x: 0, y: 0, z: 0}
+  bladeTip: {x: 0, y: 0, z: 0}
+  bladeRadius: 0.1
   idleStateName: Ranged_Bow_Idle
   ammo: {fileID: 11400000, guid: c67906aa7ab71b847af82b5bd941b7e5, type: 2}
   canAim: 1
@@ -35,6 +46,7 @@ MonoBehaviour:
   releaseTime: 0.05
   fireDuration: 0.6
   aimIdleStateName: Ranged_Bow_Aiming_Idle
+  aimHoldTime: 1
   reloadStateName: 
   reloadDuration: 1
   loadedAmmoPosition: {x: 0.044, y: 0.473, z: -0.014}

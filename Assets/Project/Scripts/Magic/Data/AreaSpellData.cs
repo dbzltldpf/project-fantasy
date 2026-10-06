@@ -7,7 +7,9 @@ namespace ProjectFantasy.Magic
     public sealed class AreaSpellData : SpellData
     {
         [Header("Targeting")]
+        [Tooltip("마법진 최대 사거리 (m)")]
         [SerializeField, Min(0f)] private float maxRange = 15f;
+        [Tooltip("마법진 조준 중 자세 상태")]
         [SerializeField] private string targetingIdleStateName = "Ranged_Magic_Raise";
         [Tooltip("조준 대기 자세를 멈출 정규화 시간 (1이면 고정 안 함)")]
         [SerializeField, Range(0f, 1f)] private float targetingHoldTime = 1f;
@@ -17,6 +19,7 @@ namespace ProjectFantasy.Magic
         [SerializeField, Min(0f)] private float indicatorScale = 1f;
 
         [Header("Area")]
+        [Tooltip("범위 반지름 (m)")]
         [SerializeField, Min(0f)] private float radius = 3f;
         [Tooltip("시전 후 범위 피해까지 지연")]
         [SerializeField, Min(0f)] private float activationDelay = 0.6f;

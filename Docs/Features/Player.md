@@ -1,21 +1,24 @@
 # Player
 
 ## 개요
-카메라 기준 이동, 걷기/달리기, 점프, 콤보 공격, 방패 가드, 원거리 조준·발사, 마법 시전, 무기 교체, 피격/사망을 처리하는 플레이어 캐릭터. 기준 캐릭터는 KayKit **Rogue**.
+카메라 기준 이동, 걷기/달리기, 점프, 콤보 공격, 방패 가드, 원거리 조준·발사, 마법 시전, 줍기·아이템 사용, 퀵슬롯 장착, 피격/사망을 처리하는 플레이어 캐릭터. 기준 캐릭터는 KayKit **Rogue**.
 
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
 | [PlayerController.cs](../../Assets/Project/Scripts/Player/PlayerController.cs) | 컴포넌트 조립, 상태 머신 구동, 카메라 기준 이동 벡터 계산, 체력/무기 이벤트 → 상태 전이 |
-| [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 수집, 공격/점프/무기 교체 선입력 버퍼, 가드 홀드 |
+| [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 액션 에셋에서 이름으로 액션 탐색, 공격/점프/줍기/퀵슬롯 선입력 버퍼, 메뉴 중 게임플레이 입력 차단 |
 | [PlayerMotor.cs](../../Assets/Project/Scripts/Player/PlayerMotor.cs) | CharacterController 이동, 가속/감속, 중력, 접지, 회전 |
-| [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 |
-| [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 보유 무기/보조 장비, 무기 순환, 장착 적용 ([Weapon](Weapon.md) 참고) |
+| [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 (상태 이름은 `PlayerAnimationData`) |
+| [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 **개체** 적용, 무기와 맞지 않는 보조 장비 비활성 ([Weapon](Weapon.md), [Inventory](Inventory.md)) |
 | [PlayerRangedWeapon.cs](../../Assets/Project/Scripts/Player/PlayerRangedWeapon.cs) / [PlayerAmmoVisual.cs](../../Assets/Project/Scripts/Player/PlayerAmmoVisual.cs) | 원거리 발사·장전 규칙, 화살 표시 ([Ranged Combat](RangedCombat.md)) |
 | [PlayerMagicCaster.cs](../../Assets/Project/Scripts/Player/PlayerMagicCaster.cs) | 마법 쿨타임·데미지 ([Magic](Magic.md)) |
 | [PlayerAimPresenter.cs](../../Assets/Project/Scripts/Player/PlayerAimPresenter.cs) | 조준 뷰 → 카메라 숄더뷰·조준점 |
+| [PlayerItemHandler.cs](../../Assets/Project/Scripts/Player/PlayerItemHandler.cs) / [PlayerInteractor.cs](../../Assets/Project/Scripts/Player/PlayerInteractor.cs) | 아이템 장착·사용·버리기·줍기, 주변 아이템 탐색 ([Inventory](Inventory.md)) |
+| [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리 창 ↔ 입력·카메라, HUD 연결 |
 | [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프 튜닝 데이터 (SO) |
-| [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Aim`, `RangedFire`, `Reload`, `Cast`, `SpellTarget`, `Hit`, `Dead` |
+| [PlayerAnimationData.cs](../../Assets/Project/Scripts/Player/Data/PlayerAnimationData.cs) | 애니메이터 상태 이름·파라미터·전환 시간·이동 모션 분기 속도 (SO) |
+| [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Aim`, `RangedFire`, `Reload`, `Cast`, `SpellTarget`, `PickUp`, `UseItem`, `Hit`, `Dead` |
 
 ## 동작 흐름
 ### 프레임 처리 순서
@@ -46,7 +49,8 @@ flowchart LR
 
 | 상태 | 역할 |
 |---|---|
-| Locomotion | 지상 이동, 무기 교체. 애니메이션은 수평 속도로 Idle/Walk/Run 자동 분기 |
+| Locomotion | 지상 이동, 줍기(E), 퀵슬롯(1~8) 장착·사용. 애니메이션은 수평 속도로 Idle/Walk/Run 자동 분기 |
+| PickUp / UseItem | 줍기 모션 후 가방에 추가 / 소모품 사용(느린 이동, 효과 시점에 소모) ([Inventory](Inventory.md)) |
 | Air | 점프·낙하. 공중 가속(airAcceleration)으로 제어, 코요테 타임 내 점프 허용 |
 | Attack | 입력 방향으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션 ([Combat](Combat.md)) |
 | Guard | 방패 가드 홀드. 느린 이동(guardMoveSpeed), 막으면 Block_Hit + 넉백 경직, 가드 중 공격 가능 |
@@ -79,10 +83,13 @@ flowchart LR
 | Jump | Space | South 버튼 | 선입력 버퍼 |
 | Sprint | Left Shift | 왼쪽 스틱 누름 | 홀드 |
 | Secondary (구 Guard) | 마우스 오른쪽 | 왼쪽 트리거 | 홀드 (무기에 따라 가드/조준) |
-| Next / Previous | 2 / 1 | D-pad 오른쪽 / 왼쪽 | 선입력 버퍼 (무기 교체) |
+| Interact | E | North | 선입력 버퍼 (줍기) |
+| Inventory | Tab | Start | 인벤토리 창 토글 (메뉴 중에도 동작) |
+| QuickSlot | 1~8 | — | 선입력 버퍼 (바인딩 순서 = 슬롯 번호) |
+| Zoom | 마우스 휠 | — | 카메라 줌 ([Camera](Camera.md)) |
 
 ### 선입력 / 코요테 타임
-- 공격·점프·무기 교체 입력은 `inputBufferTime`(0.2초) 동안 보관 후 `Consume*()` 시 소모.
+- 공격·점프·줍기·퀵슬롯 입력은 `inputBufferTime`(0.2초) 동안 보관 후 `Consume*()` 시 소모.
 - 지면을 벗어난 뒤 `coyoteTime`(0.15초)까지는 지상 판정 유지 → 경사·계단에서 Air 전환 떨림 방지 + 늦은 점프 허용.
 
 ## 데이터 파라미터
@@ -106,11 +113,9 @@ flowchart LR
 | 컴포넌트 | 필드 | 기본값 | 의미 |
 |---|---|---|---|
 | PlayerInputHandler | inputBufferTime | 0.2 | 선입력 유지 시간 |
-| PlayerAnimator | idleSpeedThreshold | 0.1 | 이 속도 미만이면 Idle |
-| PlayerAnimator | runSpeedThreshold | 3.5 | 이 속도 이상이면 Run |
-| PlayerAnimator | locomotionCrossFade / actionCrossFade | 0.15 / 0.1 | 전환 시간 |
-| PlayerAnimator | poseSpeedParameter | PoseSpeed | 조준 대기 자세 고정용 Float 파라미터 |
-| PlayerAnimator | actionSpeedParameter | ActionSpeed | 액션 재생 속도용 Float 파라미터 (공격 상태 Speed Multiplier) |
+| PlayerAnimationData | idle / runSpeedThreshold | 0.1 / 3.5 | 대기 → 걷기 → 달리기 분기 속도 |
+| PlayerAnimationData | locomotion / actionCrossFade | 0.15 / 0.1 | 전환 시간 |
+| PlayerAnimationData | pose / actionSpeedParameter | PoseSpeed / ActionSpeed | 조준 자세 고정 / 공격 재생 속도 Float 파라미터 |
 | PlayerController | minAimFacingDistance | 1.5 | 조준 지점이 가까우면 카메라 정면을 바라봄 |
 
 ### 조준 자세 고정
@@ -133,7 +138,7 @@ flowchart LR
 
 2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, PlayerRangedWeapon, RangedAttacker, PlayerAmmoVisual, PlayerMagicCaster, SpellCaster, HitStop, CharacterController). 이미 있는 오브젝트는 RequireComponent가 자동 추가되지 않으므로 수동 추가.
    - CharacterController Height/Center를 캐릭터 크기에 맞춤
-   - InputHandler에 `InputSystem_Actions`의 Player/Move, Attack, Jump, Sprint, Secondary, Next, Previous 연결
+   - InputHandler **Action Asset**에 `InputSystem_Actions` 1개 연결 (Player 맵의 액션을 이름으로 탐색, 이름이 다르면 시작 시 에러), PlayerAnimator **Data**에 `PlayerAnimationData` 연결
    - Movement / HitReaction 데이터 연결 (콤보는 무기 데이터에서 가져옴), Layer를 **Player**로 지정
 
 ## 주의사항 / 확장 포인트
@@ -151,3 +156,4 @@ flowchart LR
 | 2026-10-01 | Guard 상태, 무기 교체 입력, `PlayerLoadout` 연동, 무기별 대기 모션, 콤보 입력 예약 방식 |
 | 2026-10-02 | 원거리(Aim/RangedFire/Reload)·마법(Cast/SpellTarget) 상태, 좌/우클릭 무기별 분기, 조준 뷰 이벤트, 스트레이프 이동, 조준 자세 고정, Guard 입력 → Secondary |
 | 2026-10-02 | Attack 상태를 액션 타임라인(`ActionPlayer`) 기반으로 전환, `HitStop` 중 상태·이동 정지, `ActionSpeed` 파라미터 |
+| 2026-10-06 | 줍기·소모품 사용 상태, 퀵슬롯·줍기·인벤토리·줌 입력, 무기 순환 입력 삭제, 입력 액션 에셋 일괄 탐색, `PlayerAnimationData` 분리, 아이템·HUD Presenter |

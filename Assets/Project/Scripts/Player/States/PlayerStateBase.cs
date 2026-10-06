@@ -15,6 +15,7 @@ namespace ProjectFantasy.Player
         protected readonly PlayerLoadout Loadout;
         protected readonly PlayerRangedWeapon RangedWeapon;
         protected readonly PlayerMagicCaster MagicCaster;
+        protected readonly PlayerItemHandler ItemHandler;
 
         protected PlayerMovementData MovementData => Motor.Data;
 
@@ -31,6 +32,7 @@ namespace ProjectFantasy.Player
             Loadout = controller.Loadout;
             RangedWeapon = controller.RangedWeapon;
             MagicCaster = controller.MagicCaster;
+            ItemHandler = controller.ItemHandler;
         }
 
         public virtual void Enter() { }

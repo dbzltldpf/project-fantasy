@@ -31,15 +31,11 @@ namespace ProjectFantasy.Player
             if (IsEquipped) readyTimes[CurrentSpell] = Time.time + CurrentSpell.Cooldown;
         }
 
-        // 무기 공격력 × 마법 배율 × 마법서 배율
+        // 무기 개체 마법력 × 마법 배율 × 활성 마법서 배율
         public int CalculateDamage()
         {
-            MagicWeaponData weapon = CurrentWeapon;
-            float spellbookMultiplier = loadout.CurrentOffHand is SpellbookData spellbook && spellbook.CanEquipWith(weapon)
-                ? spellbook.MagicPowerMultiplier
-                : NoMultiplier;
-
-            return Mathf.RoundToInt(weapon.AttackPower * weapon.Spell.DamageMultiplier * spellbookMultiplier);
+            float spellbookMultiplier = loadout.ActiveOffHand is SpellbookData spellbook ? spellbook.MagicPowerMultiplier : NoMultiplier;
+            return Mathf.RoundToInt(loadout.WeaponStats.MagicPower * CurrentSpell.DamageMultiplier * spellbookMultiplier);
         }
     }
 }

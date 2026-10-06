@@ -16,7 +16,9 @@ namespace ProjectFantasy.Magic
         [SerializeField] private LayerMask areaDamageLayers = Physics.DefaultRaycastLayers;
         [Tooltip("마법진 위치 지정용 지면 레이어 (캐릭터·투사체 제외)")]
         [SerializeField] private LayerMask groundLayers = Physics.DefaultRaycastLayers;
+        [Tooltip("마법진 조준 레이 최대 거리 (m)")]
         [SerializeField, Min(0f)] private float maxTargetingRayDistance = 100f;
+        [Tooltip("사거리 밖 지점을 땅에 붙일 때 위에서 쏘는 높이 (m)")]
         [SerializeField, Min(0f)] private float groundProbeHeight = 10f;
 
         private readonly EffectPool effectPool = new EffectPool();
@@ -115,7 +117,7 @@ namespace ProjectFantasy.Magic
                 Vector3 direction = hitCollider.transform.position - area.Position;
                 direction.y = 0f;
                 Vector3 knockbackDirection = direction.sqrMagnitude > Mathf.Epsilon ? direction.normalized : transform.forward;
-                target.TakeDamage(new DamageInfo(area.Damage, hitCollider.ClosestPointOnBounds(area.Position), knockbackDirection, gameObject));
+                target.TakeDamage(new DamageInfo(area.Damage, hitCollider.ClosestPointOnBounds(area.Position), knockbackDirection, gameObject, DamageType.Magic));
             }
         }
 

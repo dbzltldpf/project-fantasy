@@ -1,36 +1,42 @@
 # Weapon
 
 ## 개요
-손에 드는 무기와 보조 장비(방패·마법서)의 데이터, 모델 장착, 무기 교체. 무기 종류별로 쥐는 손·콤보·대기 모션·판정 범위가 다르다. 플레이어·적 공용.
+손에 드는 무기와 보조 장비(방패·마법서)의 데이터, 모델 장착, 개체별 등급·능력치. 무기 종류별로 쥐는 손·콤보·대기 모션·판정 범위가 다르다. 장비는 아이템이기도 하며 가방·퀵슬롯으로 장착한다([Inventory](Inventory.md)). 플레이어·적 공용.
 
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
 | [WeaponType.cs](../../Assets/Project/Scripts/Weapon/WeaponType.cs) | `Unarmed` `OneHanded` `TwoHanded` `Wand` `Staff` `Bow` `Crossbow` |
 | [EquipHand.cs](../../Assets/Project/Scripts/Weapon/EquipHand.cs) | `Right` / `Left` (쥐는 손) |
-| [EquipmentData.cs](../../Assets/Project/Scripts/Weapon/Data/EquipmentData.cs) | 장비 공통 베이스 (이름, 모델 프리팹, 손 위치/회전 보정) |
-| [WeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/WeaponData.cs) | 무기 종류, 쥐는 손, 보조 손 점유, 공격력, 콤보, 판정 범위, 대기 모션 (SO) |
+| [EquipmentData.cs](../../Assets/Project/Scripts/Weapon/Data/EquipmentData.cs) | 장비 공통 (`ItemData` 상속): 모델 프리팹, 손 위치/회전 보정, 등급표, 개체 생성 시 능력치 굴림 |
+| [WeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/WeaponData.cs) | 무기 종류, 쥐는 손, 보조 손 점유, 공격력 범위, 콤보, 판정 범위·칼날, 대기 모션 (SO) |
 | [OffHandData.cs](../../Assets/Project/Scripts/Weapon/Data/OffHandData.cs) | 보조 장비 베이스, `CanEquipWith(weapon)`로 동시 장착 가능 여부 판정 |
-| [ShieldData.cs](../../Assets/Project/Scripts/Weapon/Data/ShieldData.cs) | 방패: 가드 각도, 막기 넉백/경직 (SO) |
+| [ShieldData.cs](../../Assets/Project/Scripts/Weapon/Data/ShieldData.cs) | 방패: 가드 각도, 막기 넉백/경직, 방어력·마법 방어력 범위 (SO) |
 | [SpellbookData.cs](../../Assets/Project/Scripts/Weapon/Data/SpellbookData.cs) | 마법서: 마법 위력 배율 (SO) |
-| [RangedWeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/RangedWeaponData.cs) / [AmmoData.cs](../../Assets/Project/Scripts/Weapon/Data/AmmoData.cs) / [AmmoPouch.cs](../../Assets/Project/Scripts/Weapon/AmmoPouch.cs) | 활·석궁, 화살, 화살 보유 수 ([Ranged Combat](RangedCombat.md)) |
-| [MagicWeaponData.cs](../../Assets/Project/Scripts/Magic/Data/MagicWeaponData.cs) | Wand·Staff ([Magic](Magic.md)) |
+| [RangedWeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/RangedWeaponData.cs) / [AmmoData.cs](../../Assets/Project/Scripts/Weapon/Data/AmmoData.cs) | 활·석궁, 화살 (화살 수는 가방 기준, [Ranged Combat](RangedCombat.md)) |
+| [MagicWeaponData.cs](../../Assets/Project/Scripts/Magic/Data/MagicWeaponData.cs) | Wand·Staff, 마법력 범위 ([Magic](Magic.md)) |
 | [EquipmentVisual.cs](../../Assets/Project/Scripts/Weapon/EquipmentVisual.cs) | `handslot.r` / `handslot.l`에 모델 부착, 미리 생성 후 활성/비활성 전환, `GetHandSlot`(에디터 미리보기 공용) |
-| [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 플레이어 보유 무기/보조 장비, 무기 순환, 장착 적용 |
+| [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 개체 적용, 맞지 않는 보조 장비 비활성, 가방에서 사라지면 해제 |
+| [Editor/WeaponDataEditor.cs](../../Assets/Project/Scripts/Weapon/Editor/WeaponDataEditor.cs) | 무기 인스펙터: 요약 줄·설정 경고, 무기 종류에 맞는 섹션만 표시 |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` (손 본 자동 탐색) |
 
 ## 동작 흐름
-### 장착 (`PlayerLoadout.EquipIndex`)
+### 장착 (`PlayerLoadout.EquipWeapon(ItemInstance)`)
 ```
-무기 선택
+무기 개체 장착 (퀵슬롯 1~8 / 인벤토리 더블클릭·우클릭)
  ├─ EquipmentVisual.Show(gripHand)   // 쥐는 손에 모델 활성 (활은 왼손 → 오른손 비움)
  ├─ MeleeAttacker.SetHitShape        // 무기별 근접 판정 위치·반경
  ├─ MeleeAttacker.SetBlade / ClearBlade  // 칼날이 설정된 무기는 모델 칼날 궤적 판정
- ├─ 보조 장비 갱신                     // CanEquipWith == false 면 숨김, 방패일 때만 가드 활성
+ ├─ 보조 장비 갱신                     // 맞지 않으면 비활성(숨김·가드·방어력 해제, 장착은 유지)
  └─ WeaponChanged → PlayerAnimator.SetIdleState (무기별 대기 모션)
 ```
-- 보유 무기가 없으면 맨손(`unarmedWeapon`) 장착.
-- 모델은 `Awake`에서 쥐는 손 슬롯에 한 번 생성해 캐시, 교체 시 `SetActive`만 전환 → 교체 중 GC/Instantiate 없음.
+- 장착 무기가 없으면 맨손(`unarmedWeapon`), 맨손 공격력은 범위 최솟값.
+- 모델은 가방에 들어올 때 미리 생성해 캐시, 교체 시 `SetActive`만 전환 → 교체 중 GC/Instantiate 없음.
+- 장비 변경은 이동 상태에서만 ([Inventory](Inventory.md)).
+
+### 등급·능력치
+- 장비 개체가 생길 때 `등급표 추첨 → 범위 균등 랜덤 × 등급 배율`로 한 번 굴린다 (무기 공격력, Wand·Staff 마법력, 방패 방어력·마법 방어력).
+- 밸런스 기준표: [인스펙터 가이드](../InspectorGuide.md#무기-weapondata).
 
 ### 보조 장비 동시 장착 규칙
 | 무기 | 방패 | 마법서 |
@@ -42,30 +48,27 @@
 | 활 (왼손) | ❌ | ❌ |
 
 - 규칙은 각 `OffHandData.CanEquipWith`가 판정 → 새 보조 장비는 클래스만 추가.
-- 보조 장비 교체(방패 ↔ 마법서)는 인벤토리 기능에서 구현 예정. 현재는 `startingOffHand` 하나.
-
-### 무기 교체
-- 입력: **Next(키보드 2 / 패드 D-pad 오른쪽)**, **Previous(1 / D-pad 왼쪽)**
-- 지상 Locomotion 상태에서만 적용 (공격·가드·공중 중 불가), 선입력 버퍼 0.2초
-- 보유 무기가 2개 이상일 때만 순환
+- 맞지 않는 보조 장비 장착 시도는 거부 + 안내, 무기 교체로 맞지 않게 되면 비활성 + 안내 ([Inventory](Inventory.md)).
 
 ### 데미지
-`최종 데미지 = WeaponData.attackPower × HitWindowEvent.damageMultiplier` (반올림)
-- 같은 종류 무기는 콤보 에셋 하나를 공유하고 공격력만 다르게 설정.
-- 활·석궁은 화살 피해 = `attackPower` ([Ranged Combat](RangedCombat.md)), Wand·Staff는 `attackPower × 마법 배율 × 마법서 배율` ([Magic](Magic.md)).
+`근접 피해 = 장착 개체 공격력 × HitWindowEvent.damageMultiplier` (반올림)
+- 같은 종류 무기는 콤보 에셋 하나를 공유하고 능력치 범위만 다르게 설정.
+- 활·석궁은 화살 피해 = 공격력 ([Ranged Combat](RangedCombat.md)), Wand·Staff는 `마법력 × 마법 배율 × 활성 마법서 배율` ([Magic](Magic.md)).
+- 받는 쪽 방패(활성)는 `피해 × 100 / (100 + 방어력)` (마법은 마법 방어력), 최소 1 ([Combat](Combat.md)).
 
 ## 데이터 파라미터
 ### WeaponData
 | 필드 | 기본값 | 의미 |
 |---|---|---|
-| displayName | — | 게임 내 표시 이름 (UI 용, 현재 미사용) |
+| displayName / icon / description | — | 게임 내 이름·아이콘·설명 (인벤토리 표시) |
+| gradeTable | — | 등급 추첨 표 (맨손은 비움) |
 | modelPrefab | — | 무기 모델 (맨손은 비움) |
 | gripPosition / gripRotation | 0 / 0 | 손 소켓 기준 보정 (KayKit 무기는 0 유지) |
 | weaponType | OneHanded | 무기 종류 |
 | gripHand | Right | 쥐는 손 (활은 Left) |
 | occupiesOffHand | false | 보조 손까지 사용 (양손검, 양손 석궁) |
 | allowsShield | true | 보조 손 방패 허용 (Staff false → 마법서만) |
-| attackPower | 10 | 공격력 |
+| attackPowerRange | 10~10 | 공격력 범위 (Wand·Staff는 `magicPowerRange`) |
 | comboData | — | 사용할 콤보 (AttackComboData) |
 | hitOffset / hitRadius | (0, 1, 1) / 0.8 | 근접 판정 구체 (캐릭터 로컬, 칼날 미설정 시 사용) |
 | bladeBase / bladeTip | 0 / 0 | 칼날 시작·끝 (무기 모델 로컬), 같으면 칼날 판정 안 함 |
@@ -77,7 +80,8 @@
 |---|---|---|---|
 | Shield | guardAngle | 120 | 정면 기준 방어 각도 (전체 각도) |
 | Shield | blockKnockbackSpeed / blockStunDuration | 2 / 0.3 | 막았을 때 밀림·경직 |
-| Spellbook | magicPowerMultiplier | 1.2 | 마법 위력 배율 (원거리 전투 기능에서 적용 예정) |
+| Shield | defenseRange / magicDefenseRange | 10~10 / 10~10 | 방어력·마법 방어력 범위 (철 방패 20~30 / 3~6, 마법 방패 8~12 / 20~30) |
+| Spellbook | magicPowerMultiplier | 1.2 | 마법 위력 배율 (활성일 때만) |
 
 ## 에디터 설정
 1. **애니메이션 임포트 (필수)** – KayKit 리그는 Humanoid의 Hand가 `wrist`에 매핑되어 있어 `hand`·`handslot` 본 회전이 기본적으로 버려진다 → 무기 싱크 깨짐.
@@ -100,7 +104,8 @@
 3. **애니메이터** – 위 콤보·대기 상태를 `Player.controller`에 추가 (상태 이름 = 클립 이름)
 4. **Rogue 프리팹/씬** – `PlayerLoadout`, `EquipmentVisual`, `ShieldGuard` 추가
    - EquipmentVisual 손 본은 컴포넌트 추가 시 자동 탐색
-   - PlayerLoadout에 Unarmed / Starting Weapons / Starting Off Hand 지정
+   - PlayerLoadout에 Unarmed / Starting Weapon / Starting Off Hand 지정 (가방 시작 아이템의 첫 개체를 장착)
+5. **능력치** – 등급표(`ItemGradeTable`)와 공격력·마법력·방어력 범위 입력 (인스펙터 상단 요약·경고 확인)
 
 ## 주의사항 / 확장 포인트
 - `unarmedWeapon`은 **필수**. 비어 있으면 시작 시 콘솔 에러.
@@ -109,7 +114,8 @@
   - Sword1H: Base (0, 0.2, 0), Tip (0, 1, 0) / Sword2H: Base (0, 0.65, 0), Tip (0, 1.88, 0) / Radius 0.1
 - 적(스켈레톤 등)은 `EquipmentVisual` + `WeaponData`를 그대로 재사용 가능.
 - 클립 Root Transform은 Rotation/Y/XZ 모두 **Bake Into Pose ✓ + Based Upon: Original** (FBX 재추출 시 .anim에 재적용).
-- 예정: 보조 장비 교체/인벤토리, 필드 무기 줍기.
+- 필드별 역할·권장값: [인스펙터 가이드](../InspectorGuide.md).
+- 예정: 무기 숙련도(숙련 등급 이하 장비만 장착, 처치 시 장착 무기·보조 장비 경험치).
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -118,3 +124,4 @@
 | 2026-10-01 | Wand/Staff/Bow/Crossbow 추가, 쥐는 손(`gripHand`)·보조 손 점유(`occupiesOffHand`), 보조 장비 일반화(방패/마법서) |
 | 2026-10-02 | `WeaponData` 상속 허용(RangedWeaponData, MagicWeaponData), `allowsShield` 추가, 클립 Root Transform 설정 |
 | 2026-10-02 | 칼날 궤적 판정용 `bladeBase` / `bladeTip` / `bladeRadius` 추가 |
+| 2026-10-06 | 장비 = 아이템(`ItemData` 상속)·개체 장착, 무기 순환 삭제(퀵슬롯), 등급·능력치 범위(공격력/마법력/방어력), 방패 방어력, 보조 장비 비활성 규칙, 무기 인스펙터, `AmmoPouch` 삭제 |

@@ -12,17 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3e9a41d5b84f2e9a6d0c1b8f4e2a73, type: 3}
   m_Name: CrossBow2H
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
-  displayName: 1H
+  displayName: "\uC591\uC190\uC11D\uAD81"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 3989796310135439970, guid: 7f53053c209a3eb4faf863b6291cc00c, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 260, z: 0}
+  gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
   weaponType: 6
   gripHand: 0
   occupiesOffHand: 1
-  attackPower: 10
+  allowsShield: 1
+  attackPowerRange:
+    min: 26
+    max: 34
   comboData: {fileID: 0}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  bladeBase: {x: 0, y: 0, z: 0}
+  bladeTip: {x: 0, y: 0, z: 0}
+  bladeRadius: 0.1
   idleStateName: Ranged_2H_Aiming
   ammo: {fileID: 11400000, guid: 5e28021103141734fb9b4e419ac706ef, type: 2}
   canAim: 1
@@ -35,6 +46,7 @@ MonoBehaviour:
   releaseTime: 0.05
   fireDuration: 1
   aimIdleStateName: Ranged_2H_Aiming
+  aimHoldTime: 1
   reloadStateName: Ranged_2H_Reload
   reloadDuration: 1.6
   loadedAmmoPosition: {x: 0, y: 0.197, z: 0.586}

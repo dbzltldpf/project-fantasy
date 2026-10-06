@@ -8,6 +8,7 @@ namespace ProjectFantasy.Combat
     {
         private const float FrozenSpeed = 0f;
 
+        [Tooltip("멈출 애니메이터 (비우면 자식 자동 탐색)")]
         [SerializeField] private Animator animator;
 
         private float endTime;

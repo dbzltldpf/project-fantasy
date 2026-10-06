@@ -9,7 +9,7 @@
 | [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Died` 이벤트 |
 | [TrainingDummy.cs](../../Assets/Project/Scripts/Combat/TrainingDummy.cs) | 훈련용 허수아비: 피격 직후 체력 복구로 죽지 않음, 피해 로그(에디터/개발 빌드) |
 | [EffectPool.cs](../../Assets/Project/Scripts/Combat/Effects/EffectPool.cs) / [PooledEffect.cs](../../Assets/Project/Scripts/Combat/Effects/PooledEffect.cs) | 파티클 이펙트 풀링: 1회 재생(파티클 종료 시 반환) / 시간 지정 / 수동 종료 |
-| [ShieldGuard.cs](../../Assets/Project/Scripts/Combat/ShieldGuard.cs) | `IDamageBlocker` 구현, 가드 중 정면 각도 내 공격 방어 |
+| [ShieldGuard.cs](../../Assets/Project/Scripts/Combat/ShieldGuard.cs) | `IDamageBlocker`: 가드 중 정면 각도 내 공격 완전 방어 / `IDamageReducer`: 방패 활성 중 방어력·마법 방어력으로 피해 감소 |
 | [MeleeAttacker.cs](../../Assets/Project/Scripts/Combat/MeleeAttacker.cs) | 칼날 궤적 스윕 또는 몸 기준 구체 판정, 판정 구간마다 대상당 1회 타격, 명중 시 히트스톱 요청 |
 | [WeaponTrace.cs](../../Assets/Project/Scripts/Combat/WeaponTrace.cs) | 칼날 위 샘플 지점의 이전/현재 월드 위치 추적 |
 | [HitStop.cs](../../Assets/Project/Scripts/Combat/HitStop.cs) | 명중 순간 애니메이터 일시 정지 (공격자·피격자 공용), `IsActive`로 로직 정지 판단 |
@@ -60,9 +60,11 @@ frame 0 ──── 6 ────── 10 ── 14 ────────�
 TakeDamage
  ├─ 사망·무적·0 이하 데미지 → 무시
  ├─ IDamageBlocker.TryBlock == true → Blocked 이벤트 후 종료 (피해 없음)
- └─ 피해 적용 → 무적 시작 → HealthChanged → Damaged → (체력 0) Died
+ ├─ IDamageReducer.Reduce → 피해 × 100 / (100 + 방어력), 최소 1 (물리 = 방어력, 마법 = 마법 방어력)
+ └─ 감소된 피해 적용 → 무적 시작 → HealthChanged → Damaged(감소 후 피해) → (체력 0) Died
 ```
 - `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어.
+- 피해 종류(`DamageInfo.Type`): 근접·화살 = 물리, Wand·Staff 마법 = 마법. 방어력은 방패 개체에서 굴린 값 ([Inventory](Inventory.md)).
 
 ## 데이터 파라미터
 ### ActionData
@@ -103,7 +105,7 @@ TakeDamage
 |---|---|---|---|
 | Health | maxHealth | 100 | 최대 체력 |
 | Health | invincibleDuration | 0.5 | 피격 후 무적 시간 |
-| MeleeAttacker | hitOffset / hitRadius | (0, 1, 1) / 0.8 | 판정 구체 기본값 (장착 무기 데이터로 덮어씀), 선택 시 Gizmo (칼날 장착 시 칼날 샘플 구체) |
+| MeleeAttacker | hitOrigin / gizmoColor | 자신 / 빨강 | 몸 기준 판정 원점, 선택 시 Gizmo (판정 위치·반경은 장착 무기 데이터가 설정, 인스펙터 비노출) |
 | MeleeAttacker | targetLayers | Everything | 타격 대상 레이어 |
 | HitStop | animator | 자식 자동 탐색 | 정지시킬 애니메이터 |
 | ShieldGuard | facingTransform | 자신 | 정면 기준 Transform |
@@ -176,3 +178,4 @@ Length               ───────────────────�
 | 2026-10-02 | 이펙트 풀링(`EffectPool`, `PooledEffect`), 훈련용 허수아비, `Health.RestoreFull` |
 | 2026-10-02 | 액션 타임라인 Phase 1: `ActionData`/`ActionEvent`/`ActionPlayer`/`IActionContext`, 칼날 궤적 판정(`WeaponTrace`), `HitStop`, `ActionSpeed` 재생 속도. `AttackStep`(초 단위) 제거 → ActionData로 변환 |
 | 2026-10-02 | 액션 타임라인 Phase 2: Action Timeline 창(트랙 드래그 편집, 프레임 스크럽·재생, Scene 뷰 자세·칼날 궤적 미리보기), 검증 경고를 인스펙터 표시로 이동 |
+| 2026-10-06 | 피해 종류(물리/마법), `IDamageReducer`·방패 방어력 감소, 공격력·마법력은 장비 개체 능력치 기준, `MeleeAttacker` 판정 위치·반경 인스펙터 비노출 |

@@ -12,15 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f8501d4b26f454baaae61aba04a619, type: 3}
   m_Name: Sword1H
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.WeaponData
-  displayName: 1H
+  displayName: "\uD55C\uC190\uAC80"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 2741391114697504946, guid: e7471a3e79d217d40b904217133a6e18, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
   weaponType: 1
   gripHand: 0
   occupiesOffHand: 0
   allowsShield: 1
-  attackPower: 10
+  attackPowerRange:
+    min: 10
+    max: 14
   comboData: {fileID: 11400000, guid: 379ed9c7e5325b64a8eba94e84ae15f8, type: 2}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
