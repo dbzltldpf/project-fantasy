@@ -7,7 +7,9 @@ namespace ProjectFantasy.Combat
     [Serializable]
     public abstract class ActionEvent
     {
+        [Tooltip("구간 시작 프레임 (포함)")]
         [SerializeField, Min(0)] private int startFrame;
+        [Tooltip("구간 끝 프레임 (제외)")]
         [SerializeField, Min(0)] private int endFrame = 1;
 
         public int StartFrame => startFrame;

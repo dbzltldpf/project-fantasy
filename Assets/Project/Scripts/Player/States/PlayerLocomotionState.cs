@@ -1,6 +1,6 @@
 namespace ProjectFantasy.Player
 {
-    // 지상 대기/걷기/달리기 (애니메이션은 속도로 분기)
+    // 지상 대기/걷기/달리기 (애니메이션은 속도로 분기), 줍기·퀵슬롯 입력 처리
     public sealed class PlayerLocomotionState : PlayerStateBase
     {
         public PlayerLocomotionState(PlayerController controller) : base(controller) { }
@@ -30,10 +30,14 @@ namespace ProjectFantasy.Player
                 return;
             }
 
-            int cycleDirection = InputHandler.ConsumeWeaponCycle();
-            if (cycleDirection != PlayerInputHandler.NoWeaponCycle)
+            if (InputHandler.ConsumeInteract() && ItemHandler.TryStartPickUp()) return;
+
+            // 무기는 즉시 장착, 소모품은 사용 상태로 전이
+            int quickSlot = InputHandler.ConsumeQuickSlot();
+            if (quickSlot != PlayerInputHandler.NoQuickSlot)
             {
-                Loadout.CycleWeapon(cycleDirection);
+                ItemHandler.TryActivateQuickSlot(quickSlot);
+                if (!Controller.IsInLocomotion) return;
             }
 
             ApplyMoveInput(MovementData.Acceleration, MovementData.Deceleration, deltaTime);

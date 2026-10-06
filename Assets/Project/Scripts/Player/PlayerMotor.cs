@@ -7,6 +7,7 @@ namespace ProjectFantasy.Player
     [DisallowMultipleComponent]
     public sealed class PlayerMotor : MonoBehaviour
     {
+        [Tooltip("이동·점프·중력 데이터")]
         [SerializeField] private PlayerMovementData movementData;
 
         private CharacterController characterController;

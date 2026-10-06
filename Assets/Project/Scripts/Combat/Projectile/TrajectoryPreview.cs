@@ -7,6 +7,7 @@ namespace ProjectFantasy.Combat
     [DisallowMultipleComponent]
     public sealed class TrajectoryPreview : MonoBehaviour
     {
+        [Tooltip("경로선 최대 점 수")]
         [SerializeField, Min(2)] private int maxPoints = 64;
 
         private LineRenderer lineRenderer;

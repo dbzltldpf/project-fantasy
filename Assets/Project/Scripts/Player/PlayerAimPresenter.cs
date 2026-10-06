@@ -8,8 +8,11 @@ namespace ProjectFantasy.Player
     [DisallowMultipleComponent]
     public sealed class PlayerAimPresenter : MonoBehaviour
     {
+        [Tooltip("플레이어")]
         [SerializeField] private PlayerController player;
+        [Tooltip("3인칭 카메라")]
         [SerializeField] private ThirdPersonCamera thirdPersonCamera;
+        [Tooltip("조준점 UI")]
         [SerializeField] private CrosshairView crosshair;
 
         private void OnEnable() => player.AimViewChanged += HandleAimViewChanged;

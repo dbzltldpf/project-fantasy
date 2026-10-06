@@ -12,7 +12,9 @@ namespace ProjectFantasy.Weapon
         private const string LeftHandSlotName = "handslot.l";
         private const int HandCount = 2;
 
+        [Tooltip("오른손 소켓 (비우면 handslot.r 자동 탐색)")]
         [SerializeField] private Transform rightHandSlot;
+        [Tooltip("왼손 소켓 (비우면 handslot.l 자동 탐색)")]
         [SerializeField] private Transform leftHandSlot;
 
         private readonly Dictionary<EquipmentData, GameObject> modelCache = new Dictionary<EquipmentData, GameObject>();

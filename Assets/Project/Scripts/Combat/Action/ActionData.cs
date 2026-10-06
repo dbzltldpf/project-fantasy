@@ -11,6 +11,7 @@ namespace ProjectFantasy.Combat
         public const float DefaultFrameRate = 30f;
         private const float MinPlaybackSpeed = 0.01f;
 
+        [Tooltip("기준 클립 (프레임레이트·길이, 타임라인 미리보기)")]
         [SerializeField] private AnimationClip clip;
         [Tooltip("애니메이터 상태 이름 (비우면 클립 이름)")]
         [SerializeField] private string stateName;
@@ -18,6 +19,7 @@ namespace ProjectFantasy.Combat
         [SerializeField, Min(1)] private int lengthFrames = (int)DefaultFrameRate;
         [Tooltip("애니메이션·이벤트 공통 재생 속도 배율")]
         [SerializeField, Min(MinPlaybackSpeed)] private float playbackSpeed = 1f;
+        [Tooltip("이 액션으로 전환하는 블렌드 시간 (초)")]
         [SerializeField, Min(0f)] private float crossFadeDuration = 0.1f;
         [SerializeReference] private List<ActionEvent> events = new List<ActionEvent>();
 

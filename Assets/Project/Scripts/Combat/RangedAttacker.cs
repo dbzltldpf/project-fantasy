@@ -1,4 +1,5 @@
 using System;
+using ProjectFantasy.Core;
 using ProjectFantasy.Utils;
 using UnityEngine;
 
@@ -8,11 +9,13 @@ namespace ProjectFantasy.Combat
     [DisallowMultipleComponent]
     public sealed class RangedAttacker : MonoBehaviour
     {
+        [Tooltip("조준 레이 최대 거리 (m), 허공을 조준하면 이 거리 지점으로 발사")]
         [SerializeField, Min(0f)] private float maxAimDistance = 100f;
         [Tooltip("조준 레이 충돌 레이어 (Player, Projectile 제외)")]
         [SerializeField] private LayerMask aimLayers = Physics.DefaultRaycastLayers;
         [Tooltip("투사체/경로 미리보기 충돌 레이어 (Player, Projectile 제외)")]
         [SerializeField] private LayerMask projectileHitLayers = Physics.DefaultRaycastLayers;
+        [Tooltip("경로선 샘플 간격 (초, 작을수록 부드럽고 점이 많아짐)")]
         [SerializeField, Min(0.001f)] private float previewTimeStep = 0.03f;
 
         private readonly PrefabPool<Projectile> projectilePool = new PrefabPool<Projectile>();
@@ -39,9 +42,9 @@ namespace ProjectFantasy.Combat
             return Ballistics.SamplePath(origin, launchVelocity, profile.Gravity, previewTimeStep, profile.Lifetime, projectileHitLayers, buffer);
         }
 
-        public void Fire(Vector3 origin, Vector3 launchVelocity, in ProjectileProfile profile, int damage)
+        public void Fire(Vector3 origin, Vector3 launchVelocity, in ProjectileProfile profile, int damage, DamageType damageType)
         {
-            RangedShot shot = new RangedShot(origin, launchVelocity, damage, gameObject);
+            RangedShot shot = new RangedShot(origin, launchVelocity, damage, damageType, gameObject);
 
             if (profile.Prefab != null)
             {

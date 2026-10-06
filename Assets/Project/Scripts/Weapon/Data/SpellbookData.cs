@@ -7,6 +7,7 @@ namespace ProjectFantasy.Weapon
     public sealed class SpellbookData : OffHandData
     {
         [Header("Magic")]
+        [Tooltip("마법 피해 배율 (Wand·Staff와 함께 활성일 때)")]
         [SerializeField, Min(0f)] private float magicPowerMultiplier = 1.2f;
 
         public float MagicPowerMultiplier => magicPowerMultiplier;

@@ -11,7 +11,7 @@ namespace ProjectFantasy.Player
         private readonly ShieldGuard shieldGuard;
         private float blockStunRemaining;
 
-        private ShieldData Shield => Loadout.CurrentShield;
+        private ShieldData Shield => Loadout.ActiveShield;
 
         public PlayerGuardState(PlayerController controller) : base(controller)
         {

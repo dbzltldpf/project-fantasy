@@ -1,4 +1,5 @@
 using ProjectFantasy.Combat;
+using ProjectFantasy.Core;
 using ProjectFantasy.Magic;
 using UnityEngine;
 
@@ -72,7 +73,7 @@ namespace ProjectFantasy.Player
             ProjectileProfile profile = projectileSpell.ToProfile();
             Vector3 origin = Controller.transform.TransformPoint(MagicCaster.CurrentWeapon.MuzzleOffset);
             Vector3 launchVelocity = Controller.RangedAttacker.ResolveLaunchVelocity(origin, Controller.GetAimPoint(), profile);
-            Controller.RangedAttacker.Fire(origin, launchVelocity, profile, damage);
+            Controller.RangedAttacker.Fire(origin, launchVelocity, profile, damage, DamageType.Magic);
         }
 
         private void Finish()

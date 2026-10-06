@@ -2,6 +2,8 @@ using System;
 using System.Diagnostics;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Core;
+using ProjectFantasy.InventorySystem;
+using ProjectFantasy.Items;
 using ProjectFantasy.Magic;
 using ProjectFantasy.Weapon;
 using UnityEngine;
@@ -13,16 +15,18 @@ namespace ProjectFantasy.Player
     [RequireComponent(typeof(MeleeAttacker), typeof(Health), typeof(PlayerLoadout))]
     [RequireComponent(typeof(ShieldGuard), typeof(PlayerRangedWeapon), typeof(RangedAttacker))]
     [RequireComponent(typeof(PlayerAmmoVisual), typeof(PlayerMagicCaster), typeof(SpellCaster))]
-    [RequireComponent(typeof(HitStop))]
+    [RequireComponent(typeof(HitStop), typeof(PlayerItemHandler))]
     [DisallowMultipleComponent]
     public sealed class PlayerController : MonoBehaviour
     {
         private const float MaxMoveInputMagnitude = 1f;
         private const int InvalidFrame = -1;
 
+        [Tooltip("이동·조준 기준 카메라 (비우면 Main Camera)")]
         [SerializeField] private Transform cameraTransform;
         [Tooltip("조준 지점이 이 거리보다 가깝거나 뒤쪽이면 카메라 정면을 바라봄")]
         [SerializeField, Min(0f)] private float minAimFacingDistance = 1.5f;
+        [Tooltip("피격 경직·넉백 데이터")]
         [SerializeField] private HitReactionData hitReactionData;
         [Tooltip("조준 모드 예상 경로 표시 (선택)")]
         [SerializeField] private TrajectoryPreview trajectoryPreview;
@@ -44,12 +48,16 @@ namespace ProjectFantasy.Player
         public PlayerAmmoVisual AmmoVisual { get; private set; }
         public PlayerMagicCaster MagicCaster { get; private set; }
         public SpellCaster SpellCaster { get; private set; }
+        public PlayerItemHandler ItemHandler { get; private set; }
         public HitReactionData HitReactionData => hitReactionData;
         public TrajectoryPreview TrajectoryPreview => trajectoryPreview;
 
         public AttackComboData AttackComboData => Loadout.CurrentWeapon != null ? Loadout.CurrentWeapon.ComboData : null;
         public bool CanAttack => AttackComboData != null && AttackComboData.ActionCount > 0;
         public bool IsAimViewActive { get; private set; }
+
+        // 장비 변경·아이템 사용 가능 여부
+        public bool IsInLocomotion => stateMachine.CurrentState == LocomotionState;
 
         public PlayerLocomotionState LocomotionState { get; private set; }
         public PlayerAirState AirState { get; private set; }
@@ -60,6 +68,8 @@ namespace ProjectFantasy.Player
         public PlayerReloadState ReloadState { get; private set; }
         public PlayerCastState CastState { get; private set; }
         public PlayerSpellTargetState SpellTargetState { get; private set; }
+        public PlayerPickUpState PickUpState { get; private set; }
+        public PlayerUseItemState UseItemState { get; private set; }
         public PlayerHitState HitState { get; private set; }
         public PlayerDeadState DeadState { get; private set; }
 
@@ -79,6 +89,7 @@ namespace ProjectFantasy.Player
             AmmoVisual = GetComponent<PlayerAmmoVisual>();
             MagicCaster = GetComponent<PlayerMagicCaster>();
             SpellCaster = GetComponent<SpellCaster>();
+            ItemHandler = GetComponent<PlayerItemHandler>();
             health = GetComponent<Health>();
             hitStop = GetComponent<HitStop>();
 
@@ -122,6 +133,18 @@ namespace ProjectFantasy.Player
         }
 
         public void ChangeState(PlayerStateBase nextState) => stateMachine.ChangeState(nextState);
+
+        public void StartPickUp(WorldItem target)
+        {
+            PickUpState.SetTarget(target);
+            ChangeState(PickUpState);
+        }
+
+        public void StartUseItem(ConsumableData item)
+        {
+            UseItemState.SetItem(item);
+            ChangeState(UseItemState);
+        }
 
         // 카메라 기준 수평 이동 벡터 (크기 = 입력 강도)
         public Vector3 GetCameraRelativeMove()
@@ -195,6 +218,8 @@ namespace ProjectFantasy.Player
             ReloadState = new PlayerReloadState(this);
             CastState = new PlayerCastState(this);
             SpellTargetState = new PlayerSpellTargetState(this);
+            PickUpState = new PlayerPickUpState(this);
+            UseItemState = new PlayerUseItemState(this);
             HitState = new PlayerHitState(this);
             DeadState = new PlayerDeadState(this);
             stateMachine = new StateMachine<PlayerStateBase>();
@@ -204,9 +229,13 @@ namespace ProjectFantasy.Player
         private void ValidateWeaponStates()
         {
             ValidateWeapon(Loadout.UnarmedWeapon);
-            foreach (WeaponData weapon in Loadout.OwnedWeapons)
+
+            Inventory inventory = ItemHandler.Inventory;
+            for (int i = 0; i < inventory.Capacity; i++)
             {
-                ValidateWeapon(weapon);
+                ItemData item = inventory.GetSlot(i).Item;
+                if (item is WeaponData weapon) ValidateWeapon(weapon);
+                else if (item is ConsumableData consumable) PlayerAnimator.ValidateState(consumable.UseStateName);
             }
         }
 

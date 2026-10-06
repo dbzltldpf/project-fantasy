@@ -8,10 +8,13 @@ namespace ProjectFantasy.Combat
     [DisallowMultipleComponent]
     public sealed class Health : MonoBehaviour, IDamageable
     {
+        [Tooltip("최대 체력")]
         [SerializeField, Min(1)] private int maxHealth = 100;
+        [Tooltip("피격 후 무적 시간 (초, 허수아비는 0)")]
         [SerializeField, Min(0f)] private float invincibleDuration = 0.5f;
 
         private IDamageBlocker damageBlocker;
+        private IDamageReducer damageReducer;
         private float invincibleEndTime;
 
         public int MaxHealth => maxHealth;
@@ -28,8 +31,10 @@ namespace ProjectFantasy.Combat
         {
             CurrentHealth = maxHealth;
             damageBlocker = GetComponent<IDamageBlocker>();
+            damageReducer = GetComponent<IDamageReducer>();
         }
 
+        // 방어(가드) → 방어력 감소 → 적용 순서, Damaged에는 감소 후 피해량 전달
         public void TakeDamage(in DamageInfo damageInfo)
         {
             if (!IsAlive || IsInvincible || damageInfo.Amount <= 0) return;
@@ -40,11 +45,13 @@ namespace ProjectFantasy.Combat
                 return;
             }
 
-            CurrentHealth = Mathf.Max(0, CurrentHealth - damageInfo.Amount);
+            DamageInfo applied = damageReducer != null ? damageInfo.WithAmount(damageReducer.Reduce(damageInfo)) : damageInfo;
+
+            CurrentHealth = Mathf.Max(0, CurrentHealth - applied.Amount);
             invincibleEndTime = Time.time + invincibleDuration;
 
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
-            Damaged?.Invoke(damageInfo);
+            Damaged?.Invoke(applied);
             if (!IsAlive) Died?.Invoke();
         }
 

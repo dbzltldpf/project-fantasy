@@ -9,6 +9,7 @@ namespace ProjectFantasy.Combat
     {
         private const float DefaultHitStopDuration = 0.06f;
 
+        [Tooltip("데미지 = 무기 공격력 × 배율")]
         [SerializeField, Min(0f)] private float damageMultiplier = 1f;
         [Tooltip("명중 시 공격자·피격자 애니메이션 정지 시간 (초)")]
         [SerializeField, Min(0f)] private float hitStopDuration = DefaultHitStopDuration;

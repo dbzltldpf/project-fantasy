@@ -1,5 +1,6 @@
 using System;
 using ProjectFantasy.Combat;
+using ProjectFantasy.Items;
 using UnityEngine;
 
 namespace ProjectFantasy.Weapon
@@ -8,31 +9,41 @@ namespace ProjectFantasy.Weapon
     [CreateAssetMenu(fileName = "WeaponData", menuName = "ProjectFantasy/Weapon/Weapon Data")]
     public class WeaponData : EquipmentData
     {
-        [Header("Type")]
+        private const int DefaultAttackPower = 10;
+
+        [Tooltip("무기 종류 (공격 방식·인스펙터 섹션 결정)")]
         [SerializeField] private WeaponType weaponType = WeaponType.OneHanded;
+        [Tooltip("쥐는 손 (활만 Left)")]
         [SerializeField] private EquipHand gripHand = EquipHand.Right;
-        [Tooltip("보조 손(왼손)까지 사용하는 무기 (양손검, 양손 석궁 등)")]
+        [Tooltip("보조 손(왼손)까지 사용 → 보조 장비 장착 불가 (양손검, 양손 석궁)")]
         [SerializeField] private bool occupiesOffHand;
-        [Tooltip("보조 손에 방패 장착 허용 (Staff는 마법서만)")]
+        [Tooltip("보조 손에 방패 허용 (Staff는 끔 → 마법서만)")]
         [SerializeField] private bool allowsShield = true;
 
-        [Header("Combat")]
-        [SerializeField, Min(0)] private int attackPower = 10;
+        [Tooltip("개체 생성 시 굴리는 공격력 범위 (등급 배율 적용 전)")]
+        [SerializeField] private StatRange attackPowerRange = new StatRange(DefaultAttackPower, DefaultAttackPower);
+        [Tooltip("근접 콤보 (같은 종류 무기는 같은 에셋 공유)")]
         [SerializeField] private AttackComboData comboData;
+        [Tooltip("칼날이 없을 때 몸 기준 판정 구체 중심 (캐릭터 로컬, 맨손 주먹 위치)")]
         [SerializeField] private Vector3 hitOffset = new Vector3(0f, 1f, 1f);
+        [Tooltip("몸 기준 판정 구체 반지름 (m)")]
         [SerializeField, Min(0f)] private float hitRadius = 0.8f;
 
-        [Header("Blade Trace")]
-        [Tooltip("무기 모델 로컬 기준 칼날 시작/끝 (같으면 위의 구체 판정 사용)")]
+        [Tooltip("칼날 시작점 (무기 모델 로컬, 손잡이 위)")]
         [SerializeField] private Vector3 bladeBase;
+        [Tooltip("칼날 끝점 (무기 모델 로컬, 시작점과 같으면 몸 기준 판정)")]
         [SerializeField] private Vector3 bladeTip;
+        [Tooltip("칼날 판정 두께 (반지름 m, 0.05~0.15)")]
         [SerializeField, Min(0f)] private float bladeRadius = 0.1f;
 
-        [Header("Animation")]
+        [Tooltip("이 무기를 들었을 때 대기 모션 상태")]
         [SerializeField] private string idleStateName = "Idle_A";
 
         [NonSerialized] private int idleStateHash;
         [NonSerialized] private bool isHashCached;
+
+        public override ItemCategory Category => ItemCategory.Weapon;
+        public override bool CanQuickSlot => true;
 
         public WeaponType WeaponType => weaponType;
         public EquipHand GripHand => gripHand;
@@ -41,7 +52,8 @@ namespace ProjectFantasy.Weapon
         public bool AllowsShield => allowsShield;
         public bool IsMagic => weaponType == WeaponType.Wand || weaponType == WeaponType.Staff;
         public bool HasMeleeHit => weaponType == WeaponType.Unarmed || weaponType == WeaponType.OneHanded || weaponType == WeaponType.TwoHanded;
-        public int AttackPower => attackPower;
+        public override ItemStats BaseStats => ItemStats.Attack(attackPowerRange.Min);
+        public override bool HasStat(StatType stat) => stat == StatType.AttackPower;
         public AttackComboData ComboData => comboData;
         public Vector3 HitOffset => hitOffset;
         public float HitRadius => hitRadius;
@@ -63,6 +75,8 @@ namespace ProjectFantasy.Weapon
                 return idleStateHash;
             }
         }
+
+        protected override ItemStats RollStats(float multiplier) => ItemStats.Attack(attackPowerRange.Roll(multiplier));
 
         protected virtual void OnValidate() => isHashCached = false;
     }
