@@ -28,12 +28,12 @@ namespace ProjectFantasy.UI
             slot.DragEnded += HandleDragEnded;
         }
 
-        public void Show(ItemData item, Vector2 screenPosition)
+        public void Show(ItemData item, string displayName, Vector2 screenPosition)
         {
             bool hasIcon = item.Icon != null;
             icon.enabled = hasIcon;
             if (hasIcon) icon.sprite = item.Icon;
-            if (nameLabel != null) nameLabel.text = hasIcon ? string.Empty : item.DisplayName;
+            if (nameLabel != null) nameLabel.text = hasIcon ? string.Empty : displayName;
 
             root.gameObject.SetActive(true);
             root.SetAsLastSibling();
@@ -45,7 +45,7 @@ namespace ProjectFantasy.UI
 
         public void Hide() => root.gameObject.SetActive(false);
 
-        private void HandleDragBegan(ItemSlotView slot, PointerEventData eventData) => Show(slot.Item, eventData.position);
+        private void HandleDragBegan(ItemSlotView slot, PointerEventData eventData) => Show(slot.Item, slot.DisplayName, eventData.position);
         private void HandleDragging(ItemSlotView _, PointerEventData eventData) => Move(eventData.position);
         private void HandleDragEnded(ItemSlotView _, PointerEventData __) => Hide();
     }

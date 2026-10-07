@@ -7,8 +7,9 @@
 |---|---|
 | [Core](Features/Core.md) | 상태 머신, 피해/방어 인터페이스, 유틸 등 공용 코드 |
 | [Player](Features/Player.md) | 플레이어 입력·이동·애니메이션·상태(FSM)·가드 |
-| [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링 |
-| [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
+| [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링, 처치 보상 |
+| [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 티어(외형 아우라·테두리 발광)·등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
+| [Mastery](Features/Mastery.md) | 무기 종류별 숙련도(알비온식), 처치 경험치, 티어 장착 조건, 숙련 보너스, 숙련도 창(K) |
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
@@ -22,21 +23,23 @@
 ```
 Assets/Project/Scripts/
 ├─ Core/          StateMachine/, Interfaces/, Types/
-├─ Player/        PlayerController, Input, Motor, Animator, Loadout, RangedWeapon, AmmoVisual, MagicCaster, ItemHandler, Interactor, Presenters(Aim/Menu/Hud), States/, Data/
-├─ Combat/        Health, ShieldGuard, MeleeAttacker, WeaponTrace, HitStop, RangedAttacker, TrainingDummy, Action/(Events/, Editor/), Projectile/, Effects/, Data/
+├─ Player/        PlayerController, Input, Motor, Animator, Loadout, RangedWeapon, AmmoVisual, MagicCaster, ItemHandler, Interactor, MasteryRewarder, Presenters(Aim/Menu/Hud), States/, Data/
+├─ Combat/        Health, ShieldGuard, MeleeAttacker, WeaponTrace, HitStop, RangedAttacker, TrainingDummy, KillReward, Action/(Events/, Editor/), Projectile/, Effects/, Data/
 ├─ Weapon/        WeaponType, EquipHand, EquipmentVisual, Data/, Editor/
-├─ Items/         ItemInstance, WorldItem, ItemNotice, Data/, Effects/, Grade/, Stats/
-├─ InventorySystem/  Inventory, ItemStack, QuickSlots, IItemActions, Data/
+├─ Items/         ItemInstance, WorldItem, ItemNotice, Data/, Effects/, Grade/, Stats/, Tier/, Editor/
+├─ InventorySystem/  Inventory, ItemStack, QuickSlots, IItemActions, EquipRequirement, Data/
+├─ Mastery/       MasteryType, MasteryMapping, WeaponMastery, Data/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
-├─ UI/            CrosshairView, DamageNumbers/, Inventory/, HUD/, Editor/
+├─ UI/            CrosshairView, DamageNumbers/, Inventory/, HUD/, Mastery/, Editor/
 ├─ Enemy/         (예정)
-└─ Utils/         TransformExtensions, PrefabPool, SubclassSelectorAttribute, Editor/
+└─ Utils/         TransformExtensions, RendererExtensions, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
+셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`).
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
-(에디터 전용: `CombatEditor` · `WeaponEditor` · `UIEditor` · `UtilsEditor`)
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
+(에디터 전용: `CombatEditor` · `WeaponEditor` · `ItemsEditor` · `UIEditor` · `UtilsEditor`)
 
 ## 변경 이력
 | 날짜 | 문서 | 내용 |
@@ -51,3 +54,4 @@ Assets/Project/Scripts/
 | 2026-10-02 | Combat, Player, Weapon | 액션 타임라인 Phase 1: 프레임 단위 ActionData·이벤트, 칼날 궤적 판정, 히트스톱, 재생 속도 배율, 초 단위 AttackStep 제거 |
 | 2026-10-02 | Combat, Weapon | 액션 타임라인 Phase 2: Action Timeline 에디터 창(트랙 드래그 편집, 프레임 스크럽, Scene 뷰 자세·칼날 궤적 미리보기) |
 | 2026-10-06 | Inventory, Weapon, Player, Combat, RangedCombat, Magic, Camera, UI, Core, InspectorGuide | 인벤토리(가방·퀵슬롯·줍기·사용·실시간 창), 장비 개체·등급·랜덤 능력치, 방패 방어력, 보조 장비 규칙, 휠 줌, 인스펙터 정리(무기 인스펙터·툴팁·입력 에셋·애니메이션 데이터), 인스펙터 가이드 |
+| 2026-10-07 | Mastery, Weapon, Inventory, Player, Combat, RangedCombat, Magic, UI, Core, InspectorGuide | 무기 숙련도(종류별 레벨·처치 경험치·티어 장착 조건·보너스·숙련도 창 K·테스트 옵션), 장비 티어 T1~T5(접두어·배율·불씨 아우라·테두리 발광), 처치 보상, UI Presenters 분리, 풀 부모 폴더(`Pools/…`) |

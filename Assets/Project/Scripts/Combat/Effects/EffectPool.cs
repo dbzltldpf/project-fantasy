@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ProjectFantasy.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -13,11 +14,15 @@ namespace ProjectFantasy.Combat
 
         private readonly Dictionary<GameObject, Stack<PooledEffect>> pools = new Dictionary<GameObject, Stack<PooledEffect>>();
         private readonly Action<PooledEffect> returnAction;
+        private readonly PoolContainerMap containers = new PoolContainerMap();
 
         public EffectPool()
         {
             returnAction = Return;
         }
+
+        // 필드 초기화 시점에는 씬 오브젝트를 만들 수 없어 Awake에서 호출
+        public void SetRoot(Transform poolRoot) => containers.SetRoot(poolRoot);
 
         // duration: OneShot(1회 재생 후 반환) / Infinite(Stop 호출 전까지 유지) / 초 단위 시간
         public PooledEffect Spawn(GameObject prefab, Vector3 position, Quaternion rotation, float duration)
@@ -38,7 +43,7 @@ namespace ProjectFantasy.Combat
                 if (pooled != null) return pooled;
             }
 
-            GameObject instance = Object.Instantiate(prefab);
+            GameObject instance = Object.Instantiate(prefab, containers.Get(prefab));
             instance.SetActive(false);
             PooledEffect created = instance.AddComponent<PooledEffect>();
             created.Initialize(prefab);

@@ -6,6 +6,7 @@ namespace ProjectFantasy.Items
         InventoryFull,
         CannotUseNow,
         OffHandIncompatible,
-        OffHandDisabled
+        OffHandDisabled,
+        MasteryTooLow
     }
 }

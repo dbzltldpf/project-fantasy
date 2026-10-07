@@ -17,11 +17,21 @@ namespace ProjectFantasy.Combat
         [SerializeField] private LayerMask projectileHitLayers = Physics.DefaultRaycastLayers;
         [Tooltip("경로선 샘플 간격 (초, 작을수록 부드럽고 점이 많아짐)")]
         [SerializeField, Min(0.001f)] private float previewTimeStep = 0.03f;
+        [Tooltip("투사체 부모 (비우면 Pools/Projectiles 아래 프리팹별 폴더)")]
+        [SerializeField] private Transform projectileRoot;
+        [Tooltip("명중 이펙트 부모 (비우면 Pools/Effects 아래 프리팹별 폴더)")]
+        [SerializeField] private Transform effectRoot;
 
         private readonly PrefabPool<Projectile> projectilePool = new PrefabPool<Projectile>();
         private readonly EffectPool effectPool = new EffectPool();
 
         public event Action<RangedShot> ShotFired;
+
+        private void Awake()
+        {
+            projectilePool.SetRoot(PoolContainers.Resolve(projectileRoot, PoolContainers.Projectiles));
+            effectPool.SetRoot(PoolContainers.Resolve(effectRoot, PoolContainers.Effects));
+        }
 
         // 화면 중앙 레이가 처음 닿는 지점 (없으면 최대 거리 지점)
         public Vector3 ResolveAimPoint(Ray aimRay)

@@ -69,6 +69,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Mastery",
+                    "type": "Button",
+                    "id": "5b8e2c71-9d4a-4f36-a1e8-3c7f0b6d2e95",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "QuickSlot",
                     "type": "Button",
                     "id": "9e3b5c17-2f8a-4d6e-b041-7c9a1e5d3f82",
@@ -378,6 +387,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d3f6a20-4c1b-4e97-b5a2-e9c04f7d1b68",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Mastery",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -33,6 +33,6 @@ MonoBehaviour:
     - rid: 1646186660429561941
       type: {class: ComboWindowEvent, ns: ProjectFantasy.Combat, asm: Assembly-CSharp}
       data:
-        startFrame: 8
+        startFrame: 7
         endFrame: 21
         transitionFrame: 26

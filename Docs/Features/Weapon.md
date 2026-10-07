@@ -8,7 +8,10 @@
 |---|---|
 | [WeaponType.cs](../../Assets/Project/Scripts/Weapon/WeaponType.cs) | `Unarmed` `OneHanded` `TwoHanded` `Wand` `Staff` `Bow` `Crossbow` |
 | [EquipHand.cs](../../Assets/Project/Scripts/Weapon/EquipHand.cs) | `Right` / `Left` (쥐는 손) |
-| [EquipmentData.cs](../../Assets/Project/Scripts/Weapon/Data/EquipmentData.cs) | 장비 공통 (`ItemData` 상속): 모델 프리팹, 손 위치/회전 보정, 등급표, 개체 생성 시 능력치 굴림 |
+| [EquipmentData.cs](../../Assets/Project/Scripts/Weapon/Data/EquipmentData.cs) | 장비 공통 (`ItemData` 상속): 모델 프리팹, 손 위치/회전 보정, 티어표·등급표, 티어별 머티리얼(선택), 개체 생성 시 능력치 굴림, `ApplyModelVisual`(티어 외형) |
+| [Items/Tier/](../../Assets/Project/Scripts/Items/Tier/) | `ItemTier`·`ItemTierTable`(SO), `TierAura`(불씨 파티클), `TierOutline`(테두리 발광), `TierTintCache`(선택 색조) |
+| [Shaders/WeaponOutline.shader](../../Assets/Project/Shaders/WeaponOutline.shader) | Inverted Hull 테두리 발광 (URP, 가산, 맥동) |
+| [Items/Editor/WeaponAuraBuilder.cs](../../Assets/Project/Scripts/Items/Editor/WeaponAuraBuilder.cs) | `Tools → ProjectFantasy → Create Weapon Tier Effects`: 아우라 프리팹·파티클/아웃라인 머티리얼 생성, 비어 있는 티어표에 연결 |
 | [WeaponData.cs](../../Assets/Project/Scripts/Weapon/Data/WeaponData.cs) | 무기 종류, 쥐는 손, 보조 손 점유, 공격력 범위, 콤보, 판정 범위·칼날, 대기 모션 (SO) |
 | [OffHandData.cs](../../Assets/Project/Scripts/Weapon/Data/OffHandData.cs) | 보조 장비 베이스, `CanEquipWith(weapon)`로 동시 장착 가능 여부 판정 |
 | [ShieldData.cs](../../Assets/Project/Scripts/Weapon/Data/ShieldData.cs) | 방패: 가드 각도, 막기 넉백/경직, 방어력·마법 방어력 범위 (SO) |
@@ -38,6 +41,24 @@
 - 장비 개체가 생길 때 `등급표 추첨 → 범위 균등 랜덤 × 등급 배율`로 한 번 굴린다 (무기 공격력, Wand·Staff 마법력, 방패 방어력·마법 방어력).
 - 밸런스 기준표: [인스펙터 가이드](../InspectorGuide.md#무기-weapondata).
 
+### 티어 (T1~T5, 무기 데이터 하나로 공용)
+- 같은 무기 데이터에서 개체마다 티어가 다르다 (`ItemInstance.Tier`). 장착 조건은 무기 숙련 ([Mastery](Mastery.md)).
+- 이름 = 티어 접두어 + 이름 (예: `강철 한손검`), 능력치 = `T1 범위 랜덤 × 티어 배율 × 등급 배율`.
+
+  | 티어 | 접두어 | 배율 | 아우라 / 아웃라인 |
+  |---|---|---|---|
+  | T1 | 낡은 | 1.0 | 없음 |
+  | T2 | 철 | 1.3 | 흰색 |
+  | T3 | 강철 | 1.6 | 하늘색 |
+  | T4 | 미스릴 | 2.0 | 보라 |
+  | T5 | 용의 | 2.5 | 주황 (가장 진함) |
+- 모델 외형 (`EquipmentData.ApplyModelVisual`, 모델 생성 시 1회):
+  1. 머티리얼: `tierMaterials[티어]` 지정 시 교체 > 티어 색조(`applyTint`, 기본 끔) > 원본
+  2. `TierAura`: 가장 큰 렌더러의 로컬 경계 상자에서 불씨 방출 (메시 Read/Write 불필요). 파티클 정점 색은 8비트라 HDR 색은 티어별 머티리얼 복사본으로 전달
+  3. `TierOutline`: 메시마다 `TierOutline` 자식(메시 공유)에 테두리 발광 머티리얼
+- 머티리얼 복사본은 티어별 1회만 생성해 공유, `EquipmentVisual` 모델 캐시 키는 (데이터, 티어).
+- 빛 번짐은 URP Volume Bloom + 카메라 HDR 필요.
+
 ### 보조 장비 동시 장착 규칙
 | 무기 | 방패 | 마법서 |
 |---|---|---|
@@ -61,6 +82,8 @@
 | 필드 | 기본값 | 의미 |
 |---|---|---|
 | displayName / icon / description | — | 게임 내 이름·아이콘·설명 (인벤토리 표시) |
+| tierTable | — | 공용 `ItemTierTable` (맨손은 비움) |
+| tierMaterials | 비움 | 티어별 모델 머티리얼 교체 (선택, 순서 = T1, T2 …, 빈 칸은 원본) |
 | gradeTable | — | 등급 추첨 표 (맨손은 비움) |
 | modelPrefab | — | 무기 모델 (맨손은 비움) |
 | gripPosition / gripRotation | 0 / 0 | 손 소켓 기준 보정 (KayKit 무기는 0 유지) |
@@ -115,7 +138,8 @@
 - 적(스켈레톤 등)은 `EquipmentVisual` + `WeaponData`를 그대로 재사용 가능.
 - 클립 Root Transform은 Rotation/Y/XZ 모두 **Bake Into Pose ✓ + Based Upon: Original** (FBX 재추출 시 .anim에 재적용).
 - 필드별 역할·권장값: [인스펙터 가이드](../InspectorGuide.md).
-- 예정: 무기 숙련도(숙련 등급 이하 장비만 장착, 처치 시 장착 무기·보조 장비 경험치).
+- 아웃라인이 각진 모서리에서 끊기면 두께를 줄인다 (부드러운 법선 굽기는 추후 검토).
+- 서드파티 원본(FBX·이펙트)은 수정하지 않고 티어 외형은 런타임에 덧붙인다.
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -125,3 +149,4 @@
 | 2026-10-02 | `WeaponData` 상속 허용(RangedWeaponData, MagicWeaponData), `allowsShield` 추가, 클립 Root Transform 설정 |
 | 2026-10-02 | 칼날 궤적 판정용 `bladeBase` / `bladeTip` / `bladeRadius` 추가 |
 | 2026-10-06 | 장비 = 아이템(`ItemData` 상속)·개체 장착, 무기 순환 삭제(퀵슬롯), 등급·능력치 범위(공격력/마법력/방어력), 방패 방어력, 보조 장비 비활성 규칙, 무기 인스펙터, `AmmoPouch` 삭제 |
+| 2026-10-07 | 티어(T1~T5, 데이터 하나로 공용): 접두어·능력치 배율, 티어 외형(불씨 아우라·테두리 발광·선택 머티리얼/색조), 티어 이펙트 생성 메뉴, 무기 인스펙터 섹션을 Foldout으로 변경 |

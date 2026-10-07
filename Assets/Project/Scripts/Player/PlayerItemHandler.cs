@@ -1,6 +1,7 @@
 using System;
 using ProjectFantasy.InventorySystem;
 using ProjectFantasy.Items;
+using ProjectFantasy.Mastery;
 using ProjectFantasy.Weapon;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace ProjectFantasy.Player
 {
     // UI·퀵슬롯의 아이템 요청 창구: 개체 단위 장착·해제·사용·버리기·줍기 (장비 변경과 사용은 이동 상태에서만)
     [RequireComponent(typeof(Inventory), typeof(QuickSlots), typeof(PlayerInteractor))]
+    [RequireComponent(typeof(WeaponMastery))]
     [DisallowMultipleComponent]
     public sealed class PlayerItemHandler : MonoBehaviour, IItemActions
     {
@@ -29,6 +31,7 @@ namespace ProjectFantasy.Player
 
         private PlayerController controller;
         private PlayerLoadout loadout;
+        private WeaponMastery mastery;
 
         public Inventory Inventory { get; private set; }
         public QuickSlots QuickSlots { get; private set; }
@@ -49,6 +52,7 @@ namespace ProjectFantasy.Player
         {
             controller = GetComponent<PlayerController>();
             loadout = GetComponent<PlayerLoadout>();
+            mastery = GetComponent<WeaponMastery>();
             Inventory = GetComponent<Inventory>();
             QuickSlots = GetComponent<QuickSlots>();
             Interactor = GetComponent<PlayerInteractor>();
@@ -69,6 +73,19 @@ namespace ProjectFantasy.Player
         }
 
         public bool IsEquipped(ItemInstance instance) => loadout.IsEquipped(instance);
+
+        public bool TryGetRequirement(ItemInstance instance, out EquipRequirement requirement)
+        {
+            if (instance == null || !MasteryMapping.TryGet(instance.Data, out MasteryType type))
+            {
+                requirement = default;
+                return false;
+            }
+
+            MasteryData data = mastery.Data;
+            requirement = new EquipRequirement(data.GetDisplayName(type), data.GetRequiredLevel(instance.Tier), instance.Tier, mastery.CanUse(instance));
+            return true;
+        }
 
         // 퀵슬롯 번호: 장비 개체는 장착, 소모품은 사용
         public bool TryActivateQuickSlot(int quickSlotIndex)
@@ -92,6 +109,12 @@ namespace ProjectFantasy.Player
         public bool TryEquip(ItemInstance instance)
         {
             if (instance == null || IsEquipped(instance) || !Inventory.Contains(instance)) return false;
+
+            if (!mastery.CanUse(instance))
+            {
+                Noticed?.Invoke(ItemNotice.MasteryTooLow);
+                return false;
+            }
 
             if (instance.Data is OffHandData offHand && !loadout.CanEquipOffHand(offHand))
             {

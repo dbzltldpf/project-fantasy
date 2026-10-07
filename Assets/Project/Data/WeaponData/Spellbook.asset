@@ -20,5 +20,7 @@ MonoBehaviour:
   modelPrefab: {fileID: 9145687753931659127, guid: 8532a212547ec144282361629aa47297, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 11400000, guid: 6326392dfec0dec4d914bd5355520efb, type: 2}
   gradeTable: {fileID: 0}
   magicPowerMultiplier: 1.2

@@ -71,7 +71,7 @@ namespace ProjectFantasy.UI
                 bool isInstance = entry.Instance != null;
                 int count = isInstance ? EquipmentCount : inventory.GetCount(entry.Item);
 
-                view.SetItem(entry.Item, count);
+                view.SetItem(entry.Item, count, entry.Instance?.DisplayName, entry.Instance?.Tier ?? ItemSlotView.NoTier);
                 view.SetNameColor(isInstance && entry.Instance.Grade != null ? entry.Instance.Grade.Color : defaultNameColor);
                 view.SetEquipped(itemActions.IsEquipped(entry.Instance));
                 view.SetDimmed(!entry.IsEmpty && count <= EmptyCount);

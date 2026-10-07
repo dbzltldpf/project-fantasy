@@ -15,6 +15,9 @@ namespace ProjectFantasy.Items
             new ItemGrade("전설", new Color(1f, 0.6f, 0.15f), 1, 1.5f),
         };
 
+        // 첫 번째(가장 낮은) 등급 (시작 지급 등)
+        public ItemGrade Lowest => grades.Length > 0 ? grades[0] : null;
+
         // 가중치 비례 추첨 (가중치 합이 0이면 첫 등급)
         public ItemGrade Roll()
         {
