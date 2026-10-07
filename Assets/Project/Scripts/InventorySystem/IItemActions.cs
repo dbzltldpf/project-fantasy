@@ -14,6 +14,8 @@ namespace ProjectFantasy.InventorySystem
         event Action EquipmentChanged;
 
         bool IsEquipped(ItemInstance instance);
+        // 숙련도가 필요한 장비면 요구 조건 반환
+        bool TryGetRequirement(ItemInstance instance, out EquipRequirement requirement);
         bool TryActivateSlot(int slotIndex);
         bool TryActivateQuickSlot(int quickSlotIndex);
         void Unequip(ItemInstance instance);

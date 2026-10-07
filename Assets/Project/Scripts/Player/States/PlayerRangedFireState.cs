@@ -75,7 +75,7 @@ namespace ProjectFantasy.Player
             if (!Controller.TryResolveLaunch(out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile)) return;
             if (!RangedWeapon.TryConsumeShot()) return;
 
-            Controller.RangedAttacker.Fire(origin, launchVelocity, profile, Loadout.WeaponStats.AttackPower, DamageType.Physical);
+            Controller.RangedAttacker.Fire(origin, launchVelocity, profile, Mathf.RoundToInt(Loadout.AttackPower), DamageType.Physical);
         }
 
         private void Finish()

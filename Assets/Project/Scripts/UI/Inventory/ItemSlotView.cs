@@ -13,6 +13,7 @@ namespace ProjectFantasy.UI
         IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
         private const int DoubleClickCount = 2;
+        public const int NoTier = 0;
         private const float VisibleAlpha = 1f;
 
         [SerializeField] private Image icon;
@@ -20,6 +21,8 @@ namespace ProjectFantasy.UI
         [SerializeField] private TMP_Text nameLabel;
         [SerializeField] private TMP_Text countLabel;
         [SerializeField] private TMP_Text keyLabel;
+        [Tooltip("장비 티어 (T3 등), 겹치는 아이템은 숨김")]
+        [SerializeField] private TMP_Text tierLabel;
         [SerializeField] private GameObject equippedMark;
         [SerializeField] private GameObject selectedFrame;
         [SerializeField] private CanvasGroup canvasGroup;
@@ -28,6 +31,8 @@ namespace ProjectFantasy.UI
 
         public int Index { get; private set; }
         public ItemData Item { get; private set; }
+        // 티어 접두어 포함 표시 이름 (드래그 고스트 등)
+        public string DisplayName { get; private set; }
         public object Owner { get; private set; }
 
         public event Action<ItemSlotView> Clicked;
@@ -45,17 +50,25 @@ namespace ProjectFantasy.UI
             Index = index;
         }
 
-        // 수량은 중첩 가능한 아이템만 표시
-        public void SetItem(ItemData item, int count)
+        // 수량은 중첩 가능한 아이템만, 티어는 장비 개체만(NoTier면 숨김) 표시, displayName이 없으면 데이터 이름
+        public void SetItem(ItemData item, int count, string displayName = null, int tier = NoTier)
         {
             Item = item;
+            DisplayName = item == null ? string.Empty : displayName ?? item.DisplayName;
             bool hasItem = item != null;
             bool hasIcon = hasItem && item.Icon != null;
 
             icon.enabled = hasIcon;
             if (hasIcon) icon.sprite = item.Icon;
 
-            if (nameLabel != null) nameLabel.text = hasItem && !hasIcon ? item.DisplayName : string.Empty;
+            if (nameLabel != null) nameLabel.text = hasItem && !hasIcon ? DisplayName : string.Empty;
+            if (tierLabel != null)
+            {
+                bool showTier = hasItem && tier > NoTier;
+                tierLabel.enabled = showTier;
+                if (showTier) tierLabel.SetText("T{0}", tier);
+            }
+
             if (countLabel != null)
             {
                 bool showCount = hasItem && item.IsStackable;

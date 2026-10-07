@@ -18,6 +18,7 @@ namespace ProjectFantasy.Player
         private const string SecondaryName = "Secondary";
         private const string InteractName = "Interact";
         private const string InventoryName = "Inventory";
+        private const string MasteryName = "Mastery";
         private const string QuickSlotName = "QuickSlot";
 
         [Tooltip("InputSystem_Actions (Player 맵의 액션을 이름으로 사용)")]
@@ -33,6 +34,7 @@ namespace ProjectFantasy.Player
         private InputAction secondaryAction;
         private InputAction interactAction;
         private InputAction inventoryAction;
+        private InputAction masteryAction;
         private InputAction quickSlotAction;
 
         private float lastAttackPressedTime = float.NegativeInfinity;
@@ -48,6 +50,7 @@ namespace ProjectFantasy.Player
 
         // 메뉴 토글은 게임플레이 차단 중에도 동작
         public event Action InventoryPressed;
+        public event Action MasteryPressed;
 
         // 이름이 틀리면 throwIfNotFound로 즉시 원인 표시
         private void Awake()
@@ -60,6 +63,7 @@ namespace ProjectFantasy.Player
             secondaryAction = playerMap.FindAction(SecondaryName, true);
             interactAction = playerMap.FindAction(InteractName, true);
             inventoryAction = playerMap.FindAction(InventoryName, true);
+            masteryAction = playerMap.FindAction(MasteryName, true);
             quickSlotAction = playerMap.FindAction(QuickSlotName, true);
         }
 
@@ -69,6 +73,7 @@ namespace ProjectFantasy.Player
             jumpAction.performed += OnJumpPerformed;
             interactAction.performed += OnInteractPerformed;
             inventoryAction.performed += OnInventoryPerformed;
+            masteryAction.performed += OnMasteryPerformed;
             quickSlotAction.performed += OnQuickSlotPerformed;
             playerMap.Enable();
         }
@@ -79,6 +84,7 @@ namespace ProjectFantasy.Player
             jumpAction.performed -= OnJumpPerformed;
             interactAction.performed -= OnInteractPerformed;
             inventoryAction.performed -= OnInventoryPerformed;
+            masteryAction.performed -= OnMasteryPerformed;
             quickSlotAction.performed -= OnQuickSlotPerformed;
             ClearBuffers();
         }
@@ -140,6 +146,7 @@ namespace ProjectFantasy.Player
         }
 
         private void OnInventoryPerformed(InputAction.CallbackContext _) => InventoryPressed?.Invoke();
+        private void OnMasteryPerformed(InputAction.CallbackContext _) => MasteryPressed?.Invoke();
 
         // 눌린 키의 바인딩 순서가 슬롯 번호
         private void OnQuickSlotPerformed(InputAction.CallbackContext context)

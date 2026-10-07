@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ProjectFantasy.Items;
 using ProjectFantasy.Weapon;
 using UnityEngine;
 
@@ -70,6 +71,7 @@ namespace ProjectFantasy.Player
             if (loadedAmmoCache.TryGetValue(ammo, out Transform cached)) return cached;
 
             Transform instance = Instantiate(ammo.ModelPrefab, transform).transform;
+            ammo.ApplyModelVisual(instance.gameObject, ItemData.MinTier);
             instance.gameObject.SetActive(false);
             loadedAmmoCache.Add(ammo, instance);
             return instance;

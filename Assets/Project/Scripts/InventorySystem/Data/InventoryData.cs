@@ -16,9 +16,13 @@ namespace ProjectFantasy.InventorySystem
             [SerializeField] private ItemData item;
             [Tooltip("수량 (장비는 개수만큼 개체 생성)")]
             [SerializeField, Min(1)] private int count;
+            [Tooltip("장비 티어 (T1 = 1, 겹치는 아이템은 무시)")]
+            [SerializeField, Min(ItemData.MinTier)] private int tier;
 
             public ItemData Item => item;
             public int Count => count;
+            // 기존 데이터의 0은 T1로 취급
+            public int Tier => Mathf.Max(ItemData.MinTier, tier);
         }
 
         [Tooltip("가방 칸 수")]

@@ -5,6 +5,7 @@ namespace ProjectFantasy.Items
     // 가방에 들어가는 모든 아이템 공통 데이터 (이름, 아이콘, 중첩, 필드 모델)
     public abstract class ItemData : ScriptableObject
     {
+        public const int MinTier = 1;
         private const int SingleStack = 1;
 
         [Tooltip("게임 내 표시 이름 (비우면 에셋 이름)")]
@@ -25,6 +26,8 @@ namespace ProjectFantasy.Items
         public bool IsStackable => maxStack > SingleStack;
 
         public virtual GameObject WorldModel => worldModelPrefab;
+        // 생성된 모델에 티어 외형(머티리얼·색조) 적용 (장비만, 기본은 원본 그대로)
+        public virtual void ApplyModelVisual(GameObject model, int tier) { }
         public abstract ItemCategory Category { get; }
 
         // 퀵슬롯 등록 가능 여부 (무기·소모품)
@@ -33,8 +36,11 @@ namespace ProjectFantasy.Items
         // 표시할 능력치 (장비만)
         public virtual bool HasStat(StatType stat) => false;
 
-        // 겹치지 않는 아이템 1개를 개체로 생성 (장비는 등급·능력치를 이때 굴림)
-        public virtual ItemInstance CreateInstance() => new ItemInstance(this, null, ItemStats.Zero);
+        // 겹치지 않는 아이템 1개를 개체로 생성 (장비는 티어 배율·등급·능력치를 이때 굴림, 시작 지급은 최하 등급)
+        public virtual ItemInstance CreateInstance(int tier = MinTier, bool useLowestGrade = false)
+        {
+            return new ItemInstance(this, MinTier, null, null, ItemStats.Zero);
+        }
 
         // 에셋 생성 시 종류별 기본 중첩 수
         protected virtual int DefaultMaxStack => SingleStack;

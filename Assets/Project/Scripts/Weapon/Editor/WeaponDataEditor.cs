@@ -18,6 +18,7 @@ namespace ProjectFantasy.WeaponEditor
         private const string AttackRangeField = "attackPowerRange";
         private const string MagicRangeField = "magicPowerRange";
         private const string GradeTableField = "gradeTable";
+        private const string TierTableField = "tierTable";
         private const string ModelField = "modelPrefab";
         private const string ComboField = "comboData";
         private const string BladeBaseField = "bladeBase";
@@ -26,7 +27,7 @@ namespace ProjectFantasy.WeaponEditor
         private const string SpellField = "spell";
 
         private static readonly string[] InfoFields = { "displayName", "icon", "description", "worldModelPrefab" };
-        private static readonly string[] EquipFields = { "weaponType", "gripHand", "occupiesOffHand", "allowsShield", ModelField, "gripPosition", "gripRotation" };
+        private static readonly string[] EquipFields = { "weaponType", "gripHand", "occupiesOffHand", "allowsShield", ModelField, "tierMaterials", "gripPosition", "gripRotation" };
         private static readonly string[] MeleeFields = { ComboField, "hitOffset", "hitRadius", BladeBaseField, BladeTipField, "bladeRadius" };
         private static readonly string[] RangedFields = { AmmoField, "canAim", "requiresReload", "muzzleOffset", "launchSpeed", "windupStateName", "windupDuration", "fireStateName", "releaseTime", "fireDuration" };
         private static readonly string[] AimFields = { "aimIdleStateName", "aimHoldTime" };
@@ -49,7 +50,7 @@ namespace ProjectFantasy.WeaponEditor
 
             DrawSection("기본 정보", InfoFields);
             DrawSection("장착", EquipFields);
-            DrawSection("능력치", GradeTableField, isMagic ? MagicRangeField : AttackRangeField);
+            DrawSection("티어·등급·능력치 (범위 = T1 기준)", TierTableField, GradeTableField, isMagic ? MagicRangeField : AttackRangeField);
             if (weapon.HasMeleeHit) DrawSection("근접 (콤보·판정)", MeleeFields);
             if (weapon is RangedWeaponData ranged) DrawRangedSection(ranged);
             if (isMagic) DrawSection("마법", MagicFields);
@@ -77,26 +78,20 @@ namespace ProjectFantasy.WeaponEditor
             EndSection();
         }
 
+        // FoldoutHeaderGroup은 중첩 불가라 배열(자체 접기 헤더)이 개수 칸만 그려짐 → 일반 Foldout 사용
         private static bool BeginSection(string title)
         {
             string key = FoldoutKeyPrefix + title;
-            bool isOpen = EditorGUILayout.BeginFoldoutHeaderGroup(SessionState.GetBool(key, true), title);
+            EditorGUILayout.Space();
+            bool isOpen = EditorGUILayout.Foldout(SessionState.GetBool(key, true), title, true, EditorStyles.foldoutHeader);
             SessionState.SetBool(key, isOpen);
-            if (!isOpen)
-            {
-                EditorGUILayout.EndFoldoutHeaderGroup();
-                return false;
-            }
+            if (!isOpen) return false;
 
             EditorGUI.indentLevel++;
             return true;
         }
 
-        private static void EndSection()
-        {
-            EditorGUI.indentLevel--;
-            EditorGUILayout.EndFoldoutHeaderGroup();
-        }
+        private static void EndSection() => EditorGUI.indentLevel--;
 
         private void DrawFields(string[] fields)
         {
@@ -126,17 +121,19 @@ namespace ProjectFantasy.WeaponEditor
             }
         }
 
-        // 예: 한손검 · 오른손 · 보조: 방패 · 공격력 12~18 · 등급표 ✔
+        // 예: 한손검 · 오른손 · 보조: 방패 · 공격력 12~18 (T1) · 티어표 ✔ · 등급표 ✔
         private string BuildSummary(WeaponData weapon, bool isMagic)
         {
             string statLabel = isMagic ? "마법력" : "공격력";
             string range = FormatRange(isMagic ? MagicRangeField : AttackRangeField);
             bool hasGradeTable = serializedObject.FindProperty(GradeTableField).objectReferenceValue != null;
+            bool hasTierTable = serializedObject.FindProperty(TierTableField).objectReferenceValue != null;
 
             return GetTypeLabel(weapon)
                 + Separator + (weapon.IsHeldInLeftHand ? "왼손" : "오른손")
                 + Separator + GetOffHandLabel(weapon)
-                + Separator + $"{statLabel} {range}"
+                + Separator + $"{statLabel} {range} (T1)"
+                + Separator + (hasTierTable ? "티어표 ✔" : "티어표 없음")
                 + Separator + (hasGradeTable ? "등급표 ✔" : "등급표 없음");
         }
 
@@ -151,6 +148,7 @@ namespace ProjectFantasy.WeaponEditor
             if (isMagic && IsMissing(SpellField)) Warn("마법(Spell)이 없어 시전할 수 없습니다.");
             if (IsInvertedRange(isMagic ? MagicRangeField : AttackRangeField)) Warn("능력치 범위의 max가 min보다 작습니다 (min으로 고정됨).");
             if (isBladeWeapon && IsBladeUnset()) Info("칼날 미설정: 몸 기준 구체로 판정합니다 (Blade Base/Tip 입력 권장).");
+            if (!isUnarmed && IsMissing(TierTableField)) Info("티어표가 없어 모든 개체가 T1 (티어 배율·접두어 없음)으로 생성됩니다.");
             if (!isUnarmed && IsMissing(GradeTableField)) Info("등급표가 없어 등급 없이 범위 값만 굴립니다.");
         }
 
@@ -205,7 +203,7 @@ namespace ProjectFantasy.WeaponEditor
 
         private static HashSet<string> BuildKnownFields()
         {
-            HashSet<string> fields = new HashSet<string> { GradeTableField, AttackRangeField, MagicRangeField };
+            HashSet<string> fields = new HashSet<string> { TierTableField, GradeTableField, AttackRangeField, MagicRangeField };
             foreach (string[] group in new[] { InfoFields, EquipFields, MeleeFields, RangedFields, AimFields, ReloadFields, MagicFields, AnimationFields, HiddenFields })
             {
                 fields.UnionWith(group);

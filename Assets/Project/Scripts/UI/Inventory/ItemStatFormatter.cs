@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using ProjectFantasy.InventorySystem;
 using ProjectFantasy.Items;
 using UnityEngine;
 
@@ -17,6 +18,10 @@ namespace ProjectFantasy.UI
         [SerializeField] private string magicDefenseLabel = "마법 방어력";
         [SerializeField] private Color increaseColor = new Color(0.4f, 0.9f, 0.4f);
         [SerializeField] private Color decreaseColor = new Color(1f, 0.4f, 0.4f);
+        [Tooltip("{0} = 숙련 이름, {1} = 필요 레벨, {2} = 티어")]
+        [SerializeField] private string requirementFormat = "요구 숙련: {0} Lv {1} (T{2})";
+        [Tooltip("숙련도가 부족할 때 요구 숙련 문구 색")]
+        [SerializeField] private Color unmetRequirementColor = new Color(1f, 0.35f, 0.35f);
 
         private static readonly StatType[] StatOrder = (StatType[])Enum.GetValues(typeof(StatType));
         private readonly StringBuilder builder = new StringBuilder();
@@ -40,6 +45,13 @@ namespace ProjectFantasy.UI
                 builder.AppendLine();
             }
             return builder.ToString();
+        }
+
+        // 부족하면 빨간색
+        public string FormatRequirement(in EquipRequirement requirement)
+        {
+            string text = string.Format(requirementFormat, requirement.MasteryName, requirement.RequiredLevel, requirement.Tier);
+            return requirement.IsMet ? text : ToColorTag(text, unmetRequirementColor);
         }
 
         public static string ToColorTag(string text, Color color) => $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{text}</color>";

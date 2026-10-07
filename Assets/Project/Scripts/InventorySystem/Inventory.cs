@@ -26,7 +26,7 @@ namespace ProjectFantasy.InventorySystem
             slots = new ItemStack[data.Capacity];
             foreach (InventoryData.StartingItem starting in data.StartingItems)
             {
-                if (starting.Item != null) AddInternal(starting.Item, starting.Count);
+                if (starting.Item != null) AddInternal(starting.Item, starting.Count, starting.Tier, true);
             }
         }
 
@@ -82,13 +82,13 @@ namespace ProjectFantasy.InventorySystem
             return false;
         }
 
-        // 종류 + 수량으로 추가 (장비는 1개마다 새 개체), 넣지 못한 수량은 remaining
-        public bool TryAdd(ItemData item, int count, out int remaining)
+        // 종류 + 수량으로 추가 (장비는 1개마다 지정 티어의 새 개체), 넣지 못한 수량은 remaining
+        public bool TryAdd(ItemData item, int count, out int remaining, int tier = ItemData.MinTier)
         {
             remaining = count;
             if (item == null || count <= EmptyCount) return false;
 
-            remaining = AddInternal(item, count);
+            remaining = AddInternal(item, count, tier, false);
             if (remaining == count) return false;
 
             Changed?.Invoke();
@@ -152,7 +152,8 @@ namespace ProjectFantasy.InventorySystem
             Changed?.Invoke();
         }
 
-        private int AddInternal(ItemData item, int count)
+        // isStarting: 시작 지급 장비는 최하 등급
+        private int AddInternal(ItemData item, int count, int tier, bool isStarting)
         {
             int left = item.IsStackable ? FillExistingStacks(item, count) : count;
 
@@ -169,7 +170,7 @@ namespace ProjectFantasy.InventorySystem
                 }
                 else
                 {
-                    slots[emptySlot] = new ItemStack(item.CreateInstance());
+                    slots[emptySlot] = new ItemStack(item.CreateInstance(tier, isStarting));
                     left--;
                 }
             }

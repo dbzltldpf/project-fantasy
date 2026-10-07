@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ProjectFantasy.Combat;
+using ProjectFantasy.Items;
 using ProjectFantasy.Weapon;
 using UnityEditor;
 using UnityEngine;
@@ -163,6 +164,7 @@ namespace ProjectFantasy.CombatEditor
             if (slot == null) return;
 
             weaponInstance = Object.Instantiate(weapon.ModelPrefab, slot);
+            weapon.ApplyModelVisual(weaponInstance, ItemData.MinTier);
             weaponInstance.transform.SetLocalPositionAndRotation(weapon.GripPosition, weapon.GripRotation);
 
             // 씬에 저장되지 않는 미리보기 전용

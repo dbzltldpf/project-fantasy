@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ProjectFantasy.Items
 {
-    // 필드에 놓인 아이템 (Interactable 레이어 트리거 콜라이더와 함께 사용), 장비는 개체(등급·능력치)를 보관
+    // 필드에 놓인 아이템 (Interactable 레이어 트리거 콜라이더와 함께 사용), 장비는 개체(티어·등급·능력치)를 보관
     [DisallowMultipleComponent]
     public sealed class WorldItem : MonoBehaviour
     {
@@ -13,6 +13,8 @@ namespace ProjectFantasy.Items
         [SerializeField] private ItemData item;
         [Tooltip("수량 (장비는 1개로 고정)")]
         [SerializeField, Min(1)] private int count = 1;
+        [Tooltip("장비 티어 (씬 배치 시 이 티어로 개체 생성, 겹치는 아이템은 무시)")]
+        [SerializeField, Min(ItemData.MinTier)] private int tier = ItemData.MinTier;
         [Tooltip("모델을 붙일 위치 (비우면 자신)")]
         [SerializeField] private Transform modelRoot;
 
@@ -20,14 +22,14 @@ namespace ProjectFantasy.Items
 
         public ItemData Item => item;
         public int Count => count;
-        // 겹치지 않는 아이템의 개체 (씬 배치 장비는 시작 시 등급·능력치를 굴림)
+        // 겹치지 않는 아이템의 개체 (씬 배치 장비는 시작 시 지정 티어로 등급·능력치를 굴림)
         public ItemInstance Instance { get; private set; }
 
         private void Start()
         {
             if (Instance == null && item != null && !item.IsStackable)
             {
-                Instance = item.CreateInstance();
+                Instance = item.CreateInstance(tier);
                 count = SingleCount;
             }
             if (model == null) RefreshModel();
@@ -70,6 +72,7 @@ namespace ProjectFantasy.Items
             if (item == null || item.WorldModel == null) return;
 
             model = Instantiate(item.WorldModel, modelRoot != null ? modelRoot : transform, false);
+            item.ApplyModelVisual(model, Instance != null ? Instance.Tier : tier);
         }
     }
 }

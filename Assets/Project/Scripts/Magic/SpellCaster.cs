@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Core;
+using ProjectFantasy.Utils;
 using UnityEngine;
 
 namespace ProjectFantasy.Magic
@@ -20,6 +21,8 @@ namespace ProjectFantasy.Magic
         [SerializeField, Min(0f)] private float maxTargetingRayDistance = 100f;
         [Tooltip("사거리 밖 지점을 땅에 붙일 때 위에서 쏘는 높이 (m)")]
         [SerializeField, Min(0f)] private float groundProbeHeight = 10f;
+        [Tooltip("마법진·마법 이펙트 부모 (비우면 Pools/Effects 아래 프리팹별 폴더)")]
+        [SerializeField] private Transform effectRoot;
 
         private readonly EffectPool effectPool = new EffectPool();
         private readonly Collider[] overlapBuffer = new Collider[MaxAreaTargets];
@@ -48,6 +51,7 @@ namespace ProjectFantasy.Magic
         private void Awake()
         {
             owner = GetComponent<IDamageable>();
+            effectPool.SetRoot(PoolContainers.Resolve(effectRoot, PoolContainers.Effects));
         }
 
         private void OnDisable()

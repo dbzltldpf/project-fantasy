@@ -154,7 +154,7 @@ namespace ProjectFantasy.UI
                 view.gameObject.SetActive(isVisible);
                 if (!isVisible) continue;
 
-                view.SetItem(stack.Item, stack.Count);
+                view.SetItem(stack.Item, stack.Count, stack.Instance?.DisplayName, stack.Instance?.Tier ?? ItemSlotView.NoTier);
                 view.SetNameColor(GetNameColor(stack.Instance));
                 view.SetEquipped(itemActions.IsEquipped(stack.Instance));
                 view.SetSelected(i == selectedIndex);
@@ -168,7 +168,7 @@ namespace ProjectFantasy.UI
         // 무기와 맞지 않아 비활성인 보조 장비는 흐리게
         private void RefreshEquipmentSlot(ItemSlotView slot, ItemInstance instance, bool isActive)
         {
-            slot.SetItem(instance?.Data, EquipmentCount);
+            slot.SetItem(instance?.Data, EquipmentCount, instance?.DisplayName, instance?.Tier ?? ItemSlotView.NoTier);
             slot.SetNameColor(GetNameColor(instance));
             slot.SetDimmed(instance != null && !isActive);
         }
@@ -201,11 +201,16 @@ namespace ProjectFantasy.UI
             }
 
             ItemInstance instance = stack.Instance;
-            string itemName = stack.Item.DisplayName;
+            string itemName = instance != null ? $"{instance.DisplayName}  T{instance.Tier}" : stack.Item.DisplayName;
             detailName.text = instance?.Grade != null
                 ? ItemStatFormatter.ToColorTag($"{itemName}  [{instance.Grade.DisplayName}]", instance.Grade.Color)
                 : itemName;
-            detailStats.text = instance != null ? statFormatter.Format(instance, GetComparisonStats(instance)) : string.Empty;
+
+            string stats = instance != null ? statFormatter.Format(instance, GetComparisonStats(instance)) : string.Empty;
+            string requirement = itemActions.TryGetRequirement(instance, out EquipRequirement equipRequirement)
+                ? statFormatter.FormatRequirement(equipRequirement)
+                : string.Empty;
+            detailStats.text = stats + requirement;
             detailDescription.text = stack.Item.Description;
         }
 
