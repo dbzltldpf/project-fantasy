@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26bddea2ce15ee849913a6cbbdcdb524, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.TrainingDummy
+  virtualHealth: 100
   logDamage: 1
 --- !u!114 &253228450343437973
 MonoBehaviour:

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e65f468b21d3fc4c96cec16bfd045c6, type: 3}
+  m_Name: MasteryData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Mastery.MasteryData
+  maxLevel: 50
+  experienceBase: 100
+  experienceExponent: 1.5
+  tierUnlockLevels: 010000000a000000140000001e00000028000000
+  bonusPerLevel: 0.01
+  displayNames:
+  - "\uB9E8\uC190"
+  - "\uD55C\uC190\uAC80"
+  - "\uC591\uC190\uAC80"
+  - "\uD65C"
+  - "\uD55C\uC190 \uC11D\uAD81"
+  - "\uC591\uC190 \uC11D\uAD81"
+  - "\uC644\uB4DC"
+  - "\uC9C0\uD321\uC774"
+  - "\uBC29\uD328"
+  - "\uB9C8\uBC95\uC11C"

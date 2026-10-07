@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bc56bb7629442941b3337d980f290fd, type: 3}
+  m_Name: ItemTierTable
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Items.ItemTierTable
+  tiers:
+  - prefix: "\uB0A1\uC740"
+    statMultiplier: 1
+    useAura: 0
+    auraColor: {r: 1, g: 1, b: 1, a: 1}
+    auraRate: 0
+    useOutline: 0
+    outlineColor: {r: 1, g: 1, b: 1, a: 1}
+    outlineWidth: 0
+    applyTint: 0
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
+    metallic: 0
+    smoothness: 0.5
+    useEmission: 0
+    emissionColor: {r: 0, g: 0, b: 0, a: 1}
+  - prefix: "\uCCA0"
+    statMultiplier: 1.3
+    useAura: 1
+    auraColor: {r: 2, g: 2, b: 2, a: 0.9}
+    auraRate: 10
+    useOutline: 1
+    outlineColor: {r: 1.5, g: 1.5, b: 1.5, a: 1}
+    outlineWidth: 0.004
+    applyTint: 0
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
+    metallic: 0
+    smoothness: 0.5
+    useEmission: 0
+    emissionColor: {r: 0, g: 0, b: 0, a: 1}
+  - prefix: "\uAC15\uCCA0"
+    statMultiplier: 1.6
+    useAura: 1
+    auraColor: {r: 1, g: 1.8, b: 3, a: 0.95}
+    auraRate: 15
+    useOutline: 1
+    outlineColor: {r: 0.8, g: 1.5, b: 2.5, a: 1}
+    outlineWidth: 0.006
+    applyTint: 0
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
+    metallic: 0
+    smoothness: 0.5
+    useEmission: 0
+    emissionColor: {r: 0, g: 0, b: 0, a: 1}
+  - prefix: "\uBBF8\uC2A4\uB9B4"
+    statMultiplier: 2
+    useAura: 1
+    auraColor: {r: 2, g: 1, b: 4, a: 1}
+    auraRate: 25
+    useOutline: 1
+    outlineColor: {r: 1.6, g: 0.8, b: 3.2, a: 1}
+    outlineWidth: 0.008
+    applyTint: 0
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
+    metallic: 0
+    smoothness: 0.5
+    useEmission: 0
+    emissionColor: {r: 0, g: 0, b: 0, a: 1}
+  - prefix: "\uC6A9\uC758"
+    statMultiplier: 2.5
+    useAura: 1
+    auraColor: {r: 6, g: 2.4, b: 0.5, a: 1}
+    auraRate: 40
+    useOutline: 1
+    outlineColor: {r: 5, g: 2, b: 0.4, a: 1}
+    outlineWidth: 0.01
+    applyTint: 0
+    baseColor: {r: 1, g: 1, b: 1, a: 1}
+    metallic: 0
+    smoothness: 0.5
+    useEmission: 0
+    emissionColor: {r: 0, g: 0, b: 0, a: 1}
+  auraPrefab: {fileID: 5287786287394333927, guid: b15e6e03f8a8e0a479d50796715b0fc5, type: 3}
+  outlineMaterial: {fileID: 2100000, guid: 730f4383b22c19344a91cf9262e8afea, type: 2}

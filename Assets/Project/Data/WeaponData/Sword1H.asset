@@ -20,6 +20,8 @@ MonoBehaviour:
   modelPrefab: {fileID: 2741391114697504946, guid: e7471a3e79d217d40b904217133a6e18, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 11400000, guid: 6326392dfec0dec4d914bd5355520efb, type: 2}
   gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
   weaponType: 1
   gripHand: 0
