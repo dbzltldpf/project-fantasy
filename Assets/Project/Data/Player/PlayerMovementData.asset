@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 245ec0e33fe3092458b58c335afae827, type: 3}
   m_Name: PlayerMovementData
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerMovementData
-  walkSpeed: 2
-  runSpeed: 5
-  sprintSpeed: 7.5
-  walkInputThreshold: 0.5
+  walkSpeed: 5
+  runSpeed: 8
+  guardMoveSpeed: 1.2
+  aimMoveSpeed: 1.5
   acceleration: 30
   deceleration: 40
   airAcceleration: 8

@@ -10,7 +10,6 @@ namespace ProjectFantasy.UI
         private const float PercentScale = 100f;
         private const float NoBonus = 1f;
         private const float FullRatio = 1f;
-        private const float EmptyRatio = 0f;
         private const int NoRequirement = 0;
 
         [SerializeField] private TMP_Text nameLabel;
@@ -34,23 +33,11 @@ namespace ProjectFantasy.UI
             tierLabel.SetText("T{0}", tier);
 
             bool isMaxLevel = required <= NoRequirement;
-            SetFillRatio(isMaxLevel ? FullRatio : (float)experience / required);
+            BarFill.SetRatio(experienceFill, isMaxLevel ? FullRatio : (float)experience / required, minFillWidth);
             if (isMaxLevel) experienceLabel.text = maxLevelText;
             else experienceLabel.SetText("{0} / {1}", experience, required);
 
             bonusLabel.SetText("+{0:1}%", (bonusMultiplier - NoBonus) * PercentScale);
-        }
-
-        // 0이면 숨김, 그 외에는 양 끝 조각 너비 이상 유지
-        private void SetFillRatio(float ratio)
-        {
-            bool isVisible = ratio > EmptyRatio;
-            experienceFill.gameObject.SetActive(isVisible);
-            if (!isVisible) return;
-
-            float fullWidth = ((RectTransform)experienceFill.parent).rect.width;
-            float width = Mathf.Max(minFillWidth, fullWidth * Mathf.Clamp01(ratio));
-            experienceFill.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
     }
 }

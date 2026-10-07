@@ -18,12 +18,8 @@ namespace ProjectFantasy.UIEditor
         private const string InventoryRootName = "Inventory UI";
         private const string PrefabFolder = "Assets/Project/Prefabs/UI";
         private const string RowPrefabPath = PrefabFolder + "/MasteryRow.prefab";
-        private const string BarSpriteFolder = "Assets/ThirdParty/Kenney/UIPack";
         private const string BackSpritePrefix = "barBack";
         private const string FillSpritePrefix = "barGreen";
-        private const string LeftCapSuffix = "_horizontalLeft.png";
-        private const string MidSuffix = "_horizontalMid.png";
-        private const string RightCapSuffix = "_horizontalRight.png";
         private const float CapWidth = 9f;
 
         private const float WindowWidth = 760f;
@@ -44,8 +40,6 @@ namespace ProjectFantasy.UIEditor
         private const float BarFontSize = 14f;
 
         private static readonly Color WindowColor = new Color(0.08f, 0.08f, 0.1f, 0.92f);
-        private static readonly Vector2 LeftMiddle = new Vector2(0f, 0.5f);
-        private static readonly Vector2 RightMiddle = new Vector2(1f, 0.5f);
         private static readonly Color TierColor = new Color(1f, 0.85f, 0.2f);
 
         [MenuItem(MenuPath)]
@@ -134,16 +128,12 @@ namespace ProjectFantasy.UIEditor
 
             RectTransform bar = CreateRect("Experience", row);
             bar.sizeDelta = new Vector2(BarWidth, BarHeight);
-            RectTransform back = CreateCappedBar(bar, "Back", BackSpritePrefix);
+            RectTransform back = CreateCappedBar(bar, "Back", BackSpritePrefix, CapWidth);
             Stretch(back);
 
             // 채움: 왼쪽 기준, 너비를 경험치 비율로 조절 (MasteryRowView)
-            RectTransform fill = CreateCappedBar(bar, "Fill", FillSpritePrefix);
-            fill.anchorMin = Vector2.zero;
-            fill.anchorMax = Vector2.up;
-            fill.pivot = LeftMiddle;
-            fill.anchoredPosition = Vector2.zero;
-            fill.sizeDelta = new Vector2(BarWidth, 0f);
+            RectTransform fill = CreateCappedBar(bar, "Fill", FillSpritePrefix, CapWidth);
+            SetLeftAnchoredFill(fill, BarWidth);
             TMP_Text experienceLabel = CreateText("Label", bar, string.Empty, BarFontSize, TextAlignmentOptions.Center);
 
             TMP_Text bonusLabel = CreateColumnText(row, "Bonus", BonusWidth, TextAlignmentOptions.Right);
@@ -153,53 +143,13 @@ namespace ProjectFantasy.UIEditor
             Assign(view, "levelLabel", levelLabel);
             Assign(view, "tierLabel", tierLabel);
             Assign(view, "experienceFill", fill);
-            SerializedObject viewObject = new SerializedObject(view);
-            viewObject.FindProperty("minFillWidth").floatValue = CapWidth + CapWidth;
-            viewObject.ApplyModifiedPropertiesWithoutUndo();
+            AssignFloat(view, "minFillWidth", CapWidth + CapWidth);
             Assign(view, "experienceLabel", experienceLabel);
             Assign(view, "bonusLabel", bonusLabel);
 
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(row.gameObject, RowPrefabPath);
             Object.DestroyImmediate(row.gameObject);
             return prefab.GetComponent<MasteryRowView>();
-        }
-
-        // Kenney 바: 왼쪽 끝(고정) | 가운데(늘어남) | 오른쪽 끝(고정)
-        private static RectTransform CreateCappedBar(RectTransform parent, string name, string spritePrefix)
-        {
-            RectTransform container = CreateRect(name, parent);
-
-            RectTransform left = CreateRect("Left", container);
-            SetVerticalStretch(left, Vector2.zero, LeftMiddle, CapWidth);
-            AddBarImage(left, spritePrefix + LeftCapSuffix);
-
-            RectTransform middle = CreateRect("Mid", container);
-            Stretch(middle);
-            middle.offsetMin = new Vector2(CapWidth, 0f);
-            middle.offsetMax = new Vector2(-CapWidth, 0f);
-            AddBarImage(middle, spritePrefix + MidSuffix);
-
-            RectTransform right = CreateRect("Right", container);
-            SetVerticalStretch(right, Vector2.right, RightMiddle, CapWidth);
-            AddBarImage(right, spritePrefix + RightCapSuffix);
-            return container;
-        }
-
-        // 세로로 꽉 차고 가로는 고정 너비 (anchorX: 0 = 왼쪽, 1 = 오른쪽)
-        private static void SetVerticalStretch(RectTransform rect, Vector2 anchorX, Vector2 pivot, float width)
-        {
-            rect.anchorMin = new Vector2(anchorX.x, 0f);
-            rect.anchorMax = new Vector2(anchorX.x, 1f);
-            rect.pivot = pivot;
-            rect.anchoredPosition = Vector2.zero;
-            rect.sizeDelta = new Vector2(width, 0f);
-        }
-
-        private static void AddBarImage(RectTransform rect, string spriteFile)
-        {
-            Image image = AddImage(rect.gameObject, Color.white, false);
-            image.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{BarSpriteFolder}/{spriteFile}");
-            if (image.sprite == null) Debug.LogWarning($"[{nameof(MasteryUIBuilder)}] 스프라이트를 찾지 못했습니다: {spriteFile}");
         }
 
         private static TMP_Text CreateColumnText(RectTransform row, string name, float width, TextAlignmentOptions alignment)

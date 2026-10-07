@@ -5,7 +5,8 @@ namespace ProjectFantasy.Items
     // 가방에 들어가는 모든 아이템 공통 데이터 (이름, 아이콘, 중첩, 필드 모델)
     public abstract class ItemData : ScriptableObject
     {
-        public const int MinTier = 1;
+        // 티어는 0부터 (T0 = 가장 낮은 티어)
+        public const int MinTier = 0;
         private const int SingleStack = 1;
 
         [Tooltip("게임 내 표시 이름 (비우면 에셋 이름)")]

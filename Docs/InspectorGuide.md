@@ -5,8 +5,9 @@
 
 ## 목차
 - [빠른 체크리스트](#빠른-체크리스트)
-- 데이터(SO): [무기](#무기-weapondata) · [방패·마법서](#방패마법서) · [화살](#화살-ammodata) · [마법](#마법-spelldata) · [소모품](#소모품-consumabledata) · [등급표](#등급표-itemgradetable) · [티어표](#티어표-itemtiertable) · [숙련도](#숙련도-masterydata) · [인벤토리](#인벤토리-inventorydata) · [액션·콤보](#액션콤보) · [이동](#이동-playermovementdata) · [애니메이션](#애니메이션-playeranimationdata) · [카메라](#카메라-cameradata) · [피격 반응](#피격-반응-hitreactiondata)
-- [플레이어(Rogue) 컴포넌트](#플레이어rogue-컴포넌트)
+- 데이터(SO): [무기](#무기-weapondata) · [방패·마법서](#방패마법서) · [화살](#화살-ammodata) · [마법](#마법-spelldata) · [소모품](#소모품-consumabledata) · [등급표](#등급표-itemgradetable) · [티어표](#티어표-itemtiertable) · [숙련도](#숙련도-masterydata) · [인벤토리](#인벤토리-inventorydata) · [액션·콤보](#액션콤보) · [이동](#이동-playermovementdata) · [애니메이션](#애니메이션-playeranimationdata) · [카메라](#카메라-cameradata) · [피격 반응](#피격-반응-hitreactiondata) · [적](#적-enemydata) · [드랍 표](#드랍-표-droptable)
+- [플레이어(Rogue) 컴포넌트](#플레이어rogue-컴포넌트) · [적 프리팹 컴포넌트](#적-프리팹-컴포넌트)
+- [레이어 마스크 설정 원칙](#레이어-마스크-설정-원칙)
 - [씬 오브젝트](#씬-오브젝트)
 
 ---
@@ -57,12 +58,12 @@
 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|
 | Tier Table | 티어 접두어·배율·외형 | 공용 `ItemTierTable` (맨손은 비움) |
-| Tier Materials | 티어별 모델 머티리얼 교체 (선택) | 보통 비움 (아우라·테두리로 구분), 순서 = T1, T2 … |
+| Tier Materials | 티어별 모델 머티리얼 교체 (선택) | 보통 비움 (아우라·테두리로 구분), 순서 = T0, T1 … |
 | Grade Table | 등급 추첨 표 | 공용 `ItemGradeTable` (맨손은 비움) |
 | Attack Power Range | 공격력 범위 (검·활·석궁) | 아래 밸런스 표 |
 | Magic Power Range | 마법력 범위 (Wand·Staff) | 아래 밸런스 표 |
 
-최종값 = `범위에서 균등 랜덤 × 티어 배율 × 등급 배율` (반올림). 개체가 생길 때 1회만 굴린다. 범위는 **T1 기준**으로 입력한다.
+최종값 = `범위에서 균등 랜덤 × 티어 배율 × 등급 배율` (반올림). 개체가 생길 때 1회만 굴린다. 범위는 **T0 기준**으로 입력한다.
 
 #### 밸런스 기준 (일반 등급, 한손검 1타 평균 12 = 기준)
 | 무기 | 범위 | 1회 피해 | 주기 | DPS | 역할 |
@@ -143,7 +144,7 @@
 |---|---|---|
 | Max Stack | 한 칸 최대 수 | 99 |
 | Model Prefab | 시위에 건 화살·장전 볼트·필드 모델 | `arrow_bow` / `arrow_crossbow` |
-| Projectile Prefab | 날아가는 화살 | `Prefabs/Combat` 화살 |
+| Projectile Prefab | 날아가는 화살 | `Prefabs/Combat/Player` 화살 |
 | Gravity | 낙하 (클수록 빨리 떨어짐) | 9.81 |
 | Lifetime | 최대 비행 시간 | 5 |
 | Stick Duration | 박힌 뒤 사라지는 시간 | 10 |
@@ -183,28 +184,28 @@
 ## 티어표 (ItemTierTable)
 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|
-| Tiers | 티어 목록 (첫 줄 = T1) | 아래 표 |
+| Tiers | 티어 목록 (첫 줄 = T0) | 아래 표 |
 | Aura Prefab / Outline Material | 공용 불씨 파티클 / 테두리 발광 머티리얼 | `Tools → ProjectFantasy → Create Weapon Tier Effects`가 생성·연결 |
 
 티어 한 줄의 필드:
 
 | 필드 | 하는 일 |
 |---|---|
-| Prefix / Stat Multiplier | 이름 접두어 / T1 범위에 곱하는 배율 |
+| Prefix / Stat Multiplier | 이름 접두어 / T0 범위에 곱하는 배율 |
 | Use Aura / Aura Color / Aura Rate | 불씨 파티클 사용 / HDR 색(강도 높을수록 Bloom 번짐) / 초당 입자 수 |
 | Use Outline / Outline Color / Outline Width | 테두리 발광 사용 / HDR 색 / 두께 m (0.004~0.012, 두꺼우면 모서리 끊김) |
 | Apply Tint 이하 | 원본 텍스처에 색조 곱하기 (손잡이까지 물들어 기본 끔) |
 
 | 티어 | 접두어 | 배율 | Aura Color / Rate | Outline Color / Width |
 |---|---|---|---|---|
-| T1 | 낡은 | 1.0 | 없음 | 없음 |
-| T2 | 철 | 1.3 | (2, 2, 2, 0.9) / 10 | (1.5, 1.5, 1.5) / 0.004 |
-| T3 | 강철 | 1.6 | (1, 1.8, 3, 0.95) / 15 | (0.8, 1.5, 2.5) / 0.006 |
-| T4 | 미스릴 | 2.0 | (2, 1, 4, 1) / 25 | (1.6, 0.8, 3.2) / 0.008 |
-| T5 | 용의 | 2.5 | (6, 2.4, 0.5, 1) / 40 | (5, 2, 0.4) / 0.01 |
+| T0 | 낡은 | 1.0 | 없음 | 없음 |
+| T1 | 철 | 1.3 | (2, 2, 2, 0.9) / 10 | (1.5, 1.5, 1.5) / 0.004 |
+| T2 | 강철 | 1.6 | (1, 1.8, 3, 0.95) / 15 | (0.8, 1.5, 2.5) / 0.006 |
+| T3 | 미스릴 | 2.0 | (2, 1, 4, 1) / 25 | (1.6, 0.8, 3.2) / 0.008 |
+| T4 | 용의 | 2.5 | (6, 2.4, 0.5, 1) / 40 | (5, 2, 0.4) / 0.01 |
 
 - 빛 번짐이 안 보이면: 카메라 **HDR 켜짐**, URP Volume에 Bloom, Threshold가 색 강도보다 낮은지 확인.
-- 배율 2.5에서도 T5 한손검(25~35)이 T4 양손검(36~48)보다 낮도록 무기 범위를 유지 → 상위 티어가 항상 역할을 뒤집지는 않음.
+- 배율 2.5에서도 T4 한손검(25~35)이 T3 양손검(36~48)보다 낮도록 무기 범위를 유지 → 상위 티어가 항상 역할을 뒤집지는 않음.
 
 ## 숙련도 (MasteryData)
 | 필드 | 하는 일 | 넣을 값 |
@@ -285,6 +286,35 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 
 ---
 
+## 적 (EnemyData)
+`Create → ProjectFantasy → Enemy → Enemy Data`. 공용 상태 이름은 `Enemy Animation Data` 한 개를 모든 적이 공유한다.
+
+| 묶음 | 필드 | 하는 일 | Minion / Warrior |
+|---|---|---|---|
+| Info | Max Health / Attack Power / Experience | 체력 / 공격력(× 액션 피해 배율) / 처치 경험치 | 60·8·30 / 120·12·60 |
+| Equipment | Weapon / Shield / Defense / Magic Defense | 무기·방패 데이터 재사용, 방어력은 고정값 | SkeletonAxe / SkeletonBlade + SkeletonShield·20·5 |
+| Perception | Sight Range / Sight Angle | 감지 거리 / 각도 (360 = 등 뒤도 감지) | 10 / 360 |
+| Perception | Lose Range / Provoked Duration / Leash Range | 추적 포기 거리 / 맞은 뒤 거리 무관 추적 시간 / 스폰 지점 귀환 거리 | 18 / 5 / 25 |
+| Movement | Walk / Run / Turn Speed, Patrol Radius, Idle Time Range | 이동·회전, 배회 | 1.5 / 4 / 540, 6, 2~5 |
+| Combat | Attack Range / Attack Angle / Attack Cooldown Range | 공격 거리 / 정면 각도 / 쿨타임 | 1.8 / 40 / 1.2~2 |
+| Combat | Max Combo Actions / Stagger Immunity / Hit Reaction | 연속 공격 수 / 경직 면역 / 경직·넉백 | 2·1 / 3·1, `HitReactionData` |
+| Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (방패 있을 때만) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
+| Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 | 1.5 / 3 / 종류별 표 |
+
+## 드랍 표 (DropTable)
+`Create → ProjectFantasy → Items → Drop Table`. 줄마다 독립 확률로 판정한다.
+
+| 필드 | 하는 일 | 넣을 값 |
+|---|---|---|
+| Item / Chance | 아이템 / 확률 (0~1) | 예: 회복약 0.3 |
+| Min / Max Count | 수량 범위 (장비는 개수만큼 개체) | **1 이상** (새 줄은 0으로 채워지니 꼭 입력, 0이면 1로 처리) |
+| Min / Max Tier | 장비 티어 범위 | 1~2 등 |
+
+| 적 | 드랍 |
+|---|---|
+| Minion | 회복약 0.3 (1), 화살 0.4 (5~10), Sword1H 0.05 (T0) |
+| Warrior | 회복약 0.4 (1), Sword1H 0.1 (T0~1) |
+
 ## 플레이어(Rogue) 컴포넌트
 레이어는 **Player**. 대부분은 비워 두면 자동 탐색되거나 기본값 그대로 쓴다. **굵게** 표시한 항목만 꼭 연결한다.
 
@@ -306,12 +336,12 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | PlayerItemHandler | Drop Distance / Height | 버리는 위치 | 1 / 0.3 |
 | PlayerItemHandler | Pick Up Grab Time / Duration | 가방에 들어가는 시점 / 줍기 전체 시간 | 0.4 / 0.9 |
 | Health | Max Health / Invincible Duration | 체력·피격 후 무적 | 100 / 0.5 |
-| MeleeAttacker | Hit Origin / **Target Layers** | 판정 기준 / 타격 대상 | 자신 / Player 제외 |
+| MeleeAttacker | Hit Origin / **Target Layers** | 판정 기준 / 타격 대상 | 자신 / Everything − Player |
 | RangedAttacker | Max Aim Distance | 허공 조준 시 거리 | 100 |
-| RangedAttacker | **Aim Layers** / **Projectile Hit Layers** | 조준 레이 / 화살 충돌 | 둘 다 Player·Projectile 제외 |
+| RangedAttacker | **Aim Layers** / **Projectile Hit Layers** | 조준 레이 / 화살·마법탄 충돌 | 둘 다 Everything − Player·Projectile·Interactable (**Enemy 포함**) |
 | RangedAttacker | Preview Time Step | 경로선 정밀도 | 0.03 |
 | RangedAttacker | Projectile Root / Effect Root | 화살·명중 이펙트 부모 | 비움 (`Pools/Projectiles`, `Pools/Effects` 자동) |
-| SpellCaster | **Area Damage Layers** / **Ground Layers** | 범위 피해 대상 / 마법진을 붙일 지면 | Player 제외 / Default·Water |
+| SpellCaster | **Area Damage Layers** / **Ground Layers** | 범위 피해 대상 / 마법진을 붙일 지면 | Everything − Player (**Enemy 포함**) / Default·Water |
 | SpellCaster | Max Targeting Ray Distance / Ground Probe Height | 마법진 조준 레이 / 사거리 밖 보정 | 100 / 10 |
 | SpellCaster | Effect Root | 마법진·마법 이펙트 부모 | 비움 (`Pools/Effects` 자동) |
 | WeaponMastery | **Data** | 숙련 규칙 | `MasteryData` |
@@ -320,6 +350,31 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | HitStop | Animator | 멈출 애니메이터 | 자동 |
 | EquipmentVisual | Right / Left Hand Slot | 손 소켓 | 자동 (`handslot.r/l`) |
 | PlayerAmmoVisual · PlayerRangedWeapon · PlayerMagicCaster · PlayerMasteryRewarder · QuickSlots | — | 설정 없음 | — |
+
+## 적 프리팹 컴포넌트
+레이어는 **Enemy**. 루트에 `EnemyController`를 붙이면 Navigator(NavMeshAgent)·Animator·Perception·Loadout(EquipmentVisual·MeleeAttacker·ShieldGuard)·Health·HitStop·KillReward가 자동 추가된다.
+
+| 컴포넌트 | 필드 | 하는 일 | 넣을 값 |
+|---|---|---|---|
+| EnemyController | **Data** | 적 종류 | `Minion` / `Warrior` |
+| EnemyPerception | **Target Layers** / **Obstacle Layers** | 감지 대상 / 시야 가림 | Player / Default (캐릭터 제외) |
+| EnemyPerception | Eye Height / Scan Interval | 가림 판정 높이 / 감지 간격 | 1.5 / 0.2 |
+| MeleeAttacker | **Target Layers** | 타격 대상 | **Player** (다른 적을 때리지 않게) |
+| NavMeshAgent | Radius / Height / Base Offset | 길찾기 크기 / 발 높이 보정 | 0.4 / 2 / 플레이 중 확인 후 조정 |
+| CapsuleCollider (직접 추가) | Center / Height / Radius | 피격 판정 | (0, 1, 0) / 2 / 0.4 |
+| DamageNumberEmitter · EnemyLoot (직접 추가) | World Item Prefab (Loot) | 데미지 숫자 / 드랍 | `Prefabs/WorldItem` |
+| 자식: Skeleton 모델 | Animator Controller | 상태 재생 | `Create Enemy Animator` 결과 |
+| 자식: EnemyHealthBar | Hide Delay | 전투 종료 후 체력바 유지 | 4 |
+
+## 레이어 마스크 설정 원칙
+공격·조준·감지 마스크는 **Everything을 고른 뒤 제외할 레이어만 해제**한다. 레이어를 하나씩 체크하면 나중에 추가한 레이어(예: Enemy)가 빠져 화살·마법이 통과한다.
+
+| 레이어 | 용도 |
+|---|---|
+| Player | 플레이어 (플레이어 공격·조준에서 제외) |
+| Projectile | 투사체 (조준·투사체 충돌에서 제외) |
+| Interactable | 필드 아이템 트리거 (조준·투사체에서 제외) |
+| Enemy | 적 (플레이어 공격 대상, 적 공격·감지에서는 제외) |
 
 ## 씬 오브젝트
 | 오브젝트 | 컴포넌트 | 필드 | 넣을 값 |
@@ -331,3 +386,6 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | 데미지 숫자 스포너 | DamageNumberSpawner | Pool Root | 비움 (`Pools/DamageNumbers` 자동) |
 | 필드 아이템 | WorldItem | Item / Count / Tier / Model Root | 아이템 / 수량 (장비는 1) / 티어 / 비움 |
 | 허수아비 | Health · TrainingDummy · DamageNumberEmitter · KillReward | Invincible Duration / Virtual Health / Experience | 0 / 100 / 30 |
+| 스폰 지점 | EnemySpawner | Enemy Prefab / Count / Spawn Radius / Respawn Delay | 적 프리팹 / 3 / 5 / 30 |
+| NavMesh | NavMeshSurface | Use Geometry / Include Layers | Physics Colliders / 지면만 (지형 MeshCollider는 Convex 끔) |
+| Canvas / Status UI | StatusBarView | Warning Threshold / Blink Speed / Value Format | 0.3 / 2 / `{0} / {1}` (`Create Player Status UI`로 생성) |

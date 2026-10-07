@@ -48,6 +48,12 @@ namespace ProjectFantasy.Combat
             contributors.Clear();
         }
 
+        // 데이터 기반 경험치 지정 (적 등)
+        public void SetExperience(int value) => experience = Mathf.Max(0, value);
+
+        // 귀환·리스폰 시 이전 전투 기여 기록 제거
+        public void ClearContributors() => contributors.Clear();
+
         private void HandleDamaged(DamageInfo damageInfo)
         {
             if (damageInfo.Instigator != null && damageInfo.Instigator.TryGetComponent(out IKillRewardReceiver receiver))

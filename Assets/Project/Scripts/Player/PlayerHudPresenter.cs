@@ -1,4 +1,6 @@
 using System;
+using ProjectFantasy.Combat;
+using ProjectFantasy.Combat;
 using ProjectFantasy.InventorySystem;
 using ProjectFantasy.Items;
 using ProjectFantasy.Mastery;
@@ -8,12 +10,14 @@ using UnityEngine;
 
 namespace ProjectFantasy.Player
 {
-    // 플레이어 상태를 HUD에 전달: 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(아이템·숙련도)
+    // 플레이어 상태를 HUD에 전달: 체력 바, 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(아이템·숙련도)
     [DisallowMultipleComponent]
     public sealed class PlayerHudPresenter : MonoBehaviour
     {
         [Tooltip("플레이어")]
         [SerializeField] private PlayerController player;
+        [Tooltip("체력 바 UI (Create Player Status UI로 생성, 비어 있으면 무시)")]
+        [SerializeField] private StatusBarView healthBar;
         [Tooltip("퀵슬롯 바 UI")]
         [SerializeField] private QuickSlotBarView quickSlotBar;
         [Tooltip("화살 수 UI")]
@@ -31,6 +35,7 @@ namespace ProjectFantasy.Player
         [Tooltip("{0} = 숙련 이름, {1} = 레벨, {2} = 해금 티어")]
         [SerializeField] private string tierUnlockFormat = "{0} 숙련 Lv {1} — T{2} 장착 가능";
 
+        private Health health;
         private PlayerItemHandler itemHandler;
         private PlayerLoadout loadout;
         private PlayerRangedWeapon rangedWeapon;
@@ -42,6 +47,7 @@ namespace ProjectFantasy.Player
         // 다른 오브젝트의 Awake 순서에 의존하지 않도록 직접 조회
         private void Awake()
         {
+            health = player.GetComponent<Health>();
             itemHandler = player.GetComponent<PlayerItemHandler>();
             loadout = player.GetComponent<PlayerLoadout>();
             rangedWeapon = player.GetComponent<PlayerRangedWeapon>();
@@ -52,6 +58,7 @@ namespace ProjectFantasy.Player
 
         private void OnEnable()
         {
+            health.HealthChanged += HandleHealthChanged;
             loadout.WeaponChanged += HandleWeaponChanged;
             rangedWeapon.LoadedChanged += HandleLoadedChanged;
             inventory.Changed += RefreshAmmo;
@@ -63,6 +70,7 @@ namespace ProjectFantasy.Player
 
         private void OnDisable()
         {
+            health.HealthChanged -= HandleHealthChanged;
             loadout.WeaponChanged -= HandleWeaponChanged;
             rangedWeapon.LoadedChanged -= HandleLoadedChanged;
             inventory.Changed -= RefreshAmmo;
@@ -74,9 +82,15 @@ namespace ProjectFantasy.Player
 
         private void Start()
         {
+            HandleHealthChanged(health.CurrentHealth, health.MaxHealth);
             quickSlotBar.Bind(itemHandler.QuickSlots, inventory, itemHandler);
             RefreshAmmo();
             CacheUnlockedTiers();
+        }
+
+        private void HandleHealthChanged(int current, int max)
+        {
+            if (healthBar != null) healthBar.SetValue(current, max);
         }
 
         private void HandleWeaponChanged(WeaponData _) => RefreshAmmo();

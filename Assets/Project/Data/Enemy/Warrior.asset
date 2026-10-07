@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f6d63bc463b1848872453c2d7e55d4, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyData
+  displayName: Warrior
+  maxHealth: 120
+  attackPower: 12
+  experience: 60
+  weapon: {fileID: 11400000, guid: 2fdcabf4103f29c4e95426848a5c4dd5, type: 2}
+  shield: {fileID: 11400000, guid: 6906259980775a54c81175bff27812eb, type: 2}
+  defense: 20
+  magicDefense: 5
+  sightRange: 10
+  sightAngle: 360
+  loseRange: 18
+  provokedDuration: 5
+  leashRange: 25
+  walkSpeed: 1.5
+  runSpeed: 4
+  turnSpeed: 540
+  patrolRadius: 6
+  idleTimeRange: {x: 2, y: 5}
+  attackRange: 1.8
+  attackAngle: 40
+  attackCooldownRange: {x: 1.2, y: 2}
+  maxComboActions: 3
+  staggerImmunity: 1
+  hitReaction: {fileID: 11400000, guid: 3cd00a0767e8e7a40b89f18a7f9cbcbb, type: 2}
+  guard:
+    guardChance: 0.35
+    reactiveGuardChance: 0.5
+    guardDuration: 1.5
+    guardCooldown: 4
+    guardMoveSpeed: 0.8
+    counterChance: 0.5
+    counterAction: {fileID: 11400000, guid: d9172af63e5ca3847bce9c32e8c41c2e, type: 2}
+  spawnDuration: 1.5
+  corpseDuration: 3
+  dropTable: {fileID: 11400000, guid: 6e406273667ea054f861df6003a03e20, type: 2}
+  animationData: {fileID: 11400000, guid: 5e02fbc499e42d34abe3746821056786, type: 2}

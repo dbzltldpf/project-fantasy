@@ -50,7 +50,7 @@ namespace ProjectFantasy.WeaponEditor
 
             DrawSection("기본 정보", InfoFields);
             DrawSection("장착", EquipFields);
-            DrawSection("티어·등급·능력치 (범위 = T1 기준)", TierTableField, GradeTableField, isMagic ? MagicRangeField : AttackRangeField);
+            DrawSection("티어·등급·능력치 (범위 = T0 기준)", TierTableField, GradeTableField, isMagic ? MagicRangeField : AttackRangeField);
             if (weapon.HasMeleeHit) DrawSection("근접 (콤보·판정)", MeleeFields);
             if (weapon is RangedWeaponData ranged) DrawRangedSection(ranged);
             if (isMagic) DrawSection("마법", MagicFields);
@@ -121,7 +121,7 @@ namespace ProjectFantasy.WeaponEditor
             }
         }
 
-        // 예: 한손검 · 오른손 · 보조: 방패 · 공격력 12~18 (T1) · 티어표 ✔ · 등급표 ✔
+        // 예: 한손검 · 오른손 · 보조: 방패 · 공격력 12~18 (T0) · 티어표 ✔ · 등급표 ✔
         private string BuildSummary(WeaponData weapon, bool isMagic)
         {
             string statLabel = isMagic ? "마법력" : "공격력";
@@ -132,7 +132,7 @@ namespace ProjectFantasy.WeaponEditor
             return GetTypeLabel(weapon)
                 + Separator + (weapon.IsHeldInLeftHand ? "왼손" : "오른손")
                 + Separator + GetOffHandLabel(weapon)
-                + Separator + $"{statLabel} {range} (T1)"
+                + Separator + $"{statLabel} {range} (T0)"
                 + Separator + (hasTierTable ? "티어표 ✔" : "티어표 없음")
                 + Separator + (hasGradeTable ? "등급표 ✔" : "등급표 없음");
         }
@@ -148,7 +148,7 @@ namespace ProjectFantasy.WeaponEditor
             if (isMagic && IsMissing(SpellField)) Warn("마법(Spell)이 없어 시전할 수 없습니다.");
             if (IsInvertedRange(isMagic ? MagicRangeField : AttackRangeField)) Warn("능력치 범위의 max가 min보다 작습니다 (min으로 고정됨).");
             if (isBladeWeapon && IsBladeUnset()) Info("칼날 미설정: 몸 기준 구체로 판정합니다 (Blade Base/Tip 입력 권장).");
-            if (!isUnarmed && IsMissing(TierTableField)) Info("티어표가 없어 모든 개체가 T1 (티어 배율·접두어 없음)으로 생성됩니다.");
+            if (!isUnarmed && IsMissing(TierTableField)) Info("티어표가 없어 모든 개체가 T0 (티어 배율·접두어 없음)으로 생성됩니다.");
             if (!isUnarmed && IsMissing(GradeTableField)) Info("등급표가 없어 등급 없이 범위 값만 굴립니다.");
         }
 

@@ -13,7 +13,7 @@ namespace ProjectFantasy.UI
         IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
         private const int DoubleClickCount = 2;
-        public const int NoTier = 0;
+        public const int NoTier = -1;
         private const float VisibleAlpha = 1f;
 
         [SerializeField] private Image icon;

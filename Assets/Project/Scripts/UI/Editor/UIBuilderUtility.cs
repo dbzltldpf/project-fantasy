@@ -14,8 +14,17 @@ namespace ProjectFantasy.UIEditor
         private const float ReferenceWidth = 1920f;
         private const float ReferenceHeight = 1080f;
         private const float WidthHeightMatch = 0.5f;
+        private const string BarSpriteFolder = "Assets/ThirdParty/Kenney/UIPack";
+        private const string LeftCapSuffix = "_horizontalLeft.png";
+        private const string MidSuffix = "_horizontalMid.png";
+        private const string RightCapSuffix = "_horizontalRight.png";
 
         public static readonly Vector2 Center = new Vector2(0.5f, 0.5f);
+        public static readonly Vector2 LeftMiddle = new Vector2(0f, 0.5f);
+        public static readonly Vector2 RightMiddle = new Vector2(1f, 0.5f);
+
+        // Kenney barBack은 거의 투명해 잘 안 보임 → 채움 스프라이트를 어둡게 칠해 배경으로 사용
+        private static readonly Color MaskedBarBackTint = new Color(0.25f, 0.25f, 0.25f, 0.85f);
         public static readonly Vector2 TopLeft = new Vector2(0f, 1f);
         public static readonly Vector2 BottomCenter = new Vector2(0.5f, 0f);
         public static readonly Vector2 BottomRight = new Vector2(1f, 0f);
@@ -153,6 +162,86 @@ namespace ProjectFantasy.UIEditor
             SerializedObject serializedObject = new SerializedObject(target);
             serializedObject.FindProperty(propertyName).objectReferenceValue = value;
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        public static void AssignFloat(Object target, string propertyName, float value)
+        {
+            SerializedObject serializedObject = new SerializedObject(target);
+            serializedObject.FindProperty(propertyName).floatValue = value;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        #endregion
+
+        #region Capped Bar (Kenney UIPack)
+
+        // Kenney 바: 왼쪽 끝(고정) | 가운데(늘어남) | 오른쪽 끝(고정), spritePrefix 예: barGreen
+        public static RectTransform CreateCappedBar(RectTransform parent, string name, string spritePrefix, float capWidth)
+        {
+            return CreateCappedBar(parent, name, spritePrefix, capWidth, Color.white);
+        }
+
+        // tint: 스프라이트 색에 곱함 (채움 스프라이트를 어둡게 칠해 배경으로 사용 등)
+        public static RectTransform CreateCappedBar(RectTransform parent, string name, string spritePrefix, float capWidth, Color tint)
+        {
+            RectTransform container = CreateRect(name, parent);
+
+            RectTransform left = CreateRect("Left", container);
+            SetVerticalStretch(left, Vector2.zero, LeftMiddle, capWidth);
+            AddBarImage(left, spritePrefix + LeftCapSuffix, tint);
+
+            RectTransform middle = CreateRect("Mid", container);
+            Stretch(middle);
+            middle.offsetMin = new Vector2(capWidth, 0f);
+            middle.offsetMax = new Vector2(-capWidth, 0f);
+            AddBarImage(middle, spritePrefix + MidSuffix, tint);
+
+            RectTransform right = CreateRect("Right", container);
+            SetVerticalStretch(right, Vector2.right, RightMiddle, capWidth);
+            AddBarImage(right, spritePrefix + RightCapSuffix, tint);
+            return container;
+        }
+
+        // 체력·자원 바: 어둡게 칠한 배경(최대치 길이) + 마스크(RectMask2D, 너비 = 비율) 안의 전체 길이 채움 → BarFill.SetMaskedRatio
+        public static RectTransform CreateMaskedBar(RectTransform parent, string spritePrefix, float capWidth, float width, out RectTransform fill)
+        {
+            RectTransform back = CreateCappedBar(parent, "Back", spritePrefix, capWidth, MaskedBarBackTint);
+            Stretch(back);
+
+            RectTransform fillMask = CreateRect("FillMask", parent);
+            SetLeftAnchoredFill(fillMask, width);
+            fillMask.gameObject.AddComponent<RectMask2D>();
+
+            fill = CreateCappedBar(fillMask, "Fill", spritePrefix, capWidth);
+            SetLeftAnchoredFill(fill, width);
+            return fillMask;
+        }
+
+        // 채움 바: 왼쪽 기준, 너비를 비율로 조절 (BarFill.SetRatio)
+        public static void SetLeftAnchoredFill(RectTransform fill, float width)
+        {
+            fill.anchorMin = Vector2.zero;
+            fill.anchorMax = Vector2.up;
+            fill.pivot = LeftMiddle;
+            fill.anchoredPosition = Vector2.zero;
+            fill.sizeDelta = new Vector2(width, 0f);
+        }
+
+        // 세로로 꽉 차고 가로는 고정 너비 (anchorX: 0 = 왼쪽, 1 = 오른쪽)
+        private static void SetVerticalStretch(RectTransform rect, Vector2 anchorX, Vector2 pivot, float width)
+        {
+            rect.anchorMin = new Vector2(anchorX.x, 0f);
+            rect.anchorMax = new Vector2(anchorX.x, 1f);
+            rect.pivot = pivot;
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2(width, 0f);
+        }
+
+        private static void AddBarImage(RectTransform rect, string spriteFile, Color tint)
+        {
+            Image image = AddImage(rect.gameObject, tint, false);
+            image.sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"{BarSpriteFolder}/{spriteFile}");
+            if (image.sprite == null) Debug.LogWarning($"[{nameof(UIBuilderUtility)}] 스프라이트를 찾지 못했습니다: {spriteFile}");
         }
 
         #endregion

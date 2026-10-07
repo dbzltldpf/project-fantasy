@@ -1,4 +1,5 @@
 using System;
+using ProjectFantasy.Items;
 using UnityEngine;
 
 namespace ProjectFantasy.Mastery
@@ -8,7 +9,7 @@ namespace ProjectFantasy.Mastery
     public sealed class MasteryData : ScriptableObject
     {
         private const int MinLevel = 1;
-        private const int FirstTier = 1;
+        private const int LastIndexOffset = 1;
         private const float NoBonus = 1f;
         private const int NoExperience = 0;
 
@@ -18,7 +19,7 @@ namespace ProjectFantasy.Mastery
         [SerializeField, Min(1)] private int experienceBase = 100;
         [Tooltip("경험치 곡선 지수 (1이면 직선, 클수록 고레벨이 오래 걸림)")]
         [SerializeField, Min(1f)] private float experienceExponent = 1.5f;
-        [Tooltip("티어별 해금 레벨 (순서대로 T1, T2 …)")]
+        [Tooltip("티어별 해금 레벨 (순서대로 T0, T1 …, T0은 보통 1)")]
         [SerializeField] private int[] tierUnlockLevels = { 1, 10, 20, 30, 40 };
         [Tooltip("레벨당 보너스 (무기·마법서 = 피해, 방패 = 방어력), 0.01 = 1%")]
         [SerializeField, Min(0f)] private float bonusPerLevel = 0.01f;
@@ -26,7 +27,8 @@ namespace ProjectFantasy.Mastery
         [SerializeField] private string[] displayNames = { "맨손", "한손검", "양손검", "활", "한손 석궁", "양손 석궁", "Wand", "Staff", "방패", "마법서" };
 
         public int MaxLevel => maxLevel;
-        public int MaxTier => tierUnlockLevels.Length;
+        // 해금 가능한 가장 높은 티어
+        public int MaxTier => ItemData.MinTier + tierUnlockLevels.Length - LastIndexOffset;
 
         // 현재 레벨에서 다음 레벨까지 필요 경험치 (최대 레벨이면 0)
         public int GetRequiredExperience(int level)
@@ -38,10 +40,10 @@ namespace ProjectFantasy.Mastery
         // 레벨로 해금된 최고 티어
         public int GetUnlockedTier(int level)
         {
-            int tier = FirstTier;
+            int tier = ItemData.MinTier;
             for (int i = 0; i < tierUnlockLevels.Length; i++)
             {
-                if (level >= tierUnlockLevels[i]) tier = i + FirstTier;
+                if (level >= tierUnlockLevels[i]) tier = i + ItemData.MinTier;
             }
             return tier;
         }
@@ -49,7 +51,7 @@ namespace ProjectFantasy.Mastery
         // 티어 해금에 필요한 레벨 (정의 밖 티어는 최대 레벨 초과로 사실상 불가)
         public int GetRequiredLevel(int tier)
         {
-            int index = tier - FirstTier;
+            int index = tier - ItemData.MinTier;
             return index >= 0 && index < tierUnlockLevels.Length ? tierUnlockLevels[index] : maxLevel + MinLevel;
         }
 

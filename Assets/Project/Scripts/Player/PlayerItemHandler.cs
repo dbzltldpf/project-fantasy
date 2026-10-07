@@ -202,10 +202,7 @@ namespace ProjectFantasy.Player
 
             Transform owner = transform;
             Vector3 position = owner.position + owner.forward * dropDistance + Vector3.up * dropHeight;
-            WorldItem worldItem = Instantiate(worldItemPrefab, position, owner.rotation);
-
-            if (stack.Instance != null) worldItem.Initialize(stack.Instance);
-            else worldItem.Initialize(stack.Item, stack.Count);
+            WorldItem.Spawn(worldItemPrefab, stack.Item, stack.Count, stack.Instance, position, owner.rotation);
         }
 
         private void HandleWeaponChanged(WeaponData _) => EquipmentChanged?.Invoke();
