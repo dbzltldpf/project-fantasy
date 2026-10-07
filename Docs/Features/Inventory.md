@@ -10,7 +10,7 @@
 | [Items/Data/ConsumableData.cs](../../Assets/Project/Scripts/Items/Data/ConsumableData.cs) | 소모품: 사용 모션·효과 시점·전체 시간·이동 속도, 다형 효과 목록 |
 | [Items/Effects/](../../Assets/Project/Scripts/Items/Effects/) | `ConsumableEffect` 베이스, `HealEffect` |
 | [Items/ItemInstance.cs](../../Assets/Project/Scripts/Items/ItemInstance.cs) | 장비 개체: 데이터·티어·등급·굴린 능력치, `DisplayName`(티어 접두어 + 이름) (내구도 등 개별 상태 확장 지점) |
-| [Items/Tier/](../../Assets/Project/Scripts/Items/Tier/) | `ItemTier`·`ItemTierTable`(접두어·능력치 배율·외형), 티어 외형은 [Weapon](Weapon.md#티어-t1t5-무기-데이터-하나로-공용) |
+| [Items/Tier/](../../Assets/Project/Scripts/Items/Tier/) | `ItemTier`·`ItemTierTable`(접두어·능력치 배율·외형), 티어 외형은 [Weapon](Weapon.md#티어-t0t4-무기-데이터-하나로-공용) |
 | [InventorySystem/EquipRequirement.cs](../../Assets/Project/Scripts/InventorySystem/EquipRequirement.cs) | 장착 조건 표시 정보 (`IItemActions.TryGetRequirement`, [Mastery](Mastery.md)) |
 | [Items/Grade/](../../Assets/Project/Scripts/Items/Grade/) | `ItemGrade`(이름·색·가중치·배율), `ItemGradeTable`(가중치 추첨, SO) |
 | [Items/Stats/](../../Assets/Project/Scripts/Items/Stats/) | `StatType`, `StatRange`(범위 랜덤), `ItemStats`(공격력·마법력·방어력·마법 방어력) |
@@ -43,9 +43,9 @@ ItemData (SO, 종류)
 
 ### 장비 개체 생성 (등급·능력치)
 ```
-CreateInstance(tier) → 등급표 가중치 추첨 → T1 범위 균등 랜덤 × 티어 배율 × 등급 배율 → 반올림
+CreateInstance(tier) → 등급표 가중치 추첨 → T0 범위 균등 랜덤 × 티어 배율 × 등급 배율 → 반올림
 ```
-- 티어는 아이템 데이터가 아니라 개체에 있다 (같은 데이터로 T1~T5). 시작 아이템(`StartingItem.tier`)·필드 아이템(`WorldItem.tier`)에서 지정.
+- 티어는 아이템 데이터가 아니라 개체에 있다 (같은 데이터로 T0~T4). 시작 아이템(`StartingItem.tier`)·필드 아이템(`WorldItem.tier`)에서 지정.
 - 시작 아이템은 최하 등급으로 생성 (`useLowestGrade`).
 - 시점: 시작 지급, 씬 배치 `WorldItem`(Start), 가방에 종류로 추가될 때. **한 번만** 굴리고, 버렸다 다시 주우면 같은 개체.
 - 수치 기준·밸런스 표: [인스펙터 가이드](../InspectorGuide.md#무기-weapondata)
@@ -130,3 +130,4 @@ E → PlayerInteractor.Target → 가방에 자리 없음? "가방이 가득 찼
 | 2026-10-06 | 최초 작성: 아이템 데이터·개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, HUD, 등급·랜덤 능력치, 보조 장비 호환 규칙, UI 빌더 |
 | 2026-10-07 | 개체 티어(접두어·배율, 시작·필드 아이템 티어 지정, 시작 아이템 최하 등급), 숙련 부족 장착 거부·요구 숙련 표시, 칸 티어 표시, 안내 문구 여러 줄 |
 | 2026-10-07 | 드랍 표(`DropTable`), `WorldItem.Spawn`(버리기·드랍 공용) |
+| 2026-10-07 | 티어 0부터 (T0~T4), 칸의 티어 없음 표시값 -1, 기존 시작 아이템·필드 아이템·드랍 표 티어 값 1씩 내림 |

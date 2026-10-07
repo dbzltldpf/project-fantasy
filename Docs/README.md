@@ -57,3 +57,4 @@ Assets/Project/Scripts/
 | 2026-10-06 | Inventory, Weapon, Player, Combat, RangedCombat, Magic, Camera, UI, Core, InspectorGuide | 인벤토리(가방·퀵슬롯·줍기·사용·실시간 창), 장비 개체·등급·랜덤 능력치, 방패 방어력, 보조 장비 규칙, 휠 줌, 인스펙터 정리(무기 인스펙터·툴팁·입력 에셋·애니메이션 데이터), 인스펙터 가이드 |
 | 2026-10-07 | Mastery, Weapon, Inventory, Player, Combat, RangedCombat, Magic, UI, Core, InspectorGuide | 무기 숙련도(종류별 레벨·처치 경험치·티어 장착 조건·보너스·숙련도 창 K·테스트 옵션), 장비 티어 T1~T5(접두어·배율·불씨 아우라·테두리 발광), 처치 보상, UI Presenters 분리, 풀 부모 폴더(`Pools/…`) |
 | 2026-10-07 | Enemy, Combat, Inventory, UI, Player, Magic, InspectorGuide | 근접 적 2종(감지·추격·공격·막기·반격·귀환·리스폰), 드랍 표, 적 머리 위 체력바·플레이어 상태바, 애니메이터·체력바·상태바 생성 메뉴, 레이어 마스크 설정 원칙 |
+| 2026-10-07 | Weapon, Inventory, Mastery, InspectorGuide | 티어를 0부터로 변경 (T0~T4, 기존 데이터 값 이전) |
