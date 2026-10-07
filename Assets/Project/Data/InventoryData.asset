@@ -56,6 +56,9 @@ MonoBehaviour:
     tier: 0
   - item: {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
     count: 1
+    tier: 0
+  - item: {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
+    count: 1
     tier: 1
   - item: {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
     count: 1
@@ -66,9 +69,6 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
     count: 1
     tier: 4
-  - item: {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
-    count: 1
-    tier: 5
   startingQuickSlots:
   - {fileID: 11400000, guid: 604a962c41d9c2046adfba6bcc584b35, type: 2}
   - {fileID: 11400000, guid: 9a2b87eb874da384480b9096e33b5b57, type: 2}
