@@ -16,9 +16,9 @@ namespace ProjectFantasy.Weapon
         [SerializeField] private Vector3 gripPosition;
         [Tooltip("손 소켓 기준 회전 보정 (KayKit 무기는 0 유지)")]
         [SerializeField] private Vector3 gripRotation;
-        [Tooltip("(선택) 티어별 전용 머티리얼, 첫 줄 = T1. 지정한 티어만 티어표 자동 색조 대신 사용 (칼날만 바꾼 텍스처 등)")]
+        [Tooltip("(선택) 티어별 전용 머티리얼, 첫 줄 = T0. 지정한 티어만 티어표 자동 색조 대신 사용 (칼날만 바꾼 텍스처 등)")]
         [SerializeField] private Material[] tierMaterials = Array.Empty<Material>();
-        [Tooltip("티어 접두어·능력치 배율·모델 색조 표 (비우면 모든 개체 T1)")]
+        [Tooltip("티어 접두어·능력치 배율·모델 색조 표 (비우면 모든 개체 T0)")]
         [SerializeField] private ItemTierTable tierTable;
         [Tooltip("등급 추첨 표 (비우면 등급 없이 범위 값만 굴림)")]
         [SerializeField] private ItemGradeTable gradeTable;
@@ -49,7 +49,7 @@ namespace ProjectFantasy.Weapon
         // 개체 없이 쓰는 기본 능력치 (맨손 등, 범위 최솟값)
         public virtual ItemStats BaseStats => ItemStats.Zero;
 
-        // 능력치 = T1 범위 랜덤 × 티어 배율 × 등급 배율
+        // 능력치 = T0 범위 랜덤 × 티어 배율 × 등급 배율
         public override ItemInstance CreateInstance(int tier = MinTier, bool useLowestGrade = false)
         {
             int clampedTier = tierTable != null ? tierTable.Clamp(tier) : MinTier;

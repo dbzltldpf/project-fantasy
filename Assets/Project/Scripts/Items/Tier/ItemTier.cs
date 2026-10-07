@@ -12,11 +12,11 @@ namespace ProjectFantasy.Items
 
         [Tooltip("이름 앞에 붙는 접두어 (예: 강철 → 강철 한손검)")]
         [SerializeField] private string prefix;
-        [Tooltip("T1 기준 능력치 범위에 곱하는 배율")]
+        [Tooltip("T0 기준 능력치 범위에 곱하는 배율")]
         [SerializeField, Min(0f)] private float statMultiplier = 1f;
 
         [Header("Aura (무기 주변 파티클)")]
-        [Tooltip("티어표의 아우라 프리팹을 이 색으로 표시 (보통 T2부터)")]
+        [Tooltip("티어표의 아우라 프리팹을 이 색으로 표시 (보통 T1부터)")]
         [SerializeField] private bool useAura;
         [Tooltip("입자 색 (HDR, 강도가 높을수록 Bloom에서 밝게 번짐)")]
         [SerializeField, ColorUsage(true, true)] private Color auraColor = Color.white;
