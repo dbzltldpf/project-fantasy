@@ -5,7 +5,7 @@
 
 ## 목차
 - [빠른 체크리스트](#빠른-체크리스트)
-- 데이터(SO): [무기](#무기-weapondata) · [방패·마법서](#방패마법서) · [화살](#화살-ammodata) · [마법](#마법-spelldata) · [소모품](#소모품-consumabledata) · [등급표](#등급표-itemgradetable) · [인벤토리](#인벤토리-inventorydata) · [액션·콤보](#액션콤보) · [이동](#이동-playermovementdata) · [애니메이션](#애니메이션-playeranimationdata) · [카메라](#카메라-cameradata) · [피격 반응](#피격-반응-hitreactiondata)
+- 데이터(SO): [무기](#무기-weapondata) · [방패·마법서](#방패마법서) · [화살](#화살-ammodata) · [마법](#마법-spelldata) · [소모품](#소모품-consumabledata) · [등급표](#등급표-itemgradetable) · [티어표](#티어표-itemtiertable) · [숙련도](#숙련도-masterydata) · [인벤토리](#인벤토리-inventorydata) · [액션·콤보](#액션콤보) · [이동](#이동-playermovementdata) · [애니메이션](#애니메이션-playeranimationdata) · [카메라](#카메라-cameradata) · [피격 반응](#피격-반응-hitreactiondata)
 - [플레이어(Rogue) 컴포넌트](#플레이어rogue-컴포넌트)
 - [씬 오브젝트](#씬-오브젝트)
 
@@ -56,11 +56,13 @@
 ### 능력치
 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|
+| Tier Table | 티어 접두어·배율·외형 | 공용 `ItemTierTable` (맨손은 비움) |
+| Tier Materials | 티어별 모델 머티리얼 교체 (선택) | 보통 비움 (아우라·테두리로 구분), 순서 = T1, T2 … |
 | Grade Table | 등급 추첨 표 | 공용 `ItemGradeTable` (맨손은 비움) |
 | Attack Power Range | 공격력 범위 (검·활·석궁) | 아래 밸런스 표 |
 | Magic Power Range | 마법력 범위 (Wand·Staff) | 아래 밸런스 표 |
 
-최종값 = `범위에서 균등 랜덤 × 등급 배율` (반올림). 개체가 생길 때 1회만 굴린다.
+최종값 = `범위에서 균등 랜덤 × 티어 배율 × 등급 배율` (반올림). 개체가 생길 때 1회만 굴린다. 범위는 **T1 기준**으로 입력한다.
 
 #### 밸런스 기준 (일반 등급, 한손검 1타 평균 12 = 기준)
 | 무기 | 범위 | 1회 피해 | 주기 | DPS | 역할 |
@@ -178,12 +180,49 @@
 
 상자·보스 전용으로 다른 가중치 표를 만들어 무기에 지정할 수 있다.
 
+## 티어표 (ItemTierTable)
+| 필드 | 하는 일 | 넣을 값 |
+|---|---|---|
+| Tiers | 티어 목록 (첫 줄 = T1) | 아래 표 |
+| Aura Prefab / Outline Material | 공용 불씨 파티클 / 테두리 발광 머티리얼 | `Tools → ProjectFantasy → Create Weapon Tier Effects`가 생성·연결 |
+
+티어 한 줄의 필드:
+
+| 필드 | 하는 일 |
+|---|---|
+| Prefix / Stat Multiplier | 이름 접두어 / T1 범위에 곱하는 배율 |
+| Use Aura / Aura Color / Aura Rate | 불씨 파티클 사용 / HDR 색(강도 높을수록 Bloom 번짐) / 초당 입자 수 |
+| Use Outline / Outline Color / Outline Width | 테두리 발광 사용 / HDR 색 / 두께 m (0.004~0.012, 두꺼우면 모서리 끊김) |
+| Apply Tint 이하 | 원본 텍스처에 색조 곱하기 (손잡이까지 물들어 기본 끔) |
+
+| 티어 | 접두어 | 배율 | Aura Color / Rate | Outline Color / Width |
+|---|---|---|---|---|
+| T1 | 낡은 | 1.0 | 없음 | 없음 |
+| T2 | 철 | 1.3 | (2, 2, 2, 0.9) / 10 | (1.5, 1.5, 1.5) / 0.004 |
+| T3 | 강철 | 1.6 | (1, 1.8, 3, 0.95) / 15 | (0.8, 1.5, 2.5) / 0.006 |
+| T4 | 미스릴 | 2.0 | (2, 1, 4, 1) / 25 | (1.6, 0.8, 3.2) / 0.008 |
+| T5 | 용의 | 2.5 | (6, 2.4, 0.5, 1) / 40 | (5, 2, 0.4) / 0.01 |
+
+- 빛 번짐이 안 보이면: 카메라 **HDR 켜짐**, URP Volume에 Bloom, Threshold가 색 강도보다 낮은지 확인.
+- 배율 2.5에서도 T5 한손검(25~35)이 T4 양손검(36~48)보다 낮도록 무기 범위를 유지 → 상위 티어가 항상 역할을 뒤집지는 않음.
+
+## 숙련도 (MasteryData)
+| 필드 | 하는 일 | 넣을 값 |
+|---|---|---|
+| Max Level | 최대 레벨 | 50 |
+| Experience Base / Exponent | 다음 레벨 필요 경험치 = 기본값 × 레벨^지수 | 100 / 1.5 (Lv 1→2: 100, Lv 49→50: 34,300) |
+| Tier Unlock Levels | 티어별 해금 레벨 (개수 = 최대 티어) | 1, 10, 20, 30, 40 |
+| Bonus Per Level | 레벨당 보너스 (무기·마법서 피해, 방패 방어력) | 0.01 (1%) |
+| Display Names | 창·알림 이름 (`MasteryType` 순서) | 맨손, 한손검, 양손검, 활, 한손 석궁, 양손 석궁, Wand, Staff, 방패, 마법서 |
+
+처치 경험치는 대상의 `KillReward.experience`(기본 30)로 정한다.
+
 ## 인벤토리 (InventoryData)
 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|
 | Capacity | 가방 칸 수 | 30 (시작 시 1회만 읽음) |
 | Quick Slot Count | 퀵슬롯 수 | 8 (키보드 1~8 바인딩 수와 맞출 것) |
-| Starting Items | 시작 아이템·수량 | 장비는 수량만큼 개체 생성, **맨손은 넣지 않음** |
+| Starting Items | 시작 아이템·수량·티어 | 장비는 수량만큼 개체 생성(최하 등급), 티어는 숙련 Lv 1로 낄 수 있는 1 권장, **맨손은 넣지 않음** |
 | Starting Quick Slots | 퀵슬롯 순서 | 무기·소모품만 (같은 무기는 아직 등록 안 된 개체 순) |
 
 ## 액션·콤보
@@ -271,18 +310,24 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | RangedAttacker | Max Aim Distance | 허공 조준 시 거리 | 100 |
 | RangedAttacker | **Aim Layers** / **Projectile Hit Layers** | 조준 레이 / 화살 충돌 | 둘 다 Player·Projectile 제외 |
 | RangedAttacker | Preview Time Step | 경로선 정밀도 | 0.03 |
+| RangedAttacker | Projectile Root / Effect Root | 화살·명중 이펙트 부모 | 비움 (`Pools/Projectiles`, `Pools/Effects` 자동) |
 | SpellCaster | **Area Damage Layers** / **Ground Layers** | 범위 피해 대상 / 마법진을 붙일 지면 | Player 제외 / Default·Water |
 | SpellCaster | Max Targeting Ray Distance / Ground Probe Height | 마법진 조준 레이 / 사거리 밖 보정 | 100 / 10 |
+| SpellCaster | Effect Root | 마법진·마법 이펙트 부모 | 비움 (`Pools/Effects` 자동) |
+| WeaponMastery | **Data** | 숙련 규칙 | `MasteryData` |
+| WeaponMastery | Is Test Mode / Test Experience Multiplier / Start At Max Level | 테스트용 (에디터·개발 빌드만) | 끔 / 200 / 끔 |
 | ShieldGuard | Facing Transform | 가드 정면 | 자신 |
 | HitStop | Animator | 멈출 애니메이터 | 자동 |
 | EquipmentVisual | Right / Left Hand Slot | 손 소켓 | 자동 (`handslot.r/l`) |
-| PlayerAmmoVisual · PlayerRangedWeapon · PlayerMagicCaster · QuickSlots | — | 설정 없음 | — |
+| PlayerAmmoVisual · PlayerRangedWeapon · PlayerMagicCaster · PlayerMasteryRewarder · QuickSlots | — | 설정 없음 | — |
 
 ## 씬 오브젝트
 | 오브젝트 | 컴포넌트 | 필드 | 넣을 값 |
 |---|---|---|---|
 | Main Camera | ThirdPersonCamera | **Target** / **Camera Data** / Aim Camera Data / **Look Action** / **Zoom Action** | Rogue / `CameraData` / `AimCameraData` / Player/Look / Player/Zoom |
 | Main Camera | ThirdPersonCamera | Aim Blend Speed | 6 |
-| Inventory UI | PlayerMenuPresenter · PlayerHudPresenter | 플레이어·카메라·UI 참조 | `Tools → ProjectFantasy → Create Inventory UI`가 자동 연결 |
-| 필드 아이템 | WorldItem | Item / Count / Model Root | 아이템 / 수량 (장비는 1) / 비움 |
-| 허수아비 | Health · TrainingDummy · DamageNumberEmitter | Invincible Duration | 0 |
+| Canvas / UI Presenters | PlayerAimPresenter · PlayerMenuPresenter · PlayerHudPresenter | 플레이어·카메라·UI 참조 (Menu는 Inventory Window·**Mastery Window**) | `Create Inventory UI` → `Create Mastery UI`가 자동 연결 |
+| UI Presenters | PlayerHudPresenter | Experience / Level Up / Tier Unlock Format | 숙련 안내 문구, 기본값 (`{0}` 이름, `{1}` 값, `{2}` 티어) |
+| 데미지 숫자 스포너 | DamageNumberSpawner | Pool Root | 비움 (`Pools/DamageNumbers` 자동) |
+| 필드 아이템 | WorldItem | Item / Count / Tier / Model Root | 아이템 / 수량 (장비는 1) / 티어 / 비움 |
+| 허수아비 | Health · TrainingDummy · DamageNumberEmitter · KillReward | Invincible Duration / Virtual Health / Experience | 0 / 100 / 30 |

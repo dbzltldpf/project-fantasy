@@ -69,6 +69,7 @@ release 시점: 발사 속도 계산 → 화살 소모(활) 또는 장전 볼트
 - 박힐 때 부모로 붙이지 않고 **맞은 Transform 기준 로컬 자세를 기억해 `LateUpdate`에서 추적** → 움직이는 대상도 따라감.
 - 대상이 **파괴/비활성화되면 즉시 풀 반환**, 그 외 `stickDuration` 후, 비행 중 `lifetime` 초과 시 반환.
 - 투사체는 `PrefabPool<Projectile>`, 이펙트는 `EffectPool`로 풀링 ([Combat](Combat.md)).
+- Hierarchy 정리: 투사체는 `Pools/Projectiles/프리팹 이름`(활 화살·석궁 화살 각각), 명중 이펙트는 `Pools/Effects/프리팹 이름` 아래 생성. `RangedAttacker`의 `projectileRoot`·`effectRoot`를 지정하면 그 아래 (박힌 화살은 부모가 아닌 추적 방식이라 영향 없음).
 
 ## 데이터 파라미터
 ### RangedWeaponData (WeaponData 상속)
@@ -126,3 +127,4 @@ release 시점: 발사 속도 계산 → 화살 소모(활) 또는 장전 볼트
 |---|---|
 | 2026-10-02 | 최초 작성 (조준/발사/장전 상태, 화살 수량, 숄더뷰, 포물선 투사체·경로 미리보기, 박힘·풀링, 조준 지점 기준 캐릭터 방향, 직사 탄도, 명중 이펙트) |
 | 2026-10-06 | `AmmoPouch` 삭제 → 화살 수는 가방 기준, 화살 피해 = 장착 개체 공격력, 원거리 무기 장착 시 화살 수 HUD ([Inventory](Inventory.md)) |
+| 2026-10-07 | 투사체·명중 이펙트 풀 부모 폴더(`Pools/Projectiles`, `Pools/Effects`), 원거리 피해에 무기 숙련 보너스 ([Mastery](Mastery.md)) |
