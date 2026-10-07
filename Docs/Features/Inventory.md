@@ -14,7 +14,8 @@
 | [InventorySystem/EquipRequirement.cs](../../Assets/Project/Scripts/InventorySystem/EquipRequirement.cs) | 장착 조건 표시 정보 (`IItemActions.TryGetRequirement`, [Mastery](Mastery.md)) |
 | [Items/Grade/](../../Assets/Project/Scripts/Items/Grade/) | `ItemGrade`(이름·색·가중치·배율), `ItemGradeTable`(가중치 추첨, SO) |
 | [Items/Stats/](../../Assets/Project/Scripts/Items/Stats/) | `StatType`, `StatRange`(범위 랜덤), `ItemStats`(공격력·마법력·방어력·마법 방어력) |
-| [Items/WorldItem.cs](../../Assets/Project/Scripts/Items/WorldItem.cs) | 필드 아이템 (씬 배치 장비는 시작 시 개체 생성, 버린 개체는 그대로 보관) |
+| [Items/WorldItem.cs](../../Assets/Project/Scripts/Items/WorldItem.cs) | 필드 아이템 (씬 배치 장비는 시작 시 개체 생성, 버린 개체는 그대로 보관, `Spawn`(버리기·적 드랍 공용)) |
+| [Items/Loot/](../../Assets/Project/Scripts/Items/Loot/) | `DropTable`(SO, 줄마다 독립 확률)·`DropEntry`(아이템·확률·수량·티어 범위)·`LootDrop`(결과) |
 | [InventorySystem/Inventory.cs](../../Assets/Project/Scripts/InventorySystem/Inventory.cs) | 고정 칸 가방: 중첩·개체 추가·소모·꺼내기·교환, `Changed` |
 | [InventorySystem/ItemStack.cs](../../Assets/Project/Scripts/InventorySystem/ItemStack.cs) | 칸 내용: 겹치는 아이템은 종류+수량, 장비는 개체 1개 |
 | [InventorySystem/QuickSlots.cs](../../Assets/Project/Scripts/InventorySystem/QuickSlots.cs) / [QuickSlotEntry.cs](../../Assets/Project/Scripts/InventorySystem/QuickSlotEntry.cs) | 퀵슬롯: 장비는 개체, 소모품은 종류 등록, 사라진 개체 자동 해제 |
@@ -77,6 +78,13 @@ E → PlayerInteractor.Target → 가방에 자리 없음? "가방이 가득 찼
 소모품 사용 → UseItem 상태(느린 이동) → effectTime에 1개 소모 + 효과 (그 전에 피격되면 소모 안 됨)
 ```
 
+### 적 드랍
+```
+적 사망 → EnemyLoot → DropTable.Roll (줄마다 확률 판정, 수량 범위, 장비는 티어 범위 안에서 개체 생성) → 주변에 WorldItem.Spawn
+```
+- 줄의 수량·티어가 0으로 저장돼 있어도 최소 1로 보정 (인스펙터에서 배열 칸을 늘리면 새 줄이 0으로 채워짐).
+- 줍기는 일반 필드 아이템과 같음 ([Enemy](Enemy.md)).
+
 ### 인벤토리 창 (Tab, 실시간)
 - 열리면 이동·공격·점프·줍기·퀵슬롯 입력과 시점 회전·줌이 막히고 커서 표시. 게임은 계속 진행(피격 적용).
 - 필터: 전체/무기/장비/화살/소모품 (전체만 빈 칸 표시). 칸끼리 드래그 = 교환.
@@ -121,3 +129,4 @@ E → PlayerInteractor.Target → 가방에 자리 없음? "가방이 가득 찼
 |---|---|
 | 2026-10-06 | 최초 작성: 아이템 데이터·개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, HUD, 등급·랜덤 능력치, 보조 장비 호환 규칙, UI 빌더 |
 | 2026-10-07 | 개체 티어(접두어·배율, 시작·필드 아이템 티어 지정, 시작 아이템 최하 등급), 숙련 부족 장착 거부·요구 숙련 표시, 칸 티어 표시, 안내 문구 여러 줄 |
+| 2026-10-07 | 드랍 표(`DropTable`), `WorldItem.Spawn`(버리기·드랍 공용) |

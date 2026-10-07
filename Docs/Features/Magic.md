@@ -83,7 +83,7 @@ PlayerCastState
 
 ## 에디터 설정
 1. **이펙트**: Hovl `Magic effects pack` 머티리얼을 Render Pipeline Converter(Built-in → URP, Material Upgrade)로 변환, Bloom 권장.
-2. **Prefab Variant**: 원본 Hovl 프리팹은 수정하지 않고 `Assets/Project/Prefabs/Effects/`에 Variant 생성.
+2. **Prefab Variant**: 원본 Hovl 프리팹은 수정하지 않고 `Assets/Project/Art/Prefabs/Effects/`에 Variant 생성.
    - 1회 재생(명중·범위 발동): **루트 포함 모든 파티클 Looping 끄기** (하나라도 켜져 있으면 5초 후 강제 반환 + 경고)
    - 지속(마법진·마법탄 비주얼): Looping 유지
 3. **마법탄 프리팹**: 빈 루트(`Projectile`, Layer Projectile) + 자식 이펙트(`Sparks blue` Variant 등).

@@ -6,9 +6,9 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Died` 이벤트 |
+| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Died` 이벤트, `SetMaxHealth`(데이터 기반 최대 체력) |
 | [TrainingDummy.cs](../../Assets/Project/Scripts/Combat/TrainingDummy.cs) | 훈련용 허수아비: 피격 직후 체력 복구로 죽지 않음, 가상 체력 처치 판정, 피해 로그(에디터/개발 빌드) |
-| [KillReward.cs](../../Assets/Project/Scripts/Combat/KillReward.cs) | 처치 보상: 피해를 준 공격자 기록 → 처치 시 각자에게 경험치 전액 (`IKillRewardReceiver`) |
+| [KillReward.cs](../../Assets/Project/Scripts/Combat/KillReward.cs) | 처치 보상: 피해를 준 공격자 기록 → 처치 시 각자에게 경험치 전액 (`IKillRewardReceiver`), `SetExperience`·`ClearContributors`(적 데이터·귀환/리스폰) |
 | [EffectPool.cs](../../Assets/Project/Scripts/Combat/Effects/EffectPool.cs) / [PooledEffect.cs](../../Assets/Project/Scripts/Combat/Effects/PooledEffect.cs) | 파티클 이펙트 풀링: 1회 재생(파티클 종료 시 반환) / 시간 지정 / 수동 종료 |
 | [ShieldGuard.cs](../../Assets/Project/Scripts/Combat/ShieldGuard.cs) | `IDamageBlocker`: 가드 중 정면 각도 내 공격 완전 방어 / `IDamageReducer`: 방패 활성 중 방어력·마법 방어력으로 피해 감소 |
 | [MeleeAttacker.cs](../../Assets/Project/Scripts/Combat/MeleeAttacker.cs) | 칼날 궤적 스윕 또는 몸 기준 구체 판정, 판정 구간마다 대상당 1회 타격, 명중 시 히트스톱 요청 |
@@ -154,13 +154,14 @@ Length               ───────────────────�
 | `EffectPool.OneShot` | 명중, 범위 발동 | 모든 파티클이 끝났을 때 (5초 넘으면 강제 반환 + 경고) |
 | 초 단위 시간 | 시전 위치 마법진 | 지정 시간 후 |
 | `EffectPool.Infinite` | 조준 중 마법진 | `PooledEffect.Stop()` 호출 시 |
-- 원본 서드파티 프리팹은 수정하지 않고 `Assets/Project/Prefabs/Effects/`의 **Prefab Variant**를 사용. 1회 재생용은 루트 포함 모든 파티클 Looping 끄기.
+- 원본 서드파티 프리팹은 수정하지 않고 `Assets/Project/Art/Prefabs/Effects/`의 **Prefab Variant**를 사용. 1회 재생용은 루트 포함 모든 파티클 Looping 끄기.
 - 인스턴스 생성 시 `PooledEffect`가 자동 부착되므로 프리팹에 따로 붙일 필요 없음.
 - 인스턴스는 `Pools/Effects/프리팹 이름` 아래에 생성 (`RangedAttacker`·`SpellCaster`의 `effectRoot`를 지정하면 그 아래).
 
 ## 처치 보상 (`KillReward`)
 - 피격 시 가해자에게 `IKillRewardReceiver`가 있으면 기여자로 기록 → 사망 시 기여자마다 `experience` 전액 지급 후 초기화.
 - 플레이어는 `PlayerMasteryRewarder`가 받아 무기 숙련 경험치로 반영 ([Mastery](Mastery.md)).
+- 적은 `EnemyController`가 `EnemyData.experience`로 경험치를 지정하고, 귀환·리스폰 시 기여 기록을 지운다 ([Enemy](Enemy.md)).
 
 ## 훈련용 허수아비
 - `Health` + `TrainingDummy` + `DamageNumberEmitter`([UI](UI.md)) + 콜라이더 → 프리팹화해 필드에 배치 (실제 빌드 포함).
@@ -187,3 +188,4 @@ Length               ───────────────────�
 | 2026-10-02 | 액션 타임라인 Phase 2: Action Timeline 창(트랙 드래그 편집, 프레임 스크럽·재생, Scene 뷰 자세·칼날 궤적 미리보기), 검증 경고를 인스펙터 표시로 이동 |
 | 2026-10-06 | 피해 종류(물리/마법), `IDamageReducer`·방패 방어력 감소, 공격력·마법력은 장비 개체 능력치 기준, `MeleeAttacker` 판정 위치·반경 인스펙터 비노출 |
 | 2026-10-07 | 처치 보상(`KillReward`), 허수아비 가상 체력 처치 판정, 이펙트 풀 부모 폴더 |
+| 2026-10-07 | `Health.SetMaxHealth`, `KillReward.SetExperience`·`ClearContributors` (적 데이터 연동), 이펙트 Variant 위치 `Art/Prefabs/Effects` |
