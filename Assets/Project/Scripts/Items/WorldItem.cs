@@ -35,6 +35,20 @@ namespace ProjectFantasy.Items
             if (model == null) RefreshModel();
         }
 
+        // 필드에 아이템 생성 (버리기·적 드랍 공용), instance가 있으면 그 개체 그대로
+        public static WorldItem Spawn(WorldItem prefab, ItemData itemData, int itemCount, ItemInstance instance, Vector3 position, Quaternion rotation)
+        {
+            WorldItem worldItem = Instantiate(prefab, position, rotation);
+            if (instance != null) worldItem.Initialize(instance);
+            else worldItem.Initialize(itemData, itemCount);
+            return worldItem;
+        }
+
+        public static WorldItem Spawn(WorldItem prefab, in LootDrop drop, Vector3 position, Quaternion rotation)
+        {
+            return Spawn(prefab, drop.Item, drop.Count, drop.Instance, position, rotation);
+        }
+
         // 겹치는 아이템 버리기
         public void Initialize(ItemData itemData, int itemCount)
         {

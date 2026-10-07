@@ -8,8 +8,10 @@ namespace ProjectFantasy.Combat
     [DisallowMultipleComponent]
     public sealed class Health : MonoBehaviour, IDamageable
     {
+        private const int MinMaxHealth = 1;
+
         [Tooltip("최대 체력")]
-        [SerializeField, Min(1)] private int maxHealth = 100;
+        [SerializeField, Min(MinMaxHealth)] private int maxHealth = 100;
         [Tooltip("피격 후 무적 시간 (초, 허수아비는 0)")]
         [SerializeField, Min(0f)] private float invincibleDuration = 0.5f;
 
@@ -61,6 +63,13 @@ namespace ProjectFantasy.Combat
 
             CurrentHealth = Mathf.Min(maxHealth, CurrentHealth + amount);
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
+        }
+
+        // 데이터 기반 최대 체력 지정 (적 등), 현재 체력도 가득 채움
+        public void SetMaxHealth(int value)
+        {
+            maxHealth = Mathf.Max(MinMaxHealth, value);
+            RestoreFull();
         }
 
         // 최대 체력으로 복구 (사망 상태 포함, 리스폰·허수아비용)
