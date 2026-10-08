@@ -9,7 +9,7 @@
 | [PlayerController.cs](../../Assets/Project/Scripts/Player/PlayerController.cs) | 컴포넌트 조립, 상태 머신 구동, 카메라 기준 이동 벡터 계산, 체력/무기 이벤트 → 상태 전이 |
 | [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 액션 에셋에서 이름으로 액션 탐색, 공격/점프/줍기/퀵슬롯 선입력 버퍼, 메뉴 중 게임플레이 입력 차단 |
 | [PlayerMotor.cs](../../Assets/Project/Scripts/Player/PlayerMotor.cs) | CharacterController 이동, 가속/감속, 중력, 접지, 회전 |
-| [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 (상태 이름은 `PlayerAnimationData`) |
+| [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 (상태 이름은 `PlayerAnimationData`), 자세 고정은 `AnimatorPoseHold`(적과 공용) |
 | [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 **개체** 적용, 무기와 맞지 않는 보조 장비 비활성 ([Weapon](Weapon.md), [Inventory](Inventory.md)) |
 | [PlayerRangedWeapon.cs](../../Assets/Project/Scripts/Player/PlayerRangedWeapon.cs) / [PlayerAmmoVisual.cs](../../Assets/Project/Scripts/Player/PlayerAmmoVisual.cs) | 원거리 발사·장전 규칙, 화살 표시 ([Ranged Combat](RangedCombat.md)) |
 | [PlayerMagicCaster.cs](../../Assets/Project/Scripts/Player/PlayerMagicCaster.cs) | 마법 쿨타임·데미지 ([Magic](Magic.md)) |
@@ -161,3 +161,4 @@ flowchart LR
 | 2026-10-06 | 줍기·소모품 사용 상태, 퀵슬롯·줍기·인벤토리·줌 입력, 무기 순환 입력 삭제, 입력 액션 에셋 일괄 탐색, `PlayerAnimationData` 분리, 아이템·HUD Presenter |
 | 2026-10-07 | 무기 숙련도(`WeaponMastery`·`PlayerMasteryRewarder`), 숙련도 창 입력(K), 숙련 보너스가 공격력·마법력·방패 방어력에 반영, 숙련 부족 장비 장착 거부 |
 | 2026-10-07 | HUD 체력 상태바 연결 (`PlayerHudPresenter.healthBar`), 플레이어 버리기가 `WorldItem.Spawn` 사용 |
+| 2026-10-08 | 조준 자세 고정 로직을 `Utils/AnimatorPoseHold`로 분리 (동작 동일) |

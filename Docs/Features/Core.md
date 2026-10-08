@@ -8,16 +8,19 @@
 |---|---|
 | [IState.cs](../../Assets/Project/Scripts/Core/StateMachine/IState.cs) | 상태 인터페이스 (`Enter` / `Tick` / `Exit`) |
 | [StateMachine.cs](../../Assets/Project/Scripts/Core/StateMachine/StateMachine.cs) | 제네릭 상태 머신, 상태 전이만 담당 |
-| [IDamageable.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageable.cs) | 피해를 받을 수 있는 대상 (`IsAlive`, `TakeDamage`) |
+| [IDamageable.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageable.cs) | 피해를 받을 수 있는 대상 (`IsAlive`, `TakeDamage` → `DamageResult`) |
 | [IDamageBlocker.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageBlocker.cs) | 피해 적용 전 방어 여부 판정 (`TryBlock`), Health가 호출 |
 | [IDamageReducer.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageReducer.cs) | 피해 적용 직전 피해량 감소 (`Reduce`, 방어력 등), Health가 호출 |
 | [DamageType.cs](../../Assets/Project/Scripts/Core/Types/DamageType.cs) | `Physical` / `Magic` (방어력 종류 구분) |
+| [DamageResult.cs](../../Assets/Project/Scripts/Core/Types/DamageResult.cs) | `Applied` / `Blocked` / `Ignored` (투사체가 박힐지 튕길지 등 공격 측 반응 결정) |
 | [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자, 종류), `WithAmount` |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` 하위 계층 이름 탐색 (초기화 전용) |
 | [IKillRewardReceiver.cs](../../Assets/Project/Scripts/Core/Interfaces/IKillRewardReceiver.cs) | 처치 보상 수신 (`KillReward`가 호출, 플레이어는 숙련 경험치) |
 | [PrefabPool.cs](../../Assets/Project/Scripts/Utils/PrefabPool.cs) | 프리팹별 컴포넌트 풀 `PrefabPool<T>` (투사체·데미지 숫자 공용, 외부 파괴 인스턴스 건너뜀, `SetRoot`로 부모 지정) |
 | [PoolContainers.cs](../../Assets/Project/Scripts/Utils/PoolContainers.cs) / [PoolContainerMap.cs](../../Assets/Project/Scripts/Utils/PoolContainerMap.cs) | 풀 인스턴스 정리 폴더 `Pools/분류/프리팹 이름` 생성·캐시 |
 | [RendererExtensions.cs](../../Assets/Project/Scripts/Utils/RendererExtensions.cs) | `ApplySharedMaterial` (모델 전체 머티리얼 교체) |
+| [FloatRange.cs](../../Assets/Project/Scripts/Utils/FloatRange.cs) / [Editor/FloatRangeDrawer.cs](../../Assets/Project/Scripts/Utils/Editor/FloatRangeDrawer.cs) | 실수 랜덤 범위 (인스펙터 Min / Max 한 줄 표시) |
+| [AnimatorPoseHold.cs](../../Assets/Project/Scripts/Utils/AnimatorPoseHold.cs) / [AnimatorExtensions.cs](../../Assets/Project/Scripts/Utils/AnimatorExtensions.cs) | 상태가 지정 시점에 도달하면 Speed 파라미터로 자세 고정 (플레이어·적 공용) / `HasFloatParameter` |
 | [SubclassSelectorAttribute.cs](../../Assets/Project/Scripts/Utils/SubclassSelectorAttribute.cs) / [Editor/SubclassSelectorDrawer.cs](../../Assets/Project/Scripts/Utils/Editor/SubclassSelectorDrawer.cs) | `[SerializeReference]` 필드에 파생 타입 선택 드롭다운 (소모품 효과 등) |
 
 ## 동작 흐름
@@ -43,3 +46,4 @@
 | 2026-10-02 | `Utils/PrefabPool<T>` 추가 |
 | 2026-10-06 | `IDamageReducer`, `DamageType`, `DamageInfo.Type`·`WithAmount`, `Utils/SubclassSelector` 추가 |
 | 2026-10-07 | `IKillRewardReceiver`, `Utils/RendererExtensions`, 풀 부모 폴더(`PoolContainers`·`PoolContainerMap`, `PrefabPool.SetRoot`) 추가 |
+| 2026-10-08 | `DamageResult`(`IDamageable.TakeDamage` 반환), `Utils/FloatRange`·`AnimatorPoseHold`·`AnimatorExtensions` 추가 |

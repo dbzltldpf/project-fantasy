@@ -92,6 +92,7 @@ PlayerCastState
 6. **플레이어**: `PlayerMagicCaster`, `SpellCaster` 추가, 레이어 마스크 설정.
 
 ## 주의사항 / 확장 포인트
+- 플레이어 마법 에셋은 `Data/Player`, 적 전용 마법은 `Data/Enemy`에 따로 둔다 (예고 시간·쿨타임·이펙트 색을 독립 조절, [Enemy](Enemy.md)).
 - 새 마법은 `SpellData` 파생 에셋 추가 (예: 다른 이펙트·데미지의 직선/범위 마법). 새 형태(관통, 유도 등)는 `SpellData` 파생 클래스 + `PlayerCastState.Release` 분기 추가.
 - 적이 Default 레이어면 마법진이 적 위에 올라갈 수 있음 → 적 기능에서 Enemy 레이어 분리.
 - 예정: 마나 자원, 마법 습득·교체, 속성 효과(화상·빙결), 시전 사운드.
@@ -102,3 +103,4 @@ PlayerCastState
 | 2026-10-02 | 최초 작성 (Wand 직선 마법탄, Staff 지면 범위 마법·마법진 조준, 쿨타임, 마법서 배율, 시전 중 조준 해제) |
 | 2026-10-06 | 피해 기준을 마법력(개체 굴림)으로 변경, 마법 피해 종류, Staff 범위 마법 배율 1.5·쿨타임 3 |
 | 2026-10-07 | 무기·마법서 숙련 보너스를 마법 피해에 반영, 마법 이펙트 풀 부모 폴더(`Pools/Effects`, `SpellCaster.effectRoot`) |
+| 2026-10-08 | 마법 에셋 위치 `Data/Player`, 적 전용 마법(마법탄·예고형 범위 마법) 분리 |
