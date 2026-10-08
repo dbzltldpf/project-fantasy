@@ -25,6 +25,8 @@ namespace ProjectFantasy.Combat
         private float hitRadius = DefaultHitRadius;
 
         private readonly Collider[] hitBuffer = new Collider[HitBufferSize];
+        // hitBuffer와 같은 칸의 대상 (판정마다 콜라이더당 한 번만 조회)
+        private readonly IDamageable[] hitBufferTargets = new IDamageable[HitBufferSize];
         private readonly HashSet<IDamageable> hitTargets = new HashSet<IDamageable>();
         private readonly WeaponTrace weaponTrace = new WeaponTrace();
 
@@ -102,15 +104,23 @@ namespace ProjectFantasy.Combat
 
         private void ApplyHits(int hitCount, Vector3 referencePoint)
         {
+            // 각 칸의 대상을 먼저 한 번씩만 조회 (부위 콜라이더는 계층이 깊어 GetComponentInParent 비용이 큼)
             for (int i = 0; i < hitCount; i++)
             {
-                Collider hitCollider = hitBuffer[i];
-                IDamageable target = hitCollider.GetComponentInParent<IDamageable>();
+                hitBufferTargets[i] = hitBuffer[i].GetComponentInParent<IDamageable>();
+            }
+
+            // 대상마다 한 번: 그 대상의 콜라이더 중 기준점에 가장 가까운 것(맞은 부위)으로 피해 적용
+            for (int i = 0; i < hitCount; i++)
+            {
+                IDamageable target = hitBufferTargets[i];
                 if (target == null || target == owner || !target.IsAlive || !hitTargets.Add(target)) continue;
 
-                Vector3 hitPoint = hitCollider.ClosestPointOnBounds(referencePoint);
-                target.TakeDamage(new DamageInfo(currentDamage, hitPoint, GetHitDirection(hitPoint), gameObject));
-                ApplyHitStop(hitCollider);
+                Collider nearestCollider = HitColliderUtility.FindNearest(hitBuffer, hitBufferTargets, hitCount, target, referencePoint);
+
+                Vector3 hitPoint = nearestCollider.ClosestPoint(referencePoint);
+                target.TakeDamage(new DamageInfo(currentDamage, hitPoint, nearestCollider, GetHitDirection(hitPoint), gameObject));
+                ApplyHitStop(nearestCollider);
             }
         }
 

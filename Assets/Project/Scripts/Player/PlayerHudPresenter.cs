@@ -1,6 +1,5 @@
 using System;
 using ProjectFantasy.Combat;
-using ProjectFantasy.Combat;
 using ProjectFantasy.InventorySystem;
 using ProjectFantasy.Items;
 using ProjectFantasy.Mastery;

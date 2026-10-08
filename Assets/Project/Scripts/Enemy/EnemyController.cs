@@ -71,7 +71,7 @@ namespace ProjectFantasy.Enemy
             health = GetComponent<Health>();
             hitStop = GetComponent<HitStop>();
             killReward = GetComponent<KillReward>();
-            colliders = GetComponents<Collider>();
+            colliders = GetComponentsInChildren<Collider>();
 
             health.SetMaxHealth(data.MaxHealth);
             killReward.SetExperience(data.Experience);
