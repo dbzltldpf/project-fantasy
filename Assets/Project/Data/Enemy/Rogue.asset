@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7f6d63bc463b1848872453c2d7e55d4, type: 3}
-  m_Name: Minion
+  m_Name: Rogue
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyData
-  displayName: Minion
-  maxHealth: 60
-  attackPower: 8
-  experience: 30
-  weapon: {fileID: 11400000, guid: 3d2466bcd7bba2347ab9c34159dbed9e, type: 2}
+  displayName: Rogue
+  maxHealth: 50
+  attackPower: 10
+  experience: 40
+  weapon: {fileID: 11400000, guid: 7b6aaa4ac1166b74083d0379641d975d, type: 2}
   shield: {fileID: 0}
   defense: 0
   magicDefense: 0
@@ -33,11 +33,11 @@ MonoBehaviour:
     min: 2
     max: 5
   combatStyle:
-    rid: 1646186774573088924
+    rid: 1646186774573088921
   attackAngle: 40
   attackCooldownRange:
-    min: 1.2
-    max: 2
+    min: 0
+    max: 0
   staggerImmunity: 1
   hitReaction: {fileID: 11400000, guid: 3cd00a0767e8e7a40b89f18a7f9cbcbb, type: 2}
   attackRange: 1.8
@@ -57,6 +57,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1646186774573088924
-      type: {class: MeleeCombatStyle, ns: ProjectFantasy.Enemy, asm: Assembly-CSharp}
-      data: 
+    - rid: 1646186774573088921
+      type: {class: ShooterCombatStyle, ns: ProjectFantasy.Enemy, asm: Assembly-CSharp}
+      data:
+        attackRange: 14
+        targetHeight: 1.2
+        spreadAngle: 3
+        aimDuration: 0
