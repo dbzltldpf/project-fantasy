@@ -1,5 +1,6 @@
 using ProjectFantasy.Combat;
 using ProjectFantasy.Items;
+using ProjectFantasy.Utils;
 using ProjectFantasy.Weapon;
 using UnityEngine;
 
@@ -9,6 +10,9 @@ namespace ProjectFantasy.Enemy
     [CreateAssetMenu(fileName = "EnemyData", menuName = "ProjectFantasy/Enemy/Enemy Data")]
     public sealed class EnemyData : ScriptableObject
     {
+        // 전투 방식을 비워 둔 기존 적 데이터는 근접
+        private static readonly MeleeCombatStyle DefaultMeleeStyle = new MeleeCombatStyle();
+
         [Header("Info")]
         [SerializeField] private string displayName = "Skeleton";
         [Tooltip("최대 체력")]
@@ -47,23 +51,27 @@ namespace ProjectFantasy.Enemy
         [Tooltip("스폰 지점 주변 배회 반경 (m)")]
         [SerializeField, Min(0f)] private float patrolRadius = 6f;
         [Tooltip("배회 지점 사이 대기 시간 범위 (초)")]
-        [SerializeField] private Vector2 idleTimeRange = new Vector2(2f, 5f);
+        [SerializeField] private FloatRange idleTimeRange = new FloatRange(2f, 5f);
 
         [Header("Combat")]
-        [Tooltip("이 거리 안이면 공격 (m)")]
-        [SerializeField, Min(0f)] private float attackRange = 1.8f;
+        [Tooltip("전투 방식 (비우면 근접): Melee / Shooter(활·석궁) / Caster(마법)")]
+        [SerializeReference, SubclassSelector] private EnemyCombatStyle combatStyle;
         [Tooltip("대상이 정면 이 각도 안에 들어와야 공격 시작 (전체 각도)")]
         [SerializeField, Range(0f, 360f)] private float attackAngle = 40f;
         [Tooltip("공격 후 다음 공격까지 대기 시간 범위 (초)")]
-        [SerializeField] private Vector2 attackCooldownRange = new Vector2(1.2f, 2f);
-        [Tooltip("한 번에 이어 치는 최대 콤보 수 (무기 콤보 길이 이하)")]
-        [SerializeField, Min(1)] private int maxComboActions = 2;
+        [SerializeField] private FloatRange attackCooldownRange = new FloatRange(1.2f, 2f);
         [Tooltip("경직 후 이 시간 동안은 다시 맞아도 경직되지 않음 (무한 경직 방지, 초)")]
         [SerializeField, Min(0f)] private float staggerImmunity = 1f;
         [Tooltip("피격 경직·넉백")]
         [SerializeField] private HitReactionData hitReaction;
 
-        [Header("Guard (방패가 있을 때만)")]
+        [Header("Melee (근접 방식)")]
+        [Tooltip("이 거리 안이면 공격 (m)")]
+        [SerializeField, Min(0f)] private float attackRange = 1.8f;
+        [Tooltip("한 번에 이어 치는 최대 콤보 수 (무기 콤보 길이 이하)")]
+        [SerializeField, Min(1)] private int maxComboActions = 2;
+
+        [Header("Guard (근접 + 방패가 있을 때만)")]
         [SerializeField] private EnemyGuardSettings guard = new EnemyGuardSettings();
 
         [Header("Spawn & Death")]
@@ -95,6 +103,7 @@ namespace ProjectFantasy.Enemy
         public float RunSpeed => runSpeed;
         public float TurnSpeed => turnSpeed;
         public float PatrolRadius => patrolRadius;
+        public EnemyCombatStyle CombatStyle => combatStyle ?? DefaultMeleeStyle;
         public float AttackRange => attackRange;
         public float AttackAngle => attackAngle;
         public int MaxComboActions => maxComboActions;
@@ -107,7 +116,7 @@ namespace ProjectFantasy.Enemy
         public EnemyAnimationData AnimationData => animationData;
         public AttackComboData ComboData => weapon != null ? weapon.ComboData : null;
 
-        public float RollIdleTime() => Random.Range(idleTimeRange.x, idleTimeRange.y);
-        public float RollAttackCooldown() => Random.Range(attackCooldownRange.x, attackCooldownRange.y);
+        public float RollIdleTime() => idleTimeRange.Random();
+        public float RollAttackCooldown() => attackCooldownRange.Random();
     }
 }

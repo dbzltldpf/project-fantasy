@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.Health
   maxHealth: 100
-  invincibleDuration: 0.5
+  invincibleDuration: 0.1
 --- !u!114 &6790462095216851705
 MonoBehaviour:
   m_ObjectHideFlags: 0

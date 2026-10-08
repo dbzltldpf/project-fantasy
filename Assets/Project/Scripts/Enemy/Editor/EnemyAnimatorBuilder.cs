@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ProjectFantasy.EnemyEditor
 {
-    // 선택한 EnemyData에 필요한 상태(이동·피격·사망·등장·막기·무기 콤보·반격)를 모아 Animator Controller 생성
+    // 선택한 EnemyData에 필요한 상태(이동·피격·사망·등장·막기 + 전투 방식별 공격 상태)를 모아 Animator Controller 생성
     // 상태 이름 = 클립 이름, 전이선 없음 (EnemyAnimator가 이름으로 CrossFade), 다시 실행하면 같은 에셋을 갱신
     public static class EnemyAnimatorBuilder
     {
@@ -18,7 +18,7 @@ namespace ProjectFantasy.EnemyEditor
         private const string ControllerFolder = "Assets/Project/Animation/Controller";
         private const string ControllerPrefix = "Enemy_";
         private const string ControllerExtension = ".controller";
-        private const float DefaultActionSpeed = 1f;
+        private const float DefaultParameterSpeed = 1f;
         private const int BaseLayerIndex = 0;
 
         [MenuItem(MenuPath)]
@@ -62,19 +62,26 @@ namespace ProjectFantasy.EnemyEditor
                 AddState(state, null, clipsByName, stateNames, stateClips);
             }
 
-            if (data.ComboData != null)
+            // 전투 방식별 상태 (근접 콤보·반격 / 조준·발사·장전 / 마법 시전)
+            List<string> styleStates = new List<string>();
+            List<ActionData> styleActions = new List<ActionData>();
+            data.CombatStyle.CollectAnimationStates(data, styleStates, styleActions);
+            HashSet<string> holdStates = new HashSet<string>();
+            data.CombatStyle.CollectHoldStates(data, holdStates);
+            foreach (string state in styleStates)
             {
-                for (int i = 0; i < data.ComboData.ActionCount; i++)
-                {
-                    AddAction(data.ComboData.GetAction(i), clipsByName, stateNames, stateClips, actionStates);
-                }
+                AddState(state, null, clipsByName, stateNames, stateClips);
             }
-            if (data.HasShield) AddAction(data.Guard.CounterAction, clipsByName, stateNames, stateClips, actionStates);
+            foreach (ActionData action in styleActions)
+            {
+                AddAction(action, clipsByName, stateNames, stateClips, actionStates);
+            }
 
             AnimatorController controller = LoadOrCreateController(data);
             AnimatorStateMachine stateMachine = controller.layers[BaseLayerIndex].stateMachine;
             ClearStates(stateMachine);
-            EnsureActionSpeedParameter(controller, data.AnimationData.ActionSpeedParameter);
+            EnsureFloatParameter(controller, data.AnimationData.ActionSpeedParameter);
+            EnsureFloatParameter(controller, data.AnimationData.PoseSpeedParameter);
 
             StringBuilder missing = new StringBuilder();
             foreach (string stateName in stateNames)
@@ -86,6 +93,11 @@ namespace ProjectFantasy.EnemyEditor
                 if (actionStates.Contains(stateName))
                 {
                     state.speedParameter = data.AnimationData.ActionSpeedParameter;
+                    state.speedParameterActive = true;
+                }
+                else if (holdStates.Contains(stateName))
+                {
+                    state.speedParameter = data.AnimationData.PoseSpeedParameter;
                     state.speedParameterActive = true;
                 }
                 if (stateName == idleState) stateMachine.defaultState = state;
@@ -147,7 +159,7 @@ namespace ProjectFantasy.EnemyEditor
             }
         }
 
-        private static void EnsureActionSpeedParameter(AnimatorController controller, string parameterName)
+        private static void EnsureFloatParameter(AnimatorController controller, string parameterName)
         {
             foreach (AnimatorControllerParameter parameter in controller.parameters)
             {
@@ -158,7 +170,7 @@ namespace ProjectFantasy.EnemyEditor
             {
                 name = parameterName,
                 type = AnimatorControllerParameterType.Float,
-                defaultFloat = DefaultActionSpeed
+                defaultFloat = DefaultParameterSpeed
             });
         }
     }

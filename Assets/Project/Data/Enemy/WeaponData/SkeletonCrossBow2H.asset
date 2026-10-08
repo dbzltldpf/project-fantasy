@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3e9a41d5b84f2e9a6d0c1b8f4e2a73, type: 3}
+  m_Name: SkeletonCrossBow2H
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
+  displayName: "\uC591\uC190\uC11D\uAD81"
+  icon: {fileID: 0}
+  description: 
+  maxStack: 1
+  worldModelPrefab: {fileID: 0}
+  modelPrefab: {fileID: 4742402621767238529, guid: 6adfddfbcaf7caf4daa79a659c56f1a4, type: 3}
+  gripPosition: {x: 0, y: 0, z: 0}
+  gripRotation: {x: 0, y: 260, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 11400000, guid: 6326392dfec0dec4d914bd5355520efb, type: 2}
+  gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
+  weaponType: 6
+  gripHand: 0
+  occupiesOffHand: 1
+  allowsShield: 1
+  attackPowerRange:
+    min: 26
+    max: 34
+  comboData: {fileID: 0}
+  hitOffset: {x: 0, y: 1, z: 1}
+  hitRadius: 0.8
+  bladeBase: {x: 0, y: 0, z: 0}
+  bladeTip: {x: 0, y: 0, z: 0}
+  bladeRadius: 0.1
+  idleStateName: Idle_A
+  ammo: {fileID: 11400000, guid: 5e28021103141734fb9b4e419ac706ef, type: 2}
+  canAim: 1
+  requiresReload: 1
+  muzzleOffset: {x: 0.2, y: 1.4, z: 0.6}
+  launchSpeed: 50
+  windupStateName: 
+  windupDuration: 0
+  fireStateName: Ranged_2H_Shoot
+  releaseTime: 0.05
+  fireDuration: 1
+  aimIdleStateName: Ranged_2H_Aiming
+  aimHoldTime: 1
+  reloadStateName: Ranged_2H_Reload
+  reloadDuration: 1.6
+  loadedAmmoPosition: {x: 0, y: 0.197, z: 0.586}
+  loadedAmmoRotation: {x: 0, y: 0, z: 0}

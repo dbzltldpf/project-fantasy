@@ -29,13 +29,19 @@ MonoBehaviour:
   runSpeed: 4
   turnSpeed: 540
   patrolRadius: 6
-  idleTimeRange: {x: 2, y: 5}
-  attackRange: 1.8
+  idleTimeRange:
+    min: 2
+    max: 5
+  combatStyle:
+    rid: 1646186774573088924
   attackAngle: 40
-  attackCooldownRange: {x: 1.2, y: 2}
-  maxComboActions: 2
+  attackCooldownRange:
+    min: 1.2
+    max: 2
   staggerImmunity: 1
   hitReaction: {fileID: 11400000, guid: 3cd00a0767e8e7a40b89f18a7f9cbcbb, type: 2}
+  attackRange: 1.8
+  maxComboActions: 2
   guard:
     guardChance: 0.35
     reactiveGuardChance: 0.5
@@ -48,3 +54,9 @@ MonoBehaviour:
   corpseDuration: 3
   dropTable: {fileID: 11400000, guid: a4e80646fc366a5428ec1e59d0acfcf1, type: 2}
   animationData: {fileID: 11400000, guid: 5e02fbc499e42d34abe3746821056786, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1646186774573088924
+      type: {class: MeleeCombatStyle, ns: ProjectFantasy.Enemy, asm: Assembly-CSharp}
+      data: 

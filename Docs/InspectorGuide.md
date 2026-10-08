@@ -287,19 +287,34 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 ---
 
 ## 적 (EnemyData)
-`Create → ProjectFantasy → Enemy → Enemy Data`. 공용 상태 이름은 `Enemy Animation Data` 한 개를 모든 적이 공유한다.
+`Create → ProjectFantasy → Enemy → Enemy Data`. 공용 상태 이름은 `Enemy Animation Data` 한 개를 모든 적이 공유한다. 범위 값(Min ~ Max)은 한 줄로 입력한다.
 
-| 묶음 | 필드 | 하는 일 | Minion / Warrior |
+| 묶음 | 필드 | 하는 일 | Minion / Warrior / Rogue / Mage |
 |---|---|---|---|
-| Info | Max Health / Attack Power / Experience | 체력 / 공격력(× 액션 피해 배율) / 처치 경험치 | 60·8·30 / 120·12·60 |
-| Equipment | Weapon / Shield / Defense / Magic Defense | 무기·방패 데이터 재사용, 방어력은 고정값 | SkeletonAxe / SkeletonBlade + SkeletonShield·20·5 |
+| Info | Max Health / Attack Power / Experience | 체력 / 공격력(× 액션·마법 피해 배율) / 처치 경험치 | 60·8·30 / 120·12·60 / 50·10·40 / 42·12·45 |
+| Equipment | Weapon / Shield / Defense / Magic Defense | 무기·방패 데이터 재사용, 방어력은 고정값 | SkeletonAxe / SkeletonBlade + SkeletonShield·20·5 / SkeletonCrossBow2H / SkeletonStaff |
 | Perception | Sight Range / Sight Angle | 감지 거리 / 각도 (360 = 등 뒤도 감지) | 10 / 360 |
 | Perception | Lose Range / Provoked Duration / Leash Range | 추적 포기 거리 / 맞은 뒤 거리 무관 추적 시간 / 스폰 지점 귀환 거리 | 18 / 5 / 25 |
 | Movement | Walk / Run / Turn Speed, Patrol Radius, Idle Time Range | 이동·회전, 배회 | 1.5 / 4 / 540, 6, 2~5 |
-| Combat | Attack Range / Attack Angle / Attack Cooldown Range | 공격 거리 / 정면 각도 / 쿨타임 | 1.8 / 40 / 1.2~2 |
-| Combat | Max Combo Actions / Stagger Immunity / Hit Reaction | 연속 공격 수 / 경직 면역 / 경직·넉백 | 2·1 / 3·1, `HitReactionData` |
-| Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (방패 있을 때만) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
+| Combat | **Combat Style** | 전투 방식 드롭다운 (비우면 근접) | Melee / Melee / Shooter / Caster |
+| Combat | Attack Angle / Attack Cooldown Range | 공격 시작 정면 각도 / 공격 후 쿨타임 | 40 / 1.2~2 · 1.2~2 · 0~0 · 1~1.5 |
+| Combat | Stagger Immunity / Hit Reaction | 경직 면역 / 경직·넉백 | 1, `HitReactionData` |
+| Melee | Attack Range / Max Combo Actions | 근접 공격 거리 / 공격마다 1 ~ 이 값 중 무작위 타수 | 1.8 / 2 · 3 |
+| Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (근접 + 방패) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
 | Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 | 1.5 / 3 / 종류별 표 |
+
+### 전투 방식 (Combat Style) 값
+| 방식 | 필드 | 하는 일 | 넣을 값 |
+|---|---|---|---|
+| Shooter·Caster 공통 | Attack Range | 이보다 멀면 접근, 안이면 제자리 공격 (물러나지 않음) | Rogue 14 / Mage 15 |
+| Shooter·Caster 공통 | Target Height / Spread Angle | 조준 높이(대상 발 기준) / 탄 퍼짐(도) | 1.2 / 3 |
+| Shooter | Aim Duration | 조준 클립이 끝난 뒤 자세 유지 시간 (피할 여유) | 0~0.5 |
+| Caster | Cast Offset | 마법탄 발사 위치 (적 로컬) | (0, 1.5, 0.6) |
+| Caster | Spells (Spell / Weight) | 사용할 마법과 선택 가중치 (쿨타임이 끝난 마법끼리) | 적 전용 마법탄 3, `EnemyAreaSpell` 1 |
+
+- 사격 무기(`SkeletonCrossBow2H`)는 **Idle State Name = Idle_A**, Aim Hold Time 1 (석궁 조준 클립은 반복 없이 끝 자세로 멈춤).
+- 적 전용 범위 마법은 **Activation Delay 1.2 이상** (마법진을 보고 피할 시간).
+- 마법·무기를 바꾸면 `Create Enemy Animator`를 다시 실행.
 
 ## 드랍 표 (DropTable)
 `Create → ProjectFantasy → Items → Drop Table`. 줄마다 독립 확률로 판정한다.
@@ -356,12 +371,14 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 
 | 컴포넌트 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|---|
-| EnemyController | **Data** | 적 종류 | `Minion` / `Warrior` |
+| EnemyController | **Data** | 적 종류 (프리팹 복제 시 꼭 바꿀 것) | `Minion` / `Warrior` / `Rogue` / `Mage` |
 | EnemyPerception | **Target Layers** / **Obstacle Layers** | 감지 대상 / 시야 가림 | Player / Default (캐릭터 제외) |
 | EnemyPerception | Eye Height / Scan Interval | 가림 판정 높이 / 감지 간격 | 1.5 / 0.2 |
 | MeleeAttacker | **Target Layers** | 타격 대상 | **Player** (다른 적을 때리지 않게) |
 | NavMeshAgent | Radius / Height / Base Offset | 길찾기 크기 / 발 높이 보정 | 0.4 / 2 / 플레이 중 확인 후 조정 |
 | CapsuleCollider (직접 추가) | Center / Height / Radius | 피격 판정 | (0, 1, 0) / 2 / 0.4 |
+| RangedAttacker (Rogue·Mage, 직접 추가) | Aim / Projectile Hit Layers | 화살·마법탄 조준·충돌 | Everything − Enemy·Projectile·Interactable |
+| SpellCaster (Mage, 직접 추가) | Area Damage / Ground Layers | 범위 마법 피해 대상 / 마법진 지면 | Everything − Enemy / Default |
 | DamageNumberEmitter · EnemyLoot (직접 추가) | World Item Prefab (Loot) | 데미지 숫자 / 드랍 | `Prefabs/WorldItem` |
 | 자식: Skeleton 모델 | Animator Controller | 상태 재생 | `Create Enemy Animator` 결과 |
 | 자식: EnemyHealthBar | Hide Delay | 전투 종료 후 체력바 유지 | 4 |

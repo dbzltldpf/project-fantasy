@@ -84,17 +84,19 @@ namespace ProjectFantasy.Combat
 
         private void HandleHit(in RaycastHit hit, Vector3 velocity)
         {
+            DamageResult result = DamageResult.Ignored;
             IDamageable target = hit.collider.GetComponentInParent<IDamageable>();
             if (target != null)
             {
                 Vector3 direction = velocity;
                 direction.y = 0f;
-                target.TakeDamage(new DamageInfo(shot.Damage, hit.point, direction.normalized, shot.Instigator, shot.DamageType));
+                result = target.TakeDamage(new DamageInfo(shot.Damage, hit.point, direction.normalized, shot.Instigator, shot.DamageType));
             }
 
             if (owner != null) owner.PlayImpactEffect(profile, hit.point, hit.normal);
 
-            if (profile.StickOnHit) StickTo(hit.collider.transform, hit.point, Quaternion.LookRotation(velocity));
+            // 방패에 막히면 몸에 박히지 않고 튕겨 나감 (풀 반환)
+            if (profile.StickOnHit && result != DamageResult.Blocked) StickTo(hit.collider.transform, hit.point, Quaternion.LookRotation(velocity));
             else Release();
         }
 

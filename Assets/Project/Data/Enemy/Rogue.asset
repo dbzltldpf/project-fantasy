@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f6d63bc463b1848872453c2d7e55d4, type: 3}
+  m_Name: Rogue
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyData
+  displayName: Rogue
+  maxHealth: 50
+  attackPower: 10
+  experience: 40
+  weapon: {fileID: 11400000, guid: 7b6aaa4ac1166b74083d0379641d975d, type: 2}
+  shield: {fileID: 0}
+  defense: 0
+  magicDefense: 0
+  sightRange: 10
+  sightAngle: 360
+  loseRange: 18
+  provokedDuration: 5
+  leashRange: 25
+  walkSpeed: 1.5
+  runSpeed: 4
+  turnSpeed: 540
+  patrolRadius: 6
+  idleTimeRange:
+    min: 2
+    max: 5
+  combatStyle:
+    rid: 1646186774573088921
+  attackAngle: 40
+  attackCooldownRange:
+    min: 0
+    max: 0
+  staggerImmunity: 1
+  hitReaction: {fileID: 11400000, guid: 3cd00a0767e8e7a40b89f18a7f9cbcbb, type: 2}
+  attackRange: 1.8
+  maxComboActions: 2
+  guard:
+    guardChance: 0.35
+    reactiveGuardChance: 0.5
+    guardDuration: 1.5
+    guardCooldown: 4
+    guardMoveSpeed: 0.8
+    counterChance: 0.5
+    counterAction: {fileID: 0}
+  spawnDuration: 1.5
+  corpseDuration: 3
+  dropTable: {fileID: 11400000, guid: a4e80646fc366a5428ec1e59d0acfcf1, type: 2}
+  animationData: {fileID: 11400000, guid: 5e02fbc499e42d34abe3746821056786, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1646186774573088921
+      type: {class: ShooterCombatStyle, ns: ProjectFantasy.Enemy, asm: Assembly-CSharp}
+      data:
+        attackRange: 14
+        targetHeight: 1.2
+        spreadAngle: 3
+        aimDuration: 0

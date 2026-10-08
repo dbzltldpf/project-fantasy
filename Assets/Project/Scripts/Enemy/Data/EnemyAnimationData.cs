@@ -9,6 +9,8 @@ namespace ProjectFantasy.Enemy
         [Header("Parameters")]
         [Tooltip("공격 상태의 Speed Multiplier로 연결한 Float 파라미터 (ActionData 재생 속도)")]
         [SerializeField] private string actionSpeedParameter = "ActionSpeed";
+        [Tooltip("조준 대기 상태의 Speed Multiplier로 연결한 Float 파라미터 (자세 고정)")]
+        [SerializeField] private string poseSpeedParameter = "PoseSpeed";
 
         [Header("States (애니메이터 상태 이름 = 클립 이름)")]
         [Tooltip("무기 대기 모션이 없을 때 기본 대기")]
@@ -35,6 +37,7 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Min(0f)] private float actionCrossFade = 0.1f;
 
         public string ActionSpeedParameter => actionSpeedParameter;
+        public string PoseSpeedParameter => poseSpeedParameter;
         public string DefaultIdleState => defaultIdleState;
         public string WalkState => walkState;
         public string RunState => runState;
