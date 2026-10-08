@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ProjectFantasy.Utils;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -9,11 +10,7 @@ namespace ProjectFantasy.Player
     public sealed class PlayerAnimator : MonoBehaviour
     {
         private const int BaseLayerIndex = 0;
-        private const int NoState = 0;
         private const float StartTimeOffset = 0f;
-        private const float NormalPoseSpeed = 1f;
-        private const float FrozenPoseSpeed = 0f;
-        private const float NoHoldTime = 1f;
 
         [Tooltip("비우면 자식에서 자동 탐색")]
         [SerializeField] private Animator animator;
@@ -34,13 +31,9 @@ namespace ProjectFantasy.Player
         private int strafeRightHash;
         private int currentStateHash;
 
-        private int poseSpeedHash;
-        private bool hasPoseSpeedParameter;
+        private AnimatorPoseHold poseHold;
         private int actionSpeedHash;
         private bool hasActionSpeedParameter;
-        private int holdStateHash = NoState;
-        private float holdNormalizedTime;
-        private bool isPoseFrozen;
 
         private void Reset()
         {
@@ -65,26 +58,15 @@ namespace ProjectFantasy.Player
             strafeLeftHash = Animator.StringToHash(data.StrafeLeftState);
             strafeRightHash = Animator.StringToHash(data.StrafeRightState);
 
-            poseSpeedHash = Animator.StringToHash(data.PoseSpeedParameter);
-            hasPoseSpeedParameter = HasFloatParameter(poseSpeedHash);
+            poseHold = new AnimatorPoseHold(animator, Animator.StringToHash(data.PoseSpeedParameter));
             actionSpeedHash = Animator.StringToHash(data.ActionSpeedParameter);
-            hasActionSpeedParameter = HasFloatParameter(actionSpeedHash);
+            hasActionSpeedParameter = animator.HasFloatParameter(actionSpeedHash);
 
             ValidateBaseStates();
         }
 
         // 조준 대기 상태가 지정 지점에 도달하면 자세 고정
-        private void Update()
-        {
-            if (holdStateHash == NoState || isPoseFrozen || !hasPoseSpeedParameter) return;
-            if (animator.IsInTransition(BaseLayerIndex)) return;
-
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(BaseLayerIndex);
-            if (stateInfo.shortNameHash != holdStateHash || stateInfo.normalizedTime < holdNormalizedTime) return;
-
-            animator.SetFloat(poseSpeedHash, FrozenPoseSpeed);
-            isPoseFrozen = true;
-        }
+        private void Update() => poseHold.Tick();
 
         // 무기 종류별 대기 모션 교체 (다음 PlayLocomotion에서 반영)
         public void SetIdleState(int stateHash) => idleHash = stateHash;
@@ -125,11 +107,7 @@ namespace ProjectFantasy.Player
                 : (localVelocity.x >= 0f ? strafeRightHash : strafeLeftHash);
             CrossFade(targetHash, data.LocomotionCrossFade, false);
 
-            if (targetHash == aimIdleHash && holdNormalizedTime < NoHoldTime)
-            {
-                holdStateHash = aimIdleHash;
-                this.holdNormalizedTime = holdNormalizedTime;
-            }
+            if (targetHash == aimIdleHash) poseHold.Hold(aimIdleHash, holdNormalizedTime);
         }
 
         // 누락된 상태를 이름으로 보고 (릴리즈 빌드에서는 호출 제거)
@@ -157,7 +135,7 @@ namespace ProjectFantasy.Player
             ValidateState(data.BlockHitState);
             ValidateState(data.PickUpState);
 
-            if (!hasPoseSpeedParameter)
+            if (!poseHold.IsAvailable)
             {
                 Debug.LogWarning($"[{nameof(PlayerAnimator)}] Float 파라미터 '{data.PoseSpeedParameter}'가 없어 조준 자세 고정이 비활성화됩니다.", this);
             }
@@ -172,28 +150,9 @@ namespace ProjectFantasy.Player
         {
             if (!restart && stateHash == currentStateHash) return;
 
-            ReleasePoseHold();
+            poseHold.Release();
             currentStateHash = stateHash;
             animator.CrossFadeInFixedTime(stateHash, duration, BaseLayerIndex, StartTimeOffset);
-        }
-
-        private void ReleasePoseHold()
-        {
-            holdStateHash = NoState;
-            if (!isPoseFrozen) return;
-
-            animator.SetFloat(poseSpeedHash, NormalPoseSpeed);
-            isPoseFrozen = false;
-        }
-
-        // 초기화 시 1회 (parameters는 배열 할당)
-        private bool HasFloatParameter(int parameterHash)
-        {
-            foreach (AnimatorControllerParameter parameter in animator.parameters)
-            {
-                if (parameter.nameHash == parameterHash && parameter.type == AnimatorControllerParameterType.Float) return true;
-            }
-            return false;
         }
     }
 }

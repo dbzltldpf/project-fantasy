@@ -37,14 +37,14 @@ namespace ProjectFantasy.Combat
         }
 
         // 방어(가드) → 방어력 감소 → 적용 순서, Damaged에는 감소 후 피해량 전달
-        public void TakeDamage(in DamageInfo damageInfo)
+        public DamageResult TakeDamage(in DamageInfo damageInfo)
         {
-            if (!IsAlive || IsInvincible || damageInfo.Amount <= 0) return;
+            if (!IsAlive || IsInvincible || damageInfo.Amount <= 0) return DamageResult.Ignored;
 
             if (damageBlocker != null && damageBlocker.TryBlock(damageInfo))
             {
                 Blocked?.Invoke(damageInfo);
-                return;
+                return DamageResult.Blocked;
             }
 
             DamageInfo applied = damageReducer != null ? damageInfo.WithAmount(damageReducer.Reduce(damageInfo)) : damageInfo;
@@ -55,6 +55,7 @@ namespace ProjectFantasy.Combat
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
             Damaged?.Invoke(applied);
             if (!IsAlive) Died?.Invoke();
+            return DamageResult.Applied;
         }
 
         public void Heal(int amount)

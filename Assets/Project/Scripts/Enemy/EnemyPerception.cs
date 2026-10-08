@@ -83,6 +83,9 @@ namespace ProjectFantasy.Enemy
 
         public float GetDistanceToTarget() => GetDirectionToTarget().magnitude;
 
+        // 원거리 공격 전 사선 확인 (지형·벽에 가리면 false)
+        public bool HasLineOfSightToTarget() => Target != null && HasClearLine(Target);
+
         // 공격받은 직후에는 추적 포기 거리를 무시 (리쉬는 EnemyController가 판정)
         private bool IsTargetValid()
         {
@@ -120,6 +123,11 @@ namespace ProjectFantasy.Enemy
         {
             if (Vector3.Angle(transform.forward, flatDirection) > sightHalfAngle) return false;
 
+            return HasClearLine(candidate);
+        }
+
+        private bool HasClearLine(Transform candidate)
+        {
             Vector3 eye = transform.position + Vector3.up * eyeHeight;
             Vector3 targetEye = candidate.position + Vector3.up * eyeHeight;
             return !Physics.Linecast(eye, targetEye, obstacleLayers, QueryTriggerInteraction.Ignore);

@@ -4,6 +4,6 @@ namespace ProjectFantasy.Core
     public interface IDamageable
     {
         bool IsAlive { get; }
-        void TakeDamage(in DamageInfo damageInfo);
+        DamageResult TakeDamage(in DamageInfo damageInfo);
     }
 }

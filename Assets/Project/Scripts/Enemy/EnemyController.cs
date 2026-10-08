@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Core;
+using ProjectFantasy.Magic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace ProjectFantasy.Enemy
 {
@@ -34,18 +35,23 @@ namespace ProjectFantasy.Enemy
         public EnemyPerception Perception { get; private set; }
         public EnemyLoadout Loadout { get; private set; }
         public MeleeAttacker Attacker { get; private set; }
+        // 원거리·마법 방식에서만 사용 (없으면 null)
+        public RangedAttacker RangedAttacker { get; private set; }
+        public SpellCaster SpellCaster { get; private set; }
         public Health Health => health;
         public Vector3 HomePosition { get; private set; }
 
         public bool IsBeyondLeash => (transform.position - HomePosition).sqrMagnitude > data.LeashRange * data.LeashRange;
         public bool CanGuard => data.HasShield && Time.time >= nextGuardTime;
-        private bool CanAttack => data.ComboData != null && data.ComboData.ActionCount > 0 && Time.time >= nextAttackTime;
+        public bool IsAttackReady => Time.time >= nextAttackTime;
 
         public EnemySpawnState SpawnState { get; private set; }
         public EnemyPatrolState PatrolState { get; private set; }
         public EnemyChaseState ChaseState { get; private set; }
         public EnemyAttackState AttackState { get; private set; }
         public EnemyGuardState GuardState { get; private set; }
+        public EnemyShootState ShootState { get; private set; }
+        public EnemyCastState CastState { get; private set; }
         public EnemyHitState HitState { get; private set; }
         public EnemyReturnState ReturnState { get; private set; }
         public EnemyDeadState DeadState { get; private set; }
@@ -60,6 +66,8 @@ namespace ProjectFantasy.Enemy
             Perception = GetComponent<EnemyPerception>();
             Loadout = GetComponent<EnemyLoadout>();
             Attacker = GetComponent<MeleeAttacker>();
+            RangedAttacker = GetComponent<RangedAttacker>();
+            SpellCaster = GetComponent<SpellCaster>();
             health = GetComponent<Health>();
             hitStop = GetComponent<HitStop>();
             killReward = GetComponent<KillReward>();
@@ -138,19 +146,11 @@ namespace ProjectFantasy.Enemy
             nextAttackTime = 0f;
             nextGuardTime = 0f;
             staggerImmuneEndTime = 0f;
+            CastState.ResetCooldowns();
         }
 
-        // 공격 거리 안: 막기(확률) 또는 정면이면 공격
-        public void TryStartCombatAction()
-        {
-            if (CanGuard && Random.value < data.Guard.GuardChance)
-            {
-                ChangeState(GuardState);
-                return;
-            }
-
-            if (CanAttack && IsFacingTarget()) ChangeState(AttackState);
-        }
+        // 유지 거리 안에서 대상을 바라보는 중: 전투 방식이 공격·막기·사격·시전 결정
+        public void TryStartCombatAction() => data.CombatStyle.TryStartAttack(this);
 
         public void StartCounter(ActionData action)
         {
@@ -172,7 +172,7 @@ namespace ProjectFantasy.Enemy
             }
         }
 
-        private bool IsFacingTarget()
+        public bool IsFacingTarget()
         {
             return Vector3.Angle(transform.forward, Perception.GetDirectionToTarget()) <= data.AttackAngle / HalfAngleDivisor;
         }
@@ -184,6 +184,8 @@ namespace ProjectFantasy.Enemy
             ChaseState = new EnemyChaseState(this);
             AttackState = new EnemyAttackState(this);
             GuardState = new EnemyGuardState(this);
+            ShootState = new EnemyShootState(this);
+            CastState = new EnemyCastState(this);
             HitState = new EnemyHitState(this);
             ReturnState = new EnemyReturnState(this);
             DeadState = new EnemyDeadState(this);
@@ -222,12 +224,20 @@ namespace ProjectFantasy.Enemy
             }
 
             if (data.Weapon != null) EnemyAnimator.ValidateState(data.Weapon.IdleStateName);
-            if (data.Guard.CounterAction != null && data.HasShield) EnemyAnimator.ValidateState(data.Guard.CounterAction.StateName);
-            if (data.ComboData == null) return;
 
-            for (int i = 0; i < data.ComboData.ActionCount; i++)
+            string styleError = data.CombatStyle.Validate(this);
+            if (styleError != null) UnityEngine.Debug.LogError($"[{name}] '{data.name}': {styleError}", data);
+
+            // 검증 전용 (에디터·개발 빌드에서 시작 시 1회)
+            List<string> states = new List<string>();
+            List<ActionData> actions = new List<ActionData>();
+            data.CombatStyle.CollectAnimationStates(data, states, actions);
+            foreach (string state in states)
             {
-                ActionData action = data.ComboData.GetAction(i);
+                EnemyAnimator.ValidateState(state);
+            }
+            foreach (ActionData action in actions)
+            {
                 if (action != null) EnemyAnimator.ValidateState(action.StateName);
             }
         }
