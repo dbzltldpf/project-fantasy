@@ -17,6 +17,7 @@ namespace ProjectFantasy.Combat
 
         private IDamageBlocker damageBlocker;
         private IDamageReducer damageReducer;
+        private IDamageMultiplier damageMultiplier;
         private float invincibleEndTime;
 
         public int MaxHealth => maxHealth;
@@ -34,11 +35,18 @@ namespace ProjectFantasy.Combat
             CurrentHealth = maxHealth;
             damageBlocker = GetComponent<IDamageBlocker>();
             damageReducer = GetComponent<IDamageReducer>();
+            damageMultiplier = GetComponent<IDamageMultiplier>();
         }
 
+        private DamageInfo ApplyMultiplier(in DamageInfo damageInfo)
+        {
+            if (damageMultiplier == null) return damageInfo;
+            int multipliedAmount = Mathf.RoundToInt(damageInfo.Amount * damageMultiplier.GetMultiplier(damageInfo));
+            return damageInfo.WithAmount(multipliedAmount);
+        }
         // 방어(가드) → 방어력 감소 → 적용 순서, Damaged에는 감소 후 피해량 전달
         public DamageResult TakeDamage(in DamageInfo damageInfo)
-        {            
+        {
             if (!IsAlive || IsInvincible || damageInfo.Amount <= 0) return DamageResult.Ignored;
 
             if (damageBlocker != null && damageBlocker.TryBlock(damageInfo))
@@ -47,7 +55,8 @@ namespace ProjectFantasy.Combat
                 return DamageResult.Blocked;
             }
 
-            DamageInfo applied = damageReducer != null ? damageInfo.WithAmount(damageReducer.Reduce(damageInfo)) : damageInfo;
+            DamageInfo multiplied = ApplyMultiplier(damageInfo);
+            DamageInfo applied = damageReducer != null ? multiplied.WithAmount(damageReducer.Reduce(multiplied)) : multiplied;
 
             CurrentHealth = Mathf.Max(0, CurrentHealth - applied.Amount);
             invincibleEndTime = Time.time + invincibleDuration;
