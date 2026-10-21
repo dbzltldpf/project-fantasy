@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 5991064916675465507}
   - component: {fileID: 5995462777874025709}
   - component: {fileID: 4298864222136715897}
+  - component: {fileID: 4961042121239729274}
   m_Layer: 8
   m_Name: Warrior_Boss
   m_TagString: Untagged
@@ -251,6 +252,55 @@ MonoBehaviour:
   worldItemPrefab: {fileID: 5925447551333588511, guid: 5aab03f9aaa7cd14186a1a2024e191e3, type: 3}
   scatterRadius: 1
   dropHeight: 0.3
+--- !u!114 &4961042121239729274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4533eff3142b86444a8e2a2cd56c054a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.BreakablePartManager
+  parts:
+  - displayName: "\uBA38\uB9AC"
+    colliders:
+    - {fileID: 3678023738987012401}
+    maxDurability: 100
+    normalMultiplier: 1
+    brokenMultiplier: 1.5
+  - displayName: "\uBAB8\uD1B5"
+    colliders:
+    - {fileID: 1600393651847197524}
+    maxDurability: 100
+    normalMultiplier: 1
+    brokenMultiplier: 1.5
+  - displayName: "\uC67C\uD314"
+    colliders:
+    - {fileID: 6313619197798893682}
+    maxDurability: 100
+    normalMultiplier: 1
+    brokenMultiplier: 1.5
+  - displayName: "\uC624\uB978\uD314"
+    colliders:
+    - {fileID: 5255176698441628572}
+    maxDurability: 100
+    normalMultiplier: 1
+    brokenMultiplier: 1.5
+  - displayName: "\uC67C\uB2E4\uB9AC"
+    colliders:
+    - {fileID: 5496138441390193026}
+    maxDurability: 100
+    normalMultiplier: 1
+    brokenMultiplier: 1.5
+  - displayName: "\uC624\uB978\uB2E4\uB9AC"
+    colliders:
+    - {fileID: 4200882132148261637}
+    maxDurability: 100
+    normalMultiplier: 1
+    brokenMultiplier: 1.5
 --- !u!1001 &5915890007787152090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -417,5 +467,35 @@ PrefabInstance:
 --- !u!4 &220272743525581358 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8592063609218822814, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
+  m_PrefabInstance: {fileID: 8373234803784773808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1600393651847197524 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 7063343222564783076, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
+  m_PrefabInstance: {fileID: 8373234803784773808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &3678023738987012401 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 5132207649152110977, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
+  m_PrefabInstance: {fileID: 8373234803784773808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &4200882132148261637 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 5656306428332008373, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
+  m_PrefabInstance: {fileID: 8373234803784773808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &5255176698441628572 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 4385828660083591980, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
+  m_PrefabInstance: {fileID: 8373234803784773808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &5496138441390193026 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 4068299100945713458, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
+  m_PrefabInstance: {fileID: 8373234803784773808}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &6313619197798893682 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2570939133768022210, guid: 198cbc6cf10a1a54bbf4b6cb36ecb279, type: 3}
   m_PrefabInstance: {fileID: 8373234803784773808}
   m_PrefabAsset: {fileID: 0}
