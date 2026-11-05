@@ -58,6 +58,8 @@ namespace ProjectFantasy.Enemy
 
         // 시체 유지가 끝나 비활성화됨 (스포너가 리스폰 예약)
         public event Action<EnemyController> Despawned;
+        // 귀환·리스폰으로 전투 상태가 초기화됨
+        public event Action CombatReset;
 
         private void Awake()
         {
@@ -147,6 +149,7 @@ namespace ProjectFantasy.Enemy
             nextGuardTime = 0f;
             staggerImmuneEndTime = 0f;
             CastState.ResetCooldowns();
+            CombatReset?.Invoke();
         }
 
         // 유지 거리 안에서 대상을 바라보는 중: 전투 방식이 공격·막기·사격·시전 결정
