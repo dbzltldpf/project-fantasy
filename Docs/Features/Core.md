@@ -11,9 +11,10 @@
 | [IDamageable.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageable.cs) | 피해를 받을 수 있는 대상 (`IsAlive`, `TakeDamage` → `DamageResult`) |
 | [IDamageBlocker.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageBlocker.cs) | 피해 적용 전 방어 여부 판정 (`TryBlock`), Health가 호출 |
 | [IDamageReducer.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageReducer.cs) | 피해 적용 직전 피해량 감소 (`Reduce`, 방어력 등), Health가 호출 |
+| [IDamageMultiplier.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageMultiplier.cs) | 피해 배율 (`GetMultiplier`, 보스 부위 등), Health가 방어력 계산 전에 호출 |
 | [DamageType.cs](../../Assets/Project/Scripts/Core/Types/DamageType.cs) | `Physical` / `Magic` (방어력 종류 구분) |
 | [DamageResult.cs](../../Assets/Project/Scripts/Core/Types/DamageResult.cs) | `Applied` / `Blocked` / `Ignored` (투사체가 박힐지 튕길지 등 공격 측 반응 결정) |
-| [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자, 종류), `WithAmount` |
+| [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자, 종류, 맞은 콜라이더 `HitCollider`), `WithAmount` |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` 하위 계층 이름 탐색 (초기화 전용) |
 | [IKillRewardReceiver.cs](../../Assets/Project/Scripts/Core/Interfaces/IKillRewardReceiver.cs) | 처치 보상 수신 (`KillReward`가 호출, 플레이어는 숙련 경험치) |
 | [PrefabPool.cs](../../Assets/Project/Scripts/Utils/PrefabPool.cs) | 프리팹별 컴포넌트 풀 `PrefabPool<T>` (투사체·데미지 숫자 공용, 외부 파괴 인스턴스 건너뜀, `SetRoot`로 부모 지정) |
@@ -47,3 +48,4 @@
 | 2026-10-06 | `IDamageReducer`, `DamageType`, `DamageInfo.Type`·`WithAmount`, `Utils/SubclassSelector` 추가 |
 | 2026-10-07 | `IKillRewardReceiver`, `Utils/RendererExtensions`, 풀 부모 폴더(`PoolContainers`·`PoolContainerMap`, `PrefabPool.SetRoot`) 추가 |
 | 2026-10-08 | `DamageResult`(`IDamageable.TakeDamage` 반환), `Utils/FloatRange`·`AnimatorPoseHold`·`AnimatorExtensions` 추가 |
+| 2026-11-05 | `IDamageMultiplier`, `DamageInfo.HitCollider` 추가 |

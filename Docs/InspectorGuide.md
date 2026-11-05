@@ -382,6 +382,8 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | DamageNumberEmitter · EnemyLoot (직접 추가) | World Item Prefab (Loot) | 데미지 숫자 / 드랍 | `Prefabs/WorldItem` |
 | 자식: Skeleton 모델 | Animator Controller | 상태 재생 | `Create Enemy Animator` 결과 |
 | 자식: EnemyHealthBar | Hide Delay | 전투 종료 후 체력바 유지 | 4 |
+| BreakablePartManager (보스, 직접 추가) | Breakable Parts | 부위별 이름·히트박스·렌더러·내구도·배율 | 히트박스 = 뼈 아래 콜라이더, 렌더러 = 부위 메시 ([Part Break](Features/PartBreak.md)) |
+| BrokenPartOutline (보스, 직접 추가) | Outline Material / Flash Duration / Flash · Idle Color | 파괴 부위 아웃라인 번쩍임 → 약하게 유지 | `PartBreakOutline` / 짧게 / 밝은 HDR 빨강 · 어두운 빨강 |
 
 ## 레이어 마스크 설정 원칙
 공격·조준·감지 마스크는 **Everything을 고른 뒤 제외할 레이어만 해제**한다. 레이어를 하나씩 체크하면 나중에 추가한 레이어(예: Enemy)가 빠져 화살·마법이 통과한다.

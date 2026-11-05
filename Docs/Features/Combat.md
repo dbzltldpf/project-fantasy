@@ -13,6 +13,7 @@
 | [Effects/Editor/EffectRecolorWindow.cs](../../Assets/Project/Scripts/Combat/Effects/Editor/EffectRecolorWindow.cs) | `Tools → ProjectFantasy → Recolor Effect`: 이펙트 Prefab Variant를 만들어 파티클·라이트 색조만 변경 (원본 유지) |
 | [ShieldGuard.cs](../../Assets/Project/Scripts/Combat/ShieldGuard.cs) | `IDamageBlocker`: 가드 중 정면 각도 내 공격 완전 방어 / `IDamageReducer`: 방패 활성 중 방어력·마법 방어력으로 피해 감소 |
 | [MeleeAttacker.cs](../../Assets/Project/Scripts/Combat/MeleeAttacker.cs) | 칼날 궤적 스윕 또는 몸 기준 구체 판정, 판정 구간마다 대상당 1회 타격, 명중 시 히트스톱 요청 |
+| [HitColliderUtility.cs](../../Assets/Project/Scripts/Combat/HitColliderUtility.cs) | 판정 버퍼에서 대상별로 기준점에 가장 가까운 콜라이더 선택 (근접·범위 공격 공용, 대상 조회는 호출 측이 1회만) |
 | [WeaponTrace.cs](../../Assets/Project/Scripts/Combat/WeaponTrace.cs) | 칼날 위 샘플 지점의 이전/현재 월드 위치 추적 |
 | [HitStop.cs](../../Assets/Project/Scripts/Combat/HitStop.cs) | 명중 순간 애니메이터 일시 정지 (공격자·피격자 공용), `IsActive`로 로직 정지 판단 |
 | [Action/ActionData.cs](../../Assets/Project/Scripts/Combat/Action/ActionData.cs) | 공격 한 동작: 클립, 길이(프레임), 재생 속도, 크로스페이드, 다형 이벤트 목록 (SO) |
@@ -62,10 +63,12 @@ frame 0 ──── 6 ────── 10 ── 14 ────────�
 TakeDamage
  ├─ 사망·무적·0 이하 데미지 → 무시
  ├─ IDamageBlocker.TryBlock == true → Blocked 이벤트 후 종료 (피해 없음)
+ ├─ IDamageMultiplier.GetMultiplier → 피해 × 배율, 반올림 (보스 부위 배율 등, 없으면 1)
  ├─ IDamageReducer.Reduce → 피해 × 100 / (100 + 방어력), 최소 1 (물리 = 방어력, 마법 = 마법 방어력)
  └─ 감소된 피해 적용 → 무적 시작 → HealthChanged → Damaged(감소 후 피해) → (체력 0) Died
 ```
 - `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어.
+- 맞은 콜라이더(`DamageInfo.HitCollider`): 근접은 칼날 샘플 지점, 범위 마법은 범위 중심에 가장 가까운 대상의 콜라이더(`HitColliderUtility.FindNearest`), 투사체는 레이캐스트에 맞은 콜라이더 ([Part Break](PartBreak.md)).
 - 피해 종류(`DamageInfo.Type`): 근접·화살 = 물리, Wand·Staff 마법 = 마법. 방어력은 방패 개체에서 굴린 값 ([Inventory](Inventory.md)).
 
 ## 데이터 파라미터
@@ -192,3 +195,4 @@ Length               ───────────────────�
 | 2026-10-07 | 처치 보상(`KillReward`), 허수아비 가상 체력 처치 판정, 이펙트 풀 부모 폴더 |
 | 2026-10-07 | `Health.SetMaxHealth`, `KillReward.SetExperience`·`ClearContributors` (적 데이터 연동), 이펙트 Variant 위치 `Art/Prefabs/Effects` |
 | 2026-10-08 | `DamageResult`(적용/막힘/무시) 반환, 이펙트 색 변환 도구(`Recolor Effect`) |
+| 2026-11-05 | 맞은 콜라이더 전달(`HitColliderUtility`, 근접·범위는 가장 가까운 콜라이더), Health 피해 배율 단계(`IDamageMultiplier`, 방어력 계산 전) |

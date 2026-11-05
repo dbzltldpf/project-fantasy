@@ -11,6 +11,7 @@
 | [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 티어(외형 아우라·테두리 발광)·등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
 | [Mastery](Features/Mastery.md) | 무기 종류별 숙련도(알비온식), 처치 경험치, 티어 장착 조건, 숙련 보너스, 숙련도 창(K) |
 | [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
+| [Part Break](Features/PartBreak.md) | 보스 부위 파괴: 맞은 부위 판별, 부위별 내구도·피해 배율, 파괴 이벤트, 파괴 부위 아웃라인 번쩍임, 귀환·리스폰 시 복구 |
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
@@ -25,7 +26,7 @@
 Assets/Project/Scripts/
 ├─ Core/          StateMachine/, Interfaces/, Types/
 ├─ Player/        PlayerController, Input, Motor, Animator, Loadout, RangedWeapon, AmmoVisual, MagicCaster, ItemHandler, Interactor, MasteryRewarder, Presenters(Aim/Menu/Hud), States/, Data/
-├─ Combat/        Health, ShieldGuard, MeleeAttacker, WeaponTrace, HitStop, RangedAttacker, TrainingDummy, KillReward, Action/(Events/, Editor/), Projectile/, Effects/(Editor/), Data/
+├─ Combat/        Health, ShieldGuard, MeleeAttacker, HitColliderUtility, WeaponTrace, HitStop, RangedAttacker, TrainingDummy, KillReward, Action/(Events/, Editor/), Projectile/, Effects/(Editor/), Data/
 ├─ Weapon/        WeaponType, EquipHand, EquipmentVisual, Data/, Editor/
 ├─ Items/         ItemInstance, WorldItem, ItemNotice, Data/, Effects/, Grade/, Stats/, Tier/, Loot/, Editor/
 ├─ InventorySystem/  Inventory, ItemStack, QuickSlots, IItemActions, EquipRequirement, Data/
@@ -33,10 +34,10 @@ Assets/Project/Scripts/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
 ├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/, Mastery/, Enemy/, Editor/
-├─ Enemy/         EnemyController, Navigator, Perception, Animator, Loadout, Loot, Spawner, HealthBarPresenter, Combat/, States/, Data/, Editor/
+├─ Enemy/         EnemyController, Navigator, Perception, Animator, Loadout, Loot, Spawner, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
-셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`).
+셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
 
 ## 네임스페이스
 `ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
@@ -59,3 +60,4 @@ Assets/Project/Scripts/
 | 2026-10-07 | Enemy, Combat, Inventory, UI, Player, Magic, InspectorGuide | 근접 적 2종(감지·추격·공격·막기·반격·귀환·리스폰), 드랍 표, 적 머리 위 체력바·플레이어 상태바, 애니메이터·체력바·상태바 생성 메뉴, 레이어 마스크 설정 원칙 |
 | 2026-10-07 | Weapon, Inventory, Mastery, InspectorGuide | 티어를 0부터로 변경 (T0~T4, 기존 데이터 값 이전) |
 | 2026-10-08 | Enemy, Combat, Core, RangedCombat, Magic, Player, InspectorGuide | 원거리·마법 적(Rogue·Mage), 적 전투 방식 전략 패턴, 중력 보정 사격, 근접 콤보 무작위 횟수, 조준 자세 고정 공용화, 방패에 막힌 화살 미부착(`DamageResult`), 범위 값 Min/Max, 이펙트 색 변환 도구 |
+| 2026-11-05 | PartBreak, Enemy, Combat, Core, InspectorGuide | 보스 부위 파괴: 맞은 콜라이더 전달·대상별 가장 가까운 콜라이더 선택, 부위 피해 배율(`IDamageMultiplier`), 부위 내구도·파괴 이벤트·피해 로그, 귀환·리스폰 시 부위 복구(`CombatReset`), 파괴 부위 아웃라인 번쩍임 |
