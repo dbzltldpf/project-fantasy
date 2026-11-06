@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 4298864222136715897}
   - component: {fileID: 4961042121239729274}
   - component: {fileID: 7022007504373310120}
+  - component: {fileID: 2520733362312511176}
   m_Layer: 8
   m_Name: Warrior_Boss
   m_TagString: Untagged
@@ -184,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c44cfc1cbecd0b4186fa4e5afb619d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.Health
-  maxHealth: 100
+  maxHealth: 600
   invincibleDuration: 0.1
 --- !u!114 &6790462095216851705
 MonoBehaviour:
@@ -272,49 +273,49 @@ MonoBehaviour:
     - {fileID: 3678023738987012401}
     renderers:
     - {fileID: 6371805385525956641}
-    maxDurability: 100
     normalMultiplier: 1
     brokenMultiplier: 1.5
+    durabilityRatio: 0.08
   - displayName: "\uBAB8\uD1B5"
     colliders:
     - {fileID: 1600393651847197524}
     renderers:
     - {fileID: 654467629694292819}
-    maxDurability: 100
     normalMultiplier: 1
     brokenMultiplier: 1.5
+    durabilityRatio: 0.15
   - displayName: "\uC67C\uD314"
     colliders:
     - {fileID: 6313619197798893682}
     renderers:
     - {fileID: 7981553809001041443}
-    maxDurability: 100
     normalMultiplier: 1
     brokenMultiplier: 1.5
+    durabilityRatio: 0.1
   - displayName: "\uC624\uB978\uD314"
     colliders:
     - {fileID: 5255176698441628572}
     renderers:
     - {fileID: 6263851492925694297}
-    maxDurability: 100
     normalMultiplier: 1
     brokenMultiplier: 1.5
+    durabilityRatio: 0.1
   - displayName: "\uC67C\uB2E4\uB9AC"
     colliders:
     - {fileID: 5496138441390193026}
     renderers:
     - {fileID: 7509224505327255512}
-    maxDurability: 100
     normalMultiplier: 1
     brokenMultiplier: 1.5
+    durabilityRatio: 0.1
   - displayName: "\uC624\uB978\uB2E4\uB9AC"
     colliders:
     - {fileID: 4200882132148261637}
     renderers:
     - {fileID: 4287943860825018014}
-    maxDurability: 100
     normalMultiplier: 1
     brokenMultiplier: 1.5
+    durabilityRatio: 0.1
 --- !u!114 &7022007504373310120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,6 +332,19 @@ MonoBehaviour:
   flashDuration: 3
   flashColor: {r: 1, g: 0.1, b: 0.05, a: 1}
   idleColor: {r: 0.5, g: 0.05, b: 0.02, a: 1}
+--- !u!114 &2520733362312511176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de091f61676fc964198932959a32fdc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.PartBreakGroggy
+  groggyDuration: 3
 --- !u!1001 &5915890007787152090
 PrefabInstance:
   m_ObjectHideFlags: 0
