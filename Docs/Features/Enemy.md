@@ -10,7 +10,7 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/Data/EnemyAnimationData.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyAnimationData.cs) | 애니메이터 상태 이름·파라미터(ActionSpeed·PoseSpeed)·전환 시간 (적 공용 SO) |
 | [Enemy/Data/EnemyGuardSettings.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyGuardSettings.cs) | 막기 확률·시간·쿨타임·반격 |
 | [Enemy/Combat/](../../Assets/Project/Scripts/Enemy/Combat/) | 전투 방식: `EnemyCombatStyle`(기반) · `MeleeCombatStyle` · `EnemyRangedStyle`(원거리 공통) · `ShooterCombatStyle` · `CasterCombatStyle` · `CasterSpell` |
-| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 면역, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), 사망 시 자식 콜라이더까지 끔 |
+| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 면역, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔 |
 | [Enemy/EnemyNavigator.cs](../../Assets/Project/Scripts/Enemy/EnemyNavigator.cs) | NavMeshAgent 래퍼: 목적지 이동(재탐색 최소화)·정지·회전(직접 제어)·넉백·직접 이동·히트스톱 정지·순간 이동 |
 | [Enemy/EnemyPerception.cs](../../Assets/Project/Scripts/Enemy/EnemyPerception.cs) | 대상 감지(거리 → 시야각 → 가림, NonAlloc·간격), 공격받으면 공격자 추적(도발 시간), 사선 확인, `TargetChanged` |
 | [Enemy/EnemyAnimator.cs](../../Assets/Project/Scripts/Enemy/EnemyAnimator.cs) | 상태 재생(해시 캐싱·중복 방지), 액션 재생 속도, 자세 고정(`AnimatorPoseHold`), 클립 종료 확인, 누락 상태 검증 |
@@ -19,7 +19,7 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/EnemySpawner.cs](../../Assets/Project/Scripts/Enemy/EnemySpawner.cs) | 반경 안 N마리 유지, 사라진 적은 대기 후 같은 인스턴스로 리스폰 (풀링) |
 | [Enemy/EnemyHealthBarPresenter.cs](../../Assets/Project/Scripts/Enemy/EnemyHealthBarPresenter.cs) | 머리 위 체력바 표시 규칙 |
 | [Enemy/PartBreak/](../../Assets/Project/Scripts/Enemy/PartBreak/) | 보스 부위 파괴 `BreakablePart` · `BreakablePartManager` · `BrokenPartOutline` ([Part Break](PartBreak.md)) |
-| [Enemy/States/](../../Assets/Project/Scripts/Enemy/States/) | `Spawn` `Patrol` `Chase` `Attack` `Guard` `Shoot` `Cast` `Hit` `Return` `Dead` |
+| [Enemy/States/](../../Assets/Project/Scripts/Enemy/States/) | `Spawn` `Patrol` `Chase` `Attack` `Guard` `Shoot` `Cast` `Hit` `Groggy` `Return` `Dead` |
 | [Enemy/Editor/EnemyAnimatorBuilder.cs](../../Assets/Project/Scripts/Enemy/Editor/EnemyAnimatorBuilder.cs) | `Tools → ProjectFantasy → Create Enemy Animator` |
 | [Items/Loot/](../../Assets/Project/Scripts/Items/Loot/) | `DropTable`(SO)·`DropEntry`·`LootDrop` ([Inventory](Inventory.md)) |
 | [UI/Enemy/EnemyHealthBarView.cs](../../Assets/Project/Scripts/UI/Enemy/EnemyHealthBarView.cs) | 월드 공간 체력바 표시·빌보드 ([UI](UI.md)) |
@@ -33,6 +33,7 @@ Chase: 전투 방식의 공격 거리 밖이거나 사선이 가리면(원거리
        공격 거리 안: 정지·바라보기 → 전투 방식이 공격 결정 (가까워도 제자리에서 공격, 물러나지 않음)
        대상 상실 / 스폰 지점에서 leashRange 초과 → Return
 Hit: 넉백·경직 → 반응 막기(방패) 또는 복귀
+Groggy: 외부 요청(StartGroggy)으로 일정 시간 행동 불능, 맞아도 경직 없음 → 복귀
 Return: 대상 버림, 스폰 지점 도착 시 체력·기여 기록·마법 쿨타임 초기화 → Patrol
 Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비활성화 → 스포너가 respawnDelay 후 리스폰
 ```
@@ -156,7 +157,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 - 귀환 중 다시 맞으면 재추적하지만 리쉬를 넘으면 다시 귀환.
 - 보스(`Warrior_Boss`)는 루트 캡슐 대신 뼈 아래 부위별 히트박스로 맞고, 부위 파괴를 쓴다 ([Part Break](PartBreak.md)).
 - 귀환·리스폰 때 되돌려야 하는 부가 기능은 `EnemyController`를 고치지 말고 `CombatReset`을 구독한다.
-- 예정: 근접 감지 반경(정면/후방 거리 분리), 보스 그로기, 무리 행동, 강인도(누적 피해 경직).
+- 예정: 근접 감지 반경(정면/후방 거리 분리), 무리 행동, 강인도(누적 피해 경직).
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -164,3 +165,4 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-10-07 | 최초 작성: 근접 적 2종(Minion·Warrior), 감지·추격·공격·막기·반격·피격·귀환·사망·리스폰, 드랍 표, 머리 위 체력바, 애니메이터 생성 메뉴 |
 | 2026-10-08 | 전투 방식(근접·사격·시전) 전략 패턴, 원거리 적 Rogue(장전 → 조준 클립 끝까지 → 발사)·마법 적 Mage(마법탄·예고형 범위 마법), 중력 보정 사격, 근접 콤보 무작위 횟수·예약 방식, 조준 자세 고정, 방패에 막힌 화살 미부착, 범위 값 Min/Max 표시, 적 전용 마법·빨간 이펙트 |
 | 2026-11-05 | 보스 `Warrior_Boss`(부위별 히트박스), 사망 시 자식 콜라이더 비활성화, `CombatReset` 이벤트, 부위 파괴 연결 ([Part Break](PartBreak.md)) |
+| 2026-11-06 | 그로기 상태(`EnemyGroggyState`, `StartGroggy`), 애니메이션 데이터 `groggyState`(Hit_B), 적 컨트롤러 재생성 |

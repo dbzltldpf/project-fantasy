@@ -382,7 +382,8 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | DamageNumberEmitter · EnemyLoot (직접 추가) | World Item Prefab (Loot) | 데미지 숫자 / 드랍 | `Prefabs/WorldItem` |
 | 자식: Skeleton 모델 | Animator Controller | 상태 재생 | `Create Enemy Animator` 결과 |
 | 자식: EnemyHealthBar | Hide Delay | 전투 종료 후 체력바 유지 | 4 |
-| BreakablePartManager (보스, 직접 추가) | Breakable Parts | 부위별 이름·히트박스·렌더러·내구도·배율 | 히트박스 = 뼈 아래 콜라이더, 렌더러 = 부위 메시 ([Part Break](Features/PartBreak.md)) |
+| BreakablePartManager (보스, 직접 추가) | Breakable Parts | 부위별 이름·히트박스·렌더러·내구도 비율·배율 | 히트박스 = 뼈 아래 콜라이더, 렌더러 = 부위 메시, 비율 합계는 1보다 충분히 낮게 ([Part Break](Features/PartBreak.md)) |
+| PartBreakGroggy (보스, 직접 추가) | Groggy Duration | 부위 파괴 시 그로기 시간 | 3 |
 | BrokenPartOutline (보스, 직접 추가) | Outline Material / Flash Duration / Flash · Idle Color | 파괴 부위 아웃라인 번쩍임 → 약하게 유지 | `PartBreakOutline` / 짧게 / 밝은 HDR 빨강 · 어두운 빨강 |
 
 ## 레이어 마스크 설정 원칙
