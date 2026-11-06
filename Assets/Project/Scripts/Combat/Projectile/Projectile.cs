@@ -90,7 +90,7 @@ namespace ProjectFantasy.Combat
             {
                 Vector3 direction = velocity;
                 direction.y = 0f;
-                result = target.TakeDamage(new DamageInfo(shot.Damage, hit.point, direction.normalized, shot.Instigator, shot.DamageType));
+                result = target.TakeDamage(new DamageInfo(shot.Damage, hit.point, hit.collider, direction.normalized, shot.Instigator, shot.DamageType));
             }
 
             if (owner != null) owner.PlayImpactEffect(profile, hit.point, hit.normal);

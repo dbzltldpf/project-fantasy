@@ -18,6 +18,7 @@ namespace ProjectFantasy.Enemy
         [SerializeField] private string walkState = "Walking_B";
         [SerializeField] private string runState = "Running_B";
         [SerializeField] private string hitState = "Hit_A";
+        [SerializeField] private string groggyState = "Hit_B";
         [SerializeField] private string deathState = "Death_A";
         [Tooltip("스폰(리스폰) 시 등장 모션")]
         [SerializeField] private string spawnState = "Spawn_Ground";
@@ -42,6 +43,7 @@ namespace ProjectFantasy.Enemy
         public string WalkState => walkState;
         public string RunState => runState;
         public string HitState => hitState;
+        public string GroggyState => groggyState;
         public string DeathState => deathState;
         public string SpawnState => spawnState;
         public string GuardState => guardState;
@@ -52,6 +54,6 @@ namespace ProjectFantasy.Enemy
         public float ActionCrossFade => actionCrossFade;
 
         // 애니메이터 생성 도구용 기본 상태 목록
-        public string[] GetBaseStates() => new[] { defaultIdleState, walkState, runState, hitState, deathState, spawnState, guardState, blockHitState };
+        public string[] GetBaseStates() => new[] { defaultIdleState, walkState, runState, hitState, groggyState, deathState, spawnState, guardState, blockHitState };
     }
 }

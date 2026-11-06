@@ -26,6 +26,9 @@ namespace ProjectFantasy.Magic
 
         private readonly EffectPool effectPool = new EffectPool();
         private readonly Collider[] overlapBuffer = new Collider[MaxAreaTargets];
+        // overlapBuffer와 같은 칸의 대상 (발동마다 콜라이더당 한 번만 조회)
+        private readonly IDamageable[] overlapBufferTargets = new IDamageable[MaxAreaTargets];
+
         private readonly HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
         private readonly List<PendingArea> pendingAreas = new List<PendingArea>(InitialPendingCapacity);
 
@@ -112,16 +115,25 @@ namespace ProjectFantasy.Magic
             int hitCount = Physics.OverlapSphereNonAlloc(area.Position, area.Spell.Radius, overlapBuffer, areaDamageLayers, QueryTriggerInteraction.Ignore);
             damagedTargets.Clear();
 
+            // 각 칸의 대상을 먼저 한 번씩만 조회
             for (int i = 0; i < hitCount; i++)
             {
-                Collider hitCollider = overlapBuffer[i];
-                IDamageable target = hitCollider.GetComponentInParent<IDamageable>();
+                overlapBufferTargets[i] = overlapBuffer[i].GetComponentInParent<IDamageable>();
+            }
+
+            // 대상마다 한 번: 그 대상의 콜라이더 중 폭발 중심에 가장 가까운 것(맞은 부위)으로 피해 적용
+            for (int i = 0; i < hitCount; i++)
+            {
+                IDamageable target = overlapBufferTargets[i];
                 if (target == null || target == owner || !target.IsAlive || !damagedTargets.Add(target)) continue;
 
-                Vector3 direction = hitCollider.transform.position - area.Position;
+                Collider nearestCollider = HitColliderUtility.FindNearest(overlapBuffer, overlapBufferTargets, hitCount, target, area.Position);
+                Debug.Log($"{nearestCollider.name},{area.Position}");
+
+                Vector3 direction = nearestCollider.transform.position - area.Position;
                 direction.y = 0f;
                 Vector3 knockbackDirection = direction.sqrMagnitude > Mathf.Epsilon ? direction.normalized : transform.forward;
-                target.TakeDamage(new DamageInfo(area.Damage, hitCollider.ClosestPointOnBounds(area.Position), knockbackDirection, gameObject, DamageType.Magic));
+                target.TakeDamage(new DamageInfo(area.Damage, nearestCollider.ClosestPoint(area.Position), nearestCollider, knockbackDirection, gameObject, DamageType.Magic));
             }
         }
 

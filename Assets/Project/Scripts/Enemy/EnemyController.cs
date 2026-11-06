@@ -28,7 +28,6 @@ namespace ProjectFantasy.Enemy
         private float nextAttackTime;
         private float nextGuardTime;
         private float staggerImmuneEndTime;
-
         public EnemyData Data => data;
         public EnemyNavigator Navigator { get; private set; }
         public EnemyAnimator EnemyAnimator { get; private set; }
@@ -55,9 +54,12 @@ namespace ProjectFantasy.Enemy
         public EnemyHitState HitState { get; private set; }
         public EnemyReturnState ReturnState { get; private set; }
         public EnemyDeadState DeadState { get; private set; }
+        public EnemyGroggyState GroggyState { get; private set; }
 
         // 시체 유지가 끝나 비활성화됨 (스포너가 리스폰 예약)
         public event Action<EnemyController> Despawned;
+        // 귀환·리스폰으로 전투 상태가 초기화됨
+        public event Action CombatReset;
 
         private void Awake()
         {
@@ -71,7 +73,7 @@ namespace ProjectFantasy.Enemy
             health = GetComponent<Health>();
             hitStop = GetComponent<HitStop>();
             killReward = GetComponent<KillReward>();
-            colliders = GetComponents<Collider>();
+            colliders = GetComponentsInChildren<Collider>();
 
             health.SetMaxHealth(data.MaxHealth);
             killReward.SetExperience(data.Experience);
@@ -147,6 +149,7 @@ namespace ProjectFantasy.Enemy
             nextGuardTime = 0f;
             staggerImmuneEndTime = 0f;
             CastState.ResetCooldowns();
+            CombatReset?.Invoke();
         }
 
         // 유지 거리 안에서 대상을 바라보는 중: 전투 방식이 공격·막기·사격·시전 결정
@@ -163,7 +166,13 @@ namespace ProjectFantasy.Enemy
 
         public void StartAttackCooldown() => nextAttackTime = Time.time + data.RollAttackCooldown();
         public void StartGuardCooldown() => nextGuardTime = Time.time + data.Guard.GuardCooldown;
-
+        public void StartGroggy(float duration)
+        {
+            if (!health.IsAlive) return;
+            if (stateMachine.CurrentState == GroggyState) return;
+            GroggyState.SetDuration(duration);
+            ChangeState(GroggyState);
+        }
         public void SetCollidersEnabled(bool isEnabled)
         {
             foreach (Collider hitCollider in colliders)
@@ -189,6 +198,7 @@ namespace ProjectFantasy.Enemy
             HitState = new EnemyHitState(this);
             ReturnState = new EnemyReturnState(this);
             DeadState = new EnemyDeadState(this);
+            GroggyState = new EnemyGroggyState(this);
             stateMachine = new StateMachine<EnemyStateBase>();
         }
 
@@ -198,7 +208,7 @@ namespace ProjectFantasy.Enemy
             if (!health.IsAlive) return;
 
             Perception.NotifyAttacked(damageInfo.Instigator);
-            if (Time.time < staggerImmuneEndTime || stateMachine.CurrentState == SpawnState) return;
+            if (Time.time < staggerImmuneEndTime || stateMachine.CurrentState == SpawnState || stateMachine.CurrentState == GroggyState) return;
 
             staggerImmuneEndTime = Time.time + data.HitReaction.StunDuration + data.StaggerImmunity;
             HitState.SetDamageInfo(damageInfo);
