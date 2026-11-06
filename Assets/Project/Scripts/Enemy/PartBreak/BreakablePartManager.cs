@@ -66,7 +66,7 @@ namespace ProjectFantasy.Enemy
         {
             foreach (var part in breakableParts)
             {
-                part.ResetState();
+                part.ResetState(health.MaxHealth);
             }
         }
 

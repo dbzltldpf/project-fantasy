@@ -7,21 +7,22 @@ namespace ProjectFantasy.Enemy
     public sealed class BreakablePart
     {
         private const int NoDurability = 0;
-
+        private const int MinDurability = 1;
         [SerializeField]
         private string displayName;
         [SerializeField]
         private Collider[] colliders;
         [SerializeField]
         private Renderer[] renderers;
-        [SerializeField, Min(1)]
-        private int maxDurability = 100;
+        private int maxDurability;
         [SerializeField, Min(0f)]
         private float normalMultiplier = 1f;
         [SerializeField, Min(0f)]
         private float brokenMultiplier = 1.5f;
         private int currentDurability;
-
+        [Tooltip("최대 체력 대비 내구도 비율")]
+        [SerializeField, Range(0f, 1f)]
+        private float durabilityRatio;
         public string DisplayName => displayName;
         public Collider[] Colliders => colliders;
         public Renderer[] Renderers => renderers;
@@ -30,8 +31,10 @@ namespace ProjectFantasy.Enemy
         public int CurrentDurability => currentDurability;
         public bool IsBroken => currentDurability <= NoDurability;
 
-        public void ResetState()
+        public void ResetState(int ownerMaxHealth)
         {
+            int durability = Mathf.RoundToInt(ownerMaxHealth * durabilityRatio);
+            maxDurability = Mathf.Max(MinDurability, durability);
             currentDurability = maxDurability;
         }
 

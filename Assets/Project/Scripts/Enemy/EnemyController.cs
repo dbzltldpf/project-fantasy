@@ -28,7 +28,6 @@ namespace ProjectFantasy.Enemy
         private float nextAttackTime;
         private float nextGuardTime;
         private float staggerImmuneEndTime;
-
         public EnemyData Data => data;
         public EnemyNavigator Navigator { get; private set; }
         public EnemyAnimator EnemyAnimator { get; private set; }
@@ -55,6 +54,7 @@ namespace ProjectFantasy.Enemy
         public EnemyHitState HitState { get; private set; }
         public EnemyReturnState ReturnState { get; private set; }
         public EnemyDeadState DeadState { get; private set; }
+        public EnemyGroggyState GroggyState { get; private set; }
 
         // 시체 유지가 끝나 비활성화됨 (스포너가 리스폰 예약)
         public event Action<EnemyController> Despawned;
@@ -166,7 +166,13 @@ namespace ProjectFantasy.Enemy
 
         public void StartAttackCooldown() => nextAttackTime = Time.time + data.RollAttackCooldown();
         public void StartGuardCooldown() => nextGuardTime = Time.time + data.Guard.GuardCooldown;
-
+        public void StartGroggy(float duration)
+        {
+            if (!health.IsAlive) return;
+            if (stateMachine.CurrentState == GroggyState) return;
+            GroggyState.SetDuration(duration);
+            ChangeState(GroggyState);
+        }
         public void SetCollidersEnabled(bool isEnabled)
         {
             foreach (Collider hitCollider in colliders)
@@ -192,6 +198,7 @@ namespace ProjectFantasy.Enemy
             HitState = new EnemyHitState(this);
             ReturnState = new EnemyReturnState(this);
             DeadState = new EnemyDeadState(this);
+            GroggyState = new EnemyGroggyState(this);
             stateMachine = new StateMachine<EnemyStateBase>();
         }
 
@@ -201,7 +208,7 @@ namespace ProjectFantasy.Enemy
             if (!health.IsAlive) return;
 
             Perception.NotifyAttacked(damageInfo.Instigator);
-            if (Time.time < staggerImmuneEndTime || stateMachine.CurrentState == SpawnState) return;
+            if (Time.time < staggerImmuneEndTime || stateMachine.CurrentState == SpawnState || stateMachine.CurrentState == GroggyState) return;
 
             staggerImmuneEndTime = Time.time + data.HitReaction.StunDuration + data.StaggerImmunity;
             HitState.SetDamageInfo(damageInfo);

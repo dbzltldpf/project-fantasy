@@ -21,6 +21,7 @@ namespace ProjectFantasy.Enemy
         private int walkHash;
         private int runHash;
         private int hitHash;
+        private int groggyHash;
         private int deathHash;
         private int spawnHash;
         private int guardHash;
@@ -43,6 +44,7 @@ namespace ProjectFantasy.Enemy
             walkHash = Animator.StringToHash(data.WalkState);
             runHash = Animator.StringToHash(data.RunState);
             hitHash = Animator.StringToHash(data.HitState);
+            groggyHash = Animator.StringToHash(data.GroggyState);
             deathHash = Animator.StringToHash(data.DeathState);
             spawnHash = Animator.StringToHash(data.SpawnState);
             guardHash = Animator.StringToHash(data.GuardState);
@@ -68,6 +70,7 @@ namespace ProjectFantasy.Enemy
 
         public void PlaySpawn() => CrossFade(spawnHash, data.ActionCrossFade, true);
         public void PlayHit() => CrossFade(hitHash, data.ActionCrossFade, true);
+        public void PlayGroggy() => CrossFade(groggyHash, data.ActionCrossFade, true);
         public void PlayDeath() => CrossFade(deathHash, data.ActionCrossFade, true);
         public void PlayGuard() => CrossFade(guardHash, data.ActionCrossFade, false);
         public void PlayBlockHit() => CrossFade(blockHitHash, data.ActionCrossFade, true);
