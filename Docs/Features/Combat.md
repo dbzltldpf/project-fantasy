@@ -49,8 +49,9 @@ frame 0 ──── 6 ────── 10 ── 14 ────────�
 1. `BeginSwing(damage, hitStopDuration)` → 타격 목록 초기화, 칼날 현재 위치 기록
 2. `TickHit()`
    - **칼날 있음**: 칼날 위 샘플 지점(간격 ≤ 지름, 2~8개)마다 이전 → 현재 위치를 `OverlapCapsuleNonAlloc` → 빠르게 휘둘러도 궤적 전체 판정
+     - 양 끝 샘플은 `bladeRadius`만큼 안쪽으로 당김(최대 칼날 길이의 절반) → 반지름을 키워도 판정이 칼끝 너머로 늘어나지 않고 두께만 늘어남
    - **칼날 없음**(맨손 등): 몸 기준 `OverlapSphereNonAlloc`
-3. 콜라이더 부모에서 `IDamageable` 탐색 → 자기 자신/사망/이미 맞은 대상 제외 → `DamageInfo` 전달
+3. 콜라이더 부모에서 `IDamageable` 탐색 → 자기 자신/사망/이미 맞은 대상 제외 → `DamageInfo` 전달 (무기의 `staggerLimit` 포함, `SetStaggerLimit`)
 4. 명중 시 자신과 대상의 `HitStop.Apply` (대상 탐색은 명중 시에만)
 5. `EndSwing()` → 종료
 
@@ -101,9 +102,12 @@ TakeDamage
 ### HitReactionData
 | 필드 | 기본값 | 의미 |
 |---|---|---|
-| stunDuration | 0.4 | 경직 시간 |
-| knockbackSpeed | 4 | 넉백 초기 속도 |
+| stunDuration | 0.7 | 경직 시간 (`Hit_A` 길이 약 0.67초에 맞춤) |
+| knockbackSpeed | 2 | 넉백 초기 속도 |
 | knockbackDeceleration | 12 | 넉백 감속 |
+
+- 밀리는 거리 = `knockbackSpeed² ÷ (2 × knockbackDeceleration)` → 현재 약 0.17m (근접 사거리를 벗어나지 않도록)
+- 에셋 하나를 플레이어·적 5종이 공유 → 값을 바꾸면 양쪽 모두 바뀜
 
 ### 컴포넌트 인스펙터 값
 | 컴포넌트 | 필드 | 기본값 | 의미 |
@@ -196,3 +200,4 @@ Length               ───────────────────�
 | 2026-10-07 | `Health.SetMaxHealth`, `KillReward.SetExperience`·`ClearContributors` (적 데이터 연동), 이펙트 Variant 위치 `Art/Prefabs/Effects` |
 | 2026-10-08 | `DamageResult`(적용/막힘/무시) 반환, 이펙트 색 변환 도구(`Recolor Effect`) |
 | 2026-11-05 | 맞은 콜라이더 전달(`HitColliderUtility`, 근접·범위는 가장 가까운 콜라이더), Health 피해 배율 단계(`IDamageMultiplier`, 방어력 계산 전) |
+| 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |

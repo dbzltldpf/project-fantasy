@@ -10,7 +10,8 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/Data/EnemyAnimationData.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyAnimationData.cs) | 애니메이터 상태 이름·파라미터(ActionSpeed·PoseSpeed)·전환 시간 (적 공용 SO) |
 | [Enemy/Data/EnemyGuardSettings.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyGuardSettings.cs) | 막기 확률·시간·쿨타임·반격 |
 | [Enemy/Combat/](../../Assets/Project/Scripts/Enemy/Combat/) | 전투 방식: `EnemyCombatStyle`(기반) · `MeleeCombatStyle` · `EnemyRangedStyle`(원거리 공통) · `ShooterCombatStyle` · `CasterCombatStyle` · `CasterSpell` |
-| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 면역, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔 |
+| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 판정, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔 |
+| [Enemy/EnemyStaggerCounter.cs](../../Assets/Project/Scripts/Enemy/EnemyStaggerCounter.cs) | 무기별 경직 횟수·면역 판정 (`TryStagger`, 일반 클래스) |
 | [Enemy/EnemyNavigator.cs](../../Assets/Project/Scripts/Enemy/EnemyNavigator.cs) | NavMeshAgent 래퍼: 목적지 이동(재탐색 최소화)·정지·회전(직접 제어)·넉백·직접 이동·히트스톱 정지·순간 이동 |
 | [Enemy/EnemyPerception.cs](../../Assets/Project/Scripts/Enemy/EnemyPerception.cs) | 대상 감지(거리 → 시야각 → 가림, NonAlloc·간격), 공격받으면 공격자 추적(도발 시간), 사선 확인, `TargetChanged` |
 | [Enemy/EnemyAnimator.cs](../../Assets/Project/Scripts/Enemy/EnemyAnimator.cs) | 상태 재생(해시 캐싱·중복 방지), 액션 재생 속도, 자세 고정(`AnimatorPoseHold`), 클립 종료 확인, 누락 상태 검증 |
@@ -32,12 +33,18 @@ Patrol: 대기(idleTimeRange) ↔ 반경 내 무작위 지점 걷기 ── 대�
 Chase: 전투 방식의 공격 거리 밖이거나 사선이 가리면(원거리) 달려서 접근
        공격 거리 안: 정지·바라보기 → 전투 방식이 공격 결정 (가까워도 제자리에서 공격, 물러나지 않음)
        대상 상실 / 스폰 지점에서 leashRange 초과 → Return
-Hit: 넉백·경직 → 반응 막기(방패) 또는 복귀
+Hit: 넉백·경직, 공격 쿨타임 시작 → 반응 막기(방패) 또는 복귀
 Groggy: 외부 요청(StartGroggy)으로 일정 시간 행동 불능, 맞아도 경직 없음 → 복귀
 Return: 대상 버림, 스폰 지점 도착 시 체력·기여 기록·마법 쿨타임 초기화 → Patrol
 Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비활성화 → 스포너가 respawnDelay 후 리스폰
 ```
-- **경직 면역**: 경직 후 `staggerImmunity`(1초) 동안은 맞아도 피해만 받고 행동 유지 (무한 경직 방지). 등장 중에는 경직 없음.
+- **무기별 경직 규칙** (`EnemyStaggerCounter`, 일반 적·보스 공통)
+  - 근접: 무기의 `staggerLimit`(맨손 4, 한손검 3, 양손검 3)번까지 경직 → 그 뒤는 피해만 받고 행동 유지 (무한 경직 방지)
+  - 마지막 경직부터 `stunDuration + staggerImmunity`(0.7 + 1 = 1.7초)가 지나면 횟수 0으로 초기화 (계속 때려도 이 시간 안이면 면역 유지)
+  - 화살·마법(`staggerLimit` 0 = 제한 없음): 면역 중에도 항상 경직, 근접 횟수·면역 시간에는 영향 없음
+  - 등장·그로기 중에는 경직 없음. 귀환·리스폰(`ResetCombat`) 시 횟수 초기화
+  - 플레이어 피격에는 적용하지 않음 (적 무기의 `staggerLimit`는 사용 안 됨)
+- **경직 후 반격 지연**: 경직이 시작될 때 공격 쿨타임(`attackCooldownRange`)도 시작 → 끊긴 공격도 쿨타임이 돌아, 경직이 끝나자마자 바로 공격하지 않음 (Minion·Warrior 기준 경직 후 약 0.5~1.3초, Rogue는 쿨타임 0이라 영향 없음)
 - **히트스톱** 중에는 상태 시계·에이전트 모두 정지.
 
 ### 전투 방식 (Combat Style)
@@ -103,7 +110,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | attackAngle / attackCooldownRange | 40 / 1.2~2 | 40 / 1.2~2 | 40 / 0~0 | 40 / 1~1.5 | 공격 시작 정면 각도 / 공격 후 쿨타임 (Min~Max) |
 | attackRange / maxComboActions | 1.8 / 2 | 1.8 / 3 | — | — | 근접 전용 |
 | guard (chance / reactive / duration / cooldown / counter) | — | 0.35 / 0.5 / 1.5 / 4 / 0.5 | — | — | 막기 (근접 + 방패) |
-| staggerImmunity / spawnDuration / corpseDuration | 1 / 1.5 / 3 | 같음 | 같음 | 같음 | 경직 면역 / 등장 모션 / 시체 유지 |
+| staggerImmunity / spawnDuration / corpseDuration | 1 / 1.5 / 3 | 같음 | 같음 | 같음 | 근접 경직 횟수를 다 쓴 뒤 추가 면역 / 등장 모션 / 시체 유지 |
 
 ### 전투 방식 값
 | 방식 | 필드 | 값 | 의미 |
@@ -166,3 +173,4 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-10-08 | 전투 방식(근접·사격·시전) 전략 패턴, 원거리 적 Rogue(장전 → 조준 클립 끝까지 → 발사)·마법 적 Mage(마법탄·예고형 범위 마법), 중력 보정 사격, 근접 콤보 무작위 횟수·예약 방식, 조준 자세 고정, 방패에 막힌 화살 미부착, 범위 값 Min/Max 표시, 적 전용 마법·빨간 이펙트 |
 | 2026-11-05 | 보스 `Warrior_Boss`(부위별 히트박스), 사망 시 자식 콜라이더 비활성화, `CombatReset` 이벤트, 부위 파괴 연결 ([Part Break](PartBreak.md)) |
 | 2026-11-06 | 그로기 상태(`EnemyGroggyState`, `StartGroggy`), 애니메이션 데이터 `groggyState`(Hit_B), 적 컨트롤러 재생성 |
+| 2026-11-10 | 무기별 경직 규칙(`EnemyStaggerCounter`): 근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직. 단순 시간 면역 대체. 경직 시작 시 공격 쿨타임 시작 |

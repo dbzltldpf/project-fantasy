@@ -86,8 +86,9 @@
 |---|---|---|
 | Combo Data | 콤보 (1타·2타…) | 무기 종류별 공유 에셋 (`1H/2H/UnarmedAttackComboData`) |
 | Hit Offset / Hit Radius | 칼날이 없을 때 몸 기준 판정 구체 | 맨손 (0, 1, 1) / 0.8 |
-| Blade Base / Blade Tip | 칼날 시작·끝 (모델 로컬) | Sword1H (0,0.2,0)~(0,1,0), Sword2H (0,0.65,0)~(0,1.88,0) |
-| Blade Radius | 칼날 판정 두께 | 0.05~0.15 (기본 0.1) |
+| Blade Base / Blade Tip | 칼날 시작·끝 (모델 로컬) | Sword1H (0,1.39,0)~(0,0.3,0), Sword2H (0,0.65,0)~(0,1.88,0) |
+| Blade Radius | 칼날 판정 두께 (양 끝은 자동으로 당겨져 길이는 그대로, 폭 = 2배) | 0.1~0.3 (Sword1H 0.3, Sword2H 0.1), 칼날 길이의 절반 이하 |
+| Stagger Limit | 적을 연속 경직시킬 수 있는 횟수, 다 쓰면 면역 (0 = 제한 없음) | 맨손 4 / 한손검 3 / 양손검 3 (콤보 타수 이상 권장) |
 
 ### 원거리 (활·석궁)
 | 필드 | 하는 일 | 넣을 값 |
@@ -281,8 +282,10 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 ## 피격 반응 (HitReactionData)
 | 필드 | 하는 일 | 기본값 |
 |---|---|---|
-| Stun Duration | 피격 경직 | 0.4 |
-| Knockback Speed / Deceleration | 넉백 속도·감속 | 4 / 12 |
+| Stun Duration | 피격 경직 (피격 모션 길이에 맞춤) | 0.7 |
+| Knockback Speed / Deceleration | 넉백 속도·감속, 밀리는 거리 = 속도² ÷ (2 × 감속) | 2 / 12 (약 0.17m) |
+
+플레이어와 적 5종이 같은 에셋을 쓴다. 값을 바꾸면 양쪽 모두 바뀐다.
 
 ---
 
@@ -298,7 +301,7 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | Movement | Walk / Run / Turn Speed, Patrol Radius, Idle Time Range | 이동·회전, 배회 | 1.5 / 4 / 540, 6, 2~5 |
 | Combat | **Combat Style** | 전투 방식 드롭다운 (비우면 근접) | Melee / Melee / Shooter / Caster |
 | Combat | Attack Angle / Attack Cooldown Range | 공격 시작 정면 각도 / 공격 후 쿨타임 | 40 / 1.2~2 · 1.2~2 · 0~0 · 1~1.5 |
-| Combat | Stagger Immunity / Hit Reaction | 경직 면역 / 경직·넉백 | 1, `HitReactionData` |
+| Combat | Stagger Immunity / Hit Reaction | 근접 경직 횟수(무기 `Stagger Limit`)를 다 쓴 뒤 추가 면역 시간 (면역 = Stun Duration + 이 값) / 경직·넉백 | 1, `HitReactionData` |
 | Melee | Attack Range / Max Combo Actions | 근접 공격 거리 / 공격마다 1 ~ 이 값 중 무작위 타수 | 1.8 / 2 · 3 |
 | Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (근접 + 방패) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
 | Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 | 1.5 / 3 / 종류별 표 |

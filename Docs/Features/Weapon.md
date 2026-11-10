@@ -95,7 +95,8 @@
 | comboData | — | 사용할 콤보 (AttackComboData) |
 | hitOffset / hitRadius | (0, 1, 1) / 0.8 | 근접 판정 구체 (캐릭터 로컬, 칼날 미설정 시 사용) |
 | bladeBase / bladeTip | 0 / 0 | 칼날 시작·끝 (무기 모델 로컬), 같으면 칼날 판정 안 함 |
-| bladeRadius | 0.1 | 칼날 판정 두께 (반지름) |
+| bladeRadius | 0.1 | 칼날 판정 두께 (반지름, 칼끝 너머로는 늘어나지 않음) |
+| staggerLimit | 3 | 근접 공격으로 연속 경직시킬 수 있는 횟수 (0 = 제한 없음, 맨손 4 / 한손검 3 / 양손검 3) |
 | idleStateName | Idle_A | 이 무기를 들었을 때 대기 모션 |
 
 ### ShieldData / SpellbookData
@@ -134,7 +135,7 @@
 - `unarmedWeapon`은 **필수**. 비어 있으면 시작 시 콘솔 에러.
 - 무기 모델이 손에서 어긋나면 먼저 클립 마스크(1번)를 확인. grip 보정은 마지막 수단.
 - 칼날 값은 Action Timeline 창 Scene 미리보기(노란 선)로 확인하며 조정 ([Combat](Combat.md)). 플레이 중 값 변경은 무기 교체 시 반영.
-  - Sword1H: Base (0, 0.2, 0), Tip (0, 1, 0) / Sword2H: Base (0, 0.65, 0), Tip (0, 1.88, 0) / Radius 0.1
+  - Sword1H: Base (0, 1.39, 0), Tip (0, 0.3, 0), Radius 0.3 (내려찍기도 맞도록 두껍게) / Sword2H: Base (0, 0.65, 0), Tip (0, 1.88, 0), Radius 0.1
 - 적(스켈레톤 등)은 `EquipmentVisual` + `WeaponData`를 그대로 재사용 가능.
 - 클립 Root Transform은 Rotation/Y/XZ 모두 **Bake Into Pose ✓ + Based Upon: Original** (FBX 재추출 시 .anim에 재적용).
 - 필드별 역할·권장값: [인스펙터 가이드](../InspectorGuide.md).
@@ -151,3 +152,4 @@
 | 2026-10-06 | 장비 = 아이템(`ItemData` 상속)·개체 장착, 무기 순환 삭제(퀵슬롯), 등급·능력치 범위(공격력/마법력/방어력), 방패 방어력, 보조 장비 비활성 규칙, 무기 인스펙터, `AmmoPouch` 삭제 |
 | 2026-10-07 | 티어(T1~T5, 데이터 하나로 공용): 접두어·능력치 배율, 티어 외형(불씨 아우라·테두리 발광·선택 머티리얼/색조), 티어 이펙트 생성 메뉴, 무기 인스펙터 섹션을 Foldout으로 변경 |
 | 2026-10-07 | 티어를 0부터로 변경 (T0~T4, 데이터·화면 표시 동일) |
+| 2026-11-10 | 근접 무기 `staggerLimit`(무기별 경직 횟수) 추가, 한손검 `bladeRadius` 0.3 |
