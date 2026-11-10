@@ -27,7 +27,7 @@ namespace ProjectFantasy.Enemy
         private bool isSpawned;
         private float nextAttackTime;
         private float nextGuardTime;
-        private float staggerImmuneEndTime;
+        private readonly EnemyStaggerCounter enemyStaggerCounter = new EnemyStaggerCounter();
         public EnemyData Data => data;
         public EnemyNavigator Navigator { get; private set; }
         public EnemyAnimator EnemyAnimator { get; private set; }
@@ -147,7 +147,7 @@ namespace ProjectFantasy.Enemy
             Perception.ClearTarget();
             nextAttackTime = 0f;
             nextGuardTime = 0f;
-            staggerImmuneEndTime = 0f;
+            enemyStaggerCounter.Reset();
             CastState.ResetCooldowns();
             CombatReset?.Invoke();
         }
@@ -208,9 +208,9 @@ namespace ProjectFantasy.Enemy
             if (!health.IsAlive) return;
 
             Perception.NotifyAttacked(damageInfo.Instigator);
-            if (Time.time < staggerImmuneEndTime || stateMachine.CurrentState == SpawnState || stateMachine.CurrentState == GroggyState) return;
-
-            staggerImmuneEndTime = Time.time + data.HitReaction.StunDuration + data.StaggerImmunity;
+            if (stateMachine.CurrentState == SpawnState || stateMachine.CurrentState == GroggyState) return;
+            float staggerWindow = data.HitReaction.StunDuration + data.StaggerImmunity;
+            if (!enemyStaggerCounter.TryStagger(damageInfo.StaggerLimit, staggerWindow)) return;
             HitState.SetDamageInfo(damageInfo);
             ChangeState(HitState);
         }

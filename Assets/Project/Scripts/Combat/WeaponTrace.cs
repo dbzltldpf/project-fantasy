@@ -25,6 +25,14 @@ namespace ProjectFantasy.Combat
             blade = bladeTransform;
             Radius = radius;
 
+            // 캡슐 끝이 칼끝을 넘지 않도록 양 끝을 반지름만큼 안쪽으로
+            Vector3 axis = localTip - localBase;
+            float length = axis.magnitude;
+            Vector3 direction = axis.normalized;
+            float pullLength = Mathf.Min(radius, length / 2);
+            localBase += direction * pullLength;
+            localTip -= direction * pullLength;
+
             float spacing = radius * DiameterPerRadius;
             int count = Mathf.CeilToInt(Vector3.Distance(localBase, localTip) / spacing) + 1;
             SampleCount = Mathf.Clamp(count, MinSampleCount, MaxSampleCount);

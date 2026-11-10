@@ -28,7 +28,8 @@ namespace ProjectFantasy.Weapon
         [SerializeField] private Vector3 hitOffset = new Vector3(0f, 1f, 1f);
         [Tooltip("몸 기준 판정 구체 반지름 (m)")]
         [SerializeField, Min(0f)] private float hitRadius = 0.8f;
-
+        [Tooltip("근접 공격으로 연속 경직시킬 수 있는 횟수 (0 = 제한 없음)")]
+        [SerializeField, Min(0)] private int staggerLimit = 3;
         [Tooltip("칼날 시작점 (무기 모델 로컬, 손잡이 위)")]
         [SerializeField] private Vector3 bladeBase;
         [Tooltip("칼날 끝점 (무기 모델 로컬, 시작점과 같으면 몸 기준 판정)")]
@@ -41,7 +42,6 @@ namespace ProjectFantasy.Weapon
 
         [NonSerialized] private int idleStateHash;
         [NonSerialized] private bool isHashCached;
-
         public override ItemCategory Category => ItemCategory.Weapon;
         public override bool CanQuickSlot => true;
 
@@ -62,6 +62,7 @@ namespace ProjectFantasy.Weapon
         public Vector3 BladeTip => bladeTip;
         public float BladeRadius => bladeRadius;
         public string IdleStateName => idleStateName;
+        public int StaggerLimit => staggerLimit;
 
         public int IdleStateHash
         {

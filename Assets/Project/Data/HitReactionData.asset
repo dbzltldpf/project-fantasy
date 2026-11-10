@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c53dbf0dfe37f1499ce79a56b3cfde4, type: 3}
   m_Name: HitReactionData
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.HitReactionData
-  stunDuration: 0.4
-  knockbackSpeed: 4
+  stunDuration: 0.7
+  knockbackSpeed: 2
   knockbackDeceleration: 12

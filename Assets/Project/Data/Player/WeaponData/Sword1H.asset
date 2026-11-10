@@ -33,7 +33,8 @@ MonoBehaviour:
   comboData: {fileID: 11400000, guid: 379ed9c7e5325b64a8eba94e84ae15f8, type: 2}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  staggerLimit: 3
   bladeBase: {x: 0, y: 1.39, z: 0}
   bladeTip: {x: 0, y: 0.3, z: 0}
-  bladeRadius: 0.1
+  bladeRadius: 0.3
   idleStateName: Idle_A

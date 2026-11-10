@@ -28,7 +28,7 @@ namespace ProjectFantasy.WeaponEditor
 
         private static readonly string[] InfoFields = { "displayName", "icon", "description", "worldModelPrefab" };
         private static readonly string[] EquipFields = { "weaponType", "gripHand", "occupiesOffHand", "allowsShield", ModelField, "tierMaterials", "gripPosition", "gripRotation" };
-        private static readonly string[] MeleeFields = { ComboField, "hitOffset", "hitRadius", BladeBaseField, BladeTipField, "bladeRadius" };
+        private static readonly string[] MeleeFields = { ComboField, "hitOffset", "hitRadius", BladeBaseField, BladeTipField, "bladeRadius" ,"staggerLimit"};
         private static readonly string[] RangedFields = { AmmoField, "canAim", "requiresReload", "muzzleOffset", "launchSpeed", "windupStateName", "windupDuration", "fireStateName", "releaseTime", "fireDuration" };
         private static readonly string[] AimFields = { "aimIdleStateName", "aimHoldTime" };
         private static readonly string[] ReloadFields = { "reloadStateName", "reloadDuration", "loadedAmmoPosition", "loadedAmmoRotation" };
