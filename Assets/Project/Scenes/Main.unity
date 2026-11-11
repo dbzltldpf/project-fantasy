@@ -23072,7 +23072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1462657171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30484,7 +30484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1829374642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30500,7 +30500,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 5661629248380242624, guid: 146e8a52835e9ef4ca8a76923f2c0fe3, type: 3}
   count: 1
   spawnRadius: 5
-  respawnDelay: 30
+  respawnDelay: 1
   gizmoColor: {r: 1, g: 0.3, b: 0.3, a: 0.5}
 --- !u!4 &1829374643
 Transform:

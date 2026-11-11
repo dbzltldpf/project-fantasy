@@ -128,7 +128,8 @@ namespace ProjectFantasy.Player
         private void ApplyHitShape()
         {
             attacker.SetHitShape(CurrentWeapon.HitOffset, CurrentWeapon.HitRadius);
-
+            attacker.SetStaggerLimit(CurrentWeapon.StaggerLimit);
+            
             Transform model = equipmentVisual.GetActiveModel(CurrentWeapon.GripHand);
             if (CurrentWeapon.HasBlade && model != null)
             {

@@ -60,7 +60,7 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Range(0f, 360f)] private float attackAngle = 40f;
         [Tooltip("공격 후 다음 공격까지 대기 시간 범위 (초)")]
         [SerializeField] private FloatRange attackCooldownRange = new FloatRange(1.2f, 2f);
-        [Tooltip("경직 후 이 시간 동안은 다시 맞아도 경직되지 않음 (무한 경직 방지, 초)")]
+        [Tooltip("근접 경직 횟수를 다 쓴 뒤 다시 경직되기까지의 추가 면역 시간 (초)")]
         [SerializeField, Min(0f)] private float staggerImmunity = 1f;
         [Tooltip("피격 경직·넉백")]
         [SerializeField] private HitReactionData hitReaction;

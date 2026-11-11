@@ -20,7 +20,7 @@ namespace ProjectFantasy.Enemy
         {
             elapsedTime = 0f;
             Controller.Attacker.EndSwing();
-
+            Controller.StartAttackCooldown();
             Vector3 knockbackDirection = pendingDamage.Direction;
             Navigator.SnapRotation(-knockbackDirection);
             Navigator.Knockback(knockbackDirection * Reaction.KnockbackSpeed, Reaction.KnockbackDeceleration);

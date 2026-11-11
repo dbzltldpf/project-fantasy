@@ -36,6 +36,7 @@ namespace ProjectFantasy.Combat
         private float currentHitStopDuration;
 
         public bool IsSwinging { get; private set; }
+        private int staggerLimit;
 
         private void Awake()
         {
@@ -49,6 +50,10 @@ namespace ProjectFantasy.Combat
         {
             hitOffset = offset;
             hitRadius = radius;
+        }
+        public void SetStaggerLimit(int staggerLimit)
+        {
+            this.staggerLimit = staggerLimit;
         }
 
         // 장착 무기 모델의 칼날 (모델 로컬 좌표)
@@ -119,7 +124,7 @@ namespace ProjectFantasy.Combat
                 Collider nearestCollider = HitColliderUtility.FindNearest(hitBuffer, hitBufferTargets, hitCount, target, referencePoint);
 
                 Vector3 hitPoint = nearestCollider.ClosestPoint(referencePoint);
-                target.TakeDamage(new DamageInfo(currentDamage, hitPoint, nearestCollider, GetHitDirection(hitPoint), gameObject));
+                target.TakeDamage(new DamageInfo(currentDamage, hitPoint, nearestCollider, GetHitDirection(hitPoint), gameObject, staggerLimit: staggerLimit));
                 ApplyHitStop(nearestCollider);
             }
         }
@@ -141,7 +146,6 @@ namespace ProjectFantasy.Combat
             direction.y = 0f;
             return direction.sqrMagnitude > Mathf.Epsilon ? direction.normalized : hitOrigin.forward;
         }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = gizmoColor;

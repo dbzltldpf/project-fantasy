@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Warrior_Boss
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyData
   displayName: Warrior_Boss
-  maxHealth: 120
+  maxHealth: 600
   attackPower: 12
   experience: 60
   weapon: {fileID: 11400000, guid: 2fdcabf4103f29c4e95426848a5c4dd5, type: 2}

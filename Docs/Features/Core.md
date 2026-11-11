@@ -14,7 +14,7 @@
 | [IDamageMultiplier.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageMultiplier.cs) | 피해 배율 (`GetMultiplier`, 보스 부위 등), Health가 방어력 계산 전에 호출 |
 | [DamageType.cs](../../Assets/Project/Scripts/Core/Types/DamageType.cs) | `Physical` / `Magic` (방어력 종류 구분) |
 | [DamageResult.cs](../../Assets/Project/Scripts/Core/Types/DamageResult.cs) | `Applied` / `Blocked` / `Ignored` (투사체가 박힐지 튕길지 등 공격 측 반응 결정) |
-| [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자, 종류, 맞은 콜라이더 `HitCollider`), `WithAmount` |
+| [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자, 종류, 맞은 콜라이더 `HitCollider`, 경직 횟수 `StaggerLimit`), `WithAmount` |
 | [TransformExtensions.cs](../../Assets/Project/Scripts/Utils/TransformExtensions.cs) | `FindDeepChild` 하위 계층 이름 탐색 (초기화 전용) |
 | [IKillRewardReceiver.cs](../../Assets/Project/Scripts/Core/Interfaces/IKillRewardReceiver.cs) | 처치 보상 수신 (`KillReward`가 호출, 플레이어는 숙련 경험치) |
 | [PrefabPool.cs](../../Assets/Project/Scripts/Utils/PrefabPool.cs) | 프리팹별 컴포넌트 풀 `PrefabPool<T>` (투사체·데미지 숫자 공용, 외부 파괴 인스턴스 건너뜀, `SetRoot`로 부모 지정) |
@@ -33,6 +33,8 @@
 
 ### DamageInfo
 - `readonly struct` → GC 할당 없이 전달. `in` 파라미터로 복사 비용 최소화.
+- `StaggerLimit`: 근접 무기가 적을 연속 경직시킬 수 있는 횟수. 기본값 `NoStaggerLimit`(0) = 제한 없음 (화살·마법). 생성자 마지막 선택 인자라 기존 호출은 그대로 동작.
+- `WithAmount`는 피해량만 바꾸고 나머지 필드(`StaggerLimit` 포함)를 모두 복사한다. 필드를 추가하면 여기도 함께 갱신.
 
 ## 주의사항 / 확장 포인트
 - 적 AI도 `StateMachine<EnemyStateBase>` 형태로 그대로 재사용한다.
@@ -49,3 +51,4 @@
 | 2026-10-07 | `IKillRewardReceiver`, `Utils/RendererExtensions`, 풀 부모 폴더(`PoolContainers`·`PoolContainerMap`, `PrefabPool.SetRoot`) 추가 |
 | 2026-10-08 | `DamageResult`(`IDamageable.TakeDamage` 반환), `Utils/FloatRange`·`AnimatorPoseHold`·`AnimatorExtensions` 추가 |
 | 2026-11-05 | `IDamageMultiplier`, `DamageInfo.HitCollider` 추가 |
+| 2026-11-10 | `DamageInfo.StaggerLimit`·`NoStaggerLimit` 추가 |

@@ -31,6 +31,7 @@ namespace ProjectFantasy.Enemy
 
             equipmentVisual.Show(weapon.GripHand, weapon);
             attacker.SetHitShape(weapon.HitOffset, weapon.HitRadius);
+            attacker.SetStaggerLimit(weapon.StaggerLimit);
 
             Transform model = equipmentVisual.GetActiveModel(weapon.GripHand);
             if (weapon.HasBlade && model != null) attacker.SetBlade(model, weapon.BladeBase, weapon.BladeTip, weapon.BladeRadius);

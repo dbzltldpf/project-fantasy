@@ -40,6 +40,7 @@ Health.TakeDamage
 - 내구도는 **배율·방어력이 적용된 최종 피해**만큼 깎인다.
 - 최대 내구도 = `최대 체력 × 비율`(반올림, 최소 1). 체력은 `EnemyController.Awake`에서 정해지므로 `ResetState`에서 계산한다.
 - 비율 합계가 1보다 충분히 낮아야 모든 부위를 부술 수 있다. 파괴된 부위를 때린 피해와 파괴 타격의 초과분은 체력만 깎기 때문이다.
+- 현재 `Warrior_Boss` 최대 체력 600 → 머리 48 · 몸통 90 · 팔·다리 각 60 (비율 0.08 / 0.15 / 0.1, 합계 0.63)
 - 배율은 매 타격마다 `IsBroken`을 새로 확인하므로 파괴 직후부터 자동으로 바뀐다.
 
 ### 파괴 연출 (BrokenPartOutline)
@@ -96,3 +97,4 @@ PartBroken → PartBreakGroggy → EnemyController.StartGroggy(시간)
 |---|---|
 | 2026-11-05 | 최초 작성: 맞은 콜라이더 전달(`DamageInfo.HitCollider`), 부위 피해 배율(`IDamageMultiplier`), 부위 내구도·파괴 이벤트(`PartBroken`)·피해 로그, 귀환·리스폰 시 복구(`EnemyController.CombatReset`), 파괴 부위 아웃라인 번쩍임(`BrokenPartOutline`) |
 | 2026-11-06 | 부위 파괴 그로기(`PartBreakGroggy`, `EnemyGroggyState`, `StartGroggy`), 내구도를 최대 체력 비율로 변경(`durabilityRatio`) |
+| 2026-11-11 | `Warrior_Boss` 최대 체력 120 → 600 (부위 파괴를 충분히 체감하도록) |

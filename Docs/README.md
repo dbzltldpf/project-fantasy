@@ -10,7 +10,7 @@
 | [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링, 처치 보상 |
 | [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 티어(외형 아우라·테두리 발광)·등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
 | [Mastery](Features/Mastery.md) | 무기 종류별 숙련도(알비온식), 처치 경험치, 티어 장착 조건, 숙련 보너스, 숙련도 창(K) |
-| [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
+| [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 무기별 경직 규칙, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
 | [Part Break](Features/PartBreak.md) | 보스 부위 파괴: 맞은 부위 판별, 체력 비율 내구도·피해 배율, 파괴 이벤트, 파괴 부위 아웃라인 번쩍임, 그로기, 귀환·리스폰 시 복구 |
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
@@ -62,3 +62,5 @@ Assets/Project/Scripts/
 | 2026-10-08 | Enemy, Combat, Core, RangedCombat, Magic, Player, InspectorGuide | 원거리·마법 적(Rogue·Mage), 적 전투 방식 전략 패턴, 중력 보정 사격, 근접 콤보 무작위 횟수, 조준 자세 고정 공용화, 방패에 막힌 화살 미부착(`DamageResult`), 범위 값 Min/Max, 이펙트 색 변환 도구 |
 | 2026-11-05 | PartBreak, Enemy, Combat, Core, InspectorGuide | 보스 부위 파괴: 맞은 콜라이더 전달·대상별 가장 가까운 콜라이더 선택, 부위 피해 배율(`IDamageMultiplier`), 부위 내구도·파괴 이벤트·피해 로그, 귀환·리스폰 시 부위 복구(`CombatReset`), 파괴 부위 아웃라인 번쩍임 |
 | 2026-11-06 | PartBreak, Enemy, InspectorGuide | 부위 파괴 그로기, 부위 내구도를 최대 체력 비율로 변경 |
+| 2026-11-10 | Enemy, Combat, Weapon, Core, InspectorGuide | 무기별 경직 규칙(근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직, 경직 후 반격 지연), 칼날 판정 두께만 늘리기(양 끝 당김), 경직 0.7초·넉백 거리 축소 |
+| 2026-11-11 | PartBreak | 보스 최대 체력 120 → 600 |

@@ -20,6 +20,9 @@ MonoBehaviour:
   modelPrefab: {fileID: 0}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 0}
+  gradeTable: {fileID: 0}
   weaponType: 0
   gripHand: 0
   occupiesOffHand: 0
@@ -30,6 +33,7 @@ MonoBehaviour:
   comboData: {fileID: 11400000, guid: 9236a524e0e3a02458a24ba940f363a4, type: 2}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  staggerLimit: 4
   bladeBase: {x: 0, y: 0, z: 0}
   bladeTip: {x: 0, y: 0, z: 0}
   bladeRadius: 0.1
