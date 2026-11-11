@@ -11,7 +11,7 @@
 | [DamageNumberSpawner.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberSpawner.cs) | 씬 단위 데미지 숫자 생성·풀링, 겹침 방지 랜덤 오프셋 |
 | [DamageNumber.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumber.cs) | 떠오르며 사라지는 TextMeshPro 숫자, 카메라 방향 빌보드, `SetText`로 GC 없음 |
 | [Inventory/](../../Assets/Project/Scripts/UI/Inventory/) | 인벤토리 창, 아이템 칸, 우클릭 메뉴, 드래그 고스트, 능력치 비교 문구 ([Inventory](Inventory.md)) |
-| [HUD/](../../Assets/Project/Scripts/UI/HUD/) | 상태바(`StatusBarView`: 체력·자원 공용, 수치, 낮으면 깜빡임), 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(여러 줄 동시 표시) |
+| [HUD/](../../Assets/Project/Scripts/UI/HUD/) | 상태바(`StatusBarView`: 체력·자원 공용, 수치, 낮으면 깜빡임), 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(여러 줄 동시 표시), 목표 표시(`ObjectiveView`, [Objective](Objective.md)) |
 | [Mastery/](../../Assets/Project/Scripts/UI/Mastery/) | 숙련도 창(K)·줄 ([Mastery](Mastery.md)) |
 | [Enemy/EnemyHealthBarView.cs](../../Assets/Project/Scripts/UI/Enemy/EnemyHealthBarView.cs) | 적 머리 위 월드 공간 체력바 표시·빌보드 (표시 규칙은 `EnemyHealthBarPresenter`, [Enemy](Enemy.md)) |
 | [Common/BarFill.cs](../../Assets/Project/Scripts/UI/Common/BarFill.cs) | 3조각 바 채움: `SetRatio`(양 끝 유지, 숙련 경험치) / `SetMaskedRatio`(마스크로 잘림, 체력·자원) |
@@ -28,6 +28,7 @@
 아이템: Inventory·QuickSlots·IItemActions 변경 → PlayerMenuPresenter / PlayerHudPresenter → InventoryWindow · QuickSlotBarView · AmmoCounterView · NoticeView
 숙련: WeaponMastery.ExperienceGained·LevelChanged → MasteryWindow(해당 줄만) · PlayerHudPresenter → NoticeView
 피해: Health.Damaged → DamageNumberEmitter → DamageNumberSpawner.Spawn(피해량, 타격 지점) → DamageNumber (수명 후 풀 반환)
+목표: ObjectiveTracker.StepCompleted·Changed → ObjectivePresenter → ObjectiveView (단계 완료 연출 후 다음 목표)
 체력: Health.HealthChanged → PlayerHudPresenter → StatusBarView (플레이어) / EnemyHealthBarPresenter → EnemyHealthBarView (적)
 ```
 
@@ -59,3 +60,4 @@
 | 2026-10-06 | 인벤토리 창·퀵슬롯 바·화살 수·줍기 안내·안내 문구, UI 빌더 메뉴, 한글 폰트(Pretendard 기본, Black Han Sans 제목, MaruBuri 대화) |
 | 2026-10-07 | 숙련도 창(K)·UI 빌더, Presenter를 `UI Presenters` 오브젝트로 분리, 아이템 칸 티어 표시, 안내 문구 여러 줄, 데미지 숫자 풀 부모 폴더 |
 | 2026-10-07 | 플레이어 상태바(하단 중앙, 체력 수치·저체력 깜빡임, 자원 줄 자리), 적 머리 위 체력바(어두운 배경 + 마스크 채움), `BarFill`·3조각 바 생성 공용화 |
+| 2026-11-11 | HUD 목표 표시(`ObjectiveView`: 문구·진행도, 단계 완료 색 연출, 전체 완료 문구) |

@@ -10,7 +10,8 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/Data/EnemyAnimationData.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyAnimationData.cs) | 애니메이터 상태 이름·파라미터(ActionSpeed·PoseSpeed)·전환 시간 (적 공용 SO) |
 | [Enemy/Data/EnemyGuardSettings.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyGuardSettings.cs) | 막기 확률·시간·쿨타임·반격 |
 | [Enemy/Combat/](../../Assets/Project/Scripts/Enemy/Combat/) | 전투 방식: `EnemyCombatStyle`(기반) · `MeleeCombatStyle` · `EnemyRangedStyle`(원거리 공통) · `ShooterCombatStyle` · `CasterCombatStyle` · `CasterSpell` |
-| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 판정, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔 |
+| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 판정, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔, 사망 시 `EnemyEvents.RaiseEnemyKilled` |
+| [Enemy/EnemyEvents.cs](../../Assets/Project/Scripts/Enemy/EnemyEvents.cs) | 적 전역 알림 `EnemyKilled(EnemyData)` (목표 시스템 등 적을 직접 모르는 쪽이 구독, [Objective](Objective.md)) |
 | [Enemy/EnemyStaggerCounter.cs](../../Assets/Project/Scripts/Enemy/EnemyStaggerCounter.cs) | 무기별 경직 횟수·면역 판정 (`TryStagger`, 일반 클래스) |
 | [Enemy/EnemyNavigator.cs](../../Assets/Project/Scripts/Enemy/EnemyNavigator.cs) | NavMeshAgent 래퍼: 목적지 이동(재탐색 최소화)·정지·회전(직접 제어)·넉백·직접 이동·히트스톱 정지·순간 이동 |
 | [Enemy/EnemyPerception.cs](../../Assets/Project/Scripts/Enemy/EnemyPerception.cs) | 대상 감지(거리 → 시야각 → 가림, NonAlloc·간격), 공격받으면 공격자 추적(도발 시간), 사선 확인, `TargetChanged` |
@@ -174,3 +175,4 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-05 | 보스 `Warrior_Boss`(부위별 히트박스), 사망 시 자식 콜라이더 비활성화, `CombatReset` 이벤트, 부위 파괴 연결 ([Part Break](PartBreak.md)) |
 | 2026-11-06 | 그로기 상태(`EnemyGroggyState`, `StartGroggy`), 애니메이션 데이터 `groggyState`(Hit_B), 적 컨트롤러 재생성 |
 | 2026-11-10 | 무기별 경직 규칙(`EnemyStaggerCounter`): 근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직. 단순 시간 면역 대체. 경직 시작 시 공격 쿨타임 시작 |
+| 2026-11-11 | 사망 시 전역 알림 `EnemyEvents.EnemyKilled` 발생 (목표 시스템 연동) |
