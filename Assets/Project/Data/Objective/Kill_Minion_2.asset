@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28a04c55433b42f4b91645e778321a42, type: 3}
-  m_Name: Kill_Minion_1
+  m_Name: Kill_Minion_2
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Objective.ObjectiveData
-  description: "\uD574\uACE8 \uBCD1\uC0AC 1\uB9C8\uB9AC \uCC98\uCE58"
+  description: "\uD574\uACE8 \uBCD1\uC0AC 2\uB9C8\uB9AC \uCC98\uCE58"
   target: {fileID: 11400000, guid: 754a315b45a1ad64ea917b78e123a803, type: 2}
   requiredCount: 2

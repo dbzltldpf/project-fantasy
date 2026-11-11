@@ -3,6 +3,7 @@ using ProjectFantasy.Enemy;
 using UnityEngine;
 namespace ProjectFantasy.Objective
 {
+    // 적 처치 알림으로 현재 목표 진행도를 세고 단계 완료·변경을 알림
     public sealed class ObjectiveTracker : MonoBehaviour
     {
         [SerializeField] private ObjectiveSequence goals;

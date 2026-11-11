@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ProjectFantasy.Objective
 {
+    // 트래커 알림을 목표 HUD에 반영, 단계 완료 연출 동안 갱신 보류
     public sealed class ObjectivePresenter : MonoBehaviour
     {
         [SerializeField] private ObjectiveTracker objectiveTracker;

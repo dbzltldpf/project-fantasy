@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 namespace ProjectFantasy.UI
 {
+    // 목표 문구·진행도 표시와 단계 완료 색 연출 (목표 시스템은 모름)
     public sealed class ObjectiveView : MonoBehaviour
     {
         [SerializeField] private GameObject root;
