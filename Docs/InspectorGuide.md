@@ -412,3 +412,6 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | 스폰 지점 | EnemySpawner | Enemy Prefab / Count / Spawn Radius / Respawn Delay | 적 프리팹 / 3 / 5 / 30 |
 | NavMesh | NavMeshSurface | Use Geometry / Include Layers | Physics Colliders / 지면만 (지형 MeshCollider는 Convex 끔) |
 | Canvas / Status UI | StatusBarView | Warning Threshold / Blink Speed / Value Format | 0.3 / 2 / `{0} / {1}` (`Create Player Status UI`로 생성) |
+| ObjectiveTracker | ObjectiveTracker | **Goals** | 챕터 `ObjectiveSequence` (예: `Chapter1`, [Objective](Features/Objective.md)) |
+| Canvas / 목표 패널 | ObjectiveView | Root / **Label** / **Progress Label** / Completed | 패널 / 문구 TMP / 진행도 TMP / `완료` |
+| ObjectivePresenter | ObjectivePresenter | **Objective Tracker** / **Objective View** | 씬의 트래커 / 목표 패널 |

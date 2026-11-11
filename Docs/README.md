@@ -15,6 +15,7 @@
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
+| [Objective](Features/Objective.md) | 스토리 목표 단계·챕터 SO, 적 처치 알림으로 진행도 집계, HUD 목표 표시·단계 완료 연출 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라, 휠 줌, 조준 숄더뷰 |
 | [UI](Features/UI.md) | 조준점, 데미지 숫자, 인벤토리·숙련도 창, 퀵슬롯 바·플레이어 상태바·HUD, 적 체력바 |
 | [인스펙터 설정 가이드](InspectorGuide.md) | 에셋·컴포넌트별 필드 역할과 넣을 값, 새 무기 만들기 체크리스트 |
@@ -34,13 +35,14 @@ Assets/Project/Scripts/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
 ├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/, Mastery/, Enemy/, Editor/
-├─ Enemy/         EnemyController, Navigator, Perception, Animator, Loadout, Loot, Spawner, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
+├─ Objective/     ObjectiveData, ObjectiveSequence, ObjectiveTracker, ObjectivePresenter
+├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
 셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
 (에디터 전용: `CombatEditor` · `WeaponEditor` · `ItemsEditor` · `EnemyEditor` · `UIEditor` · `UtilsEditor`)
 
 ## 변경 이력
@@ -64,3 +66,4 @@ Assets/Project/Scripts/
 | 2026-11-06 | PartBreak, Enemy, InspectorGuide | 부위 파괴 그로기, 부위 내구도를 최대 체력 비율로 변경 |
 | 2026-11-10 | Enemy, Combat, Weapon, Core, InspectorGuide | 무기별 경직 규칙(근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직, 경직 후 반격 지연), 칼날 판정 두께만 늘리기(양 끝 당김), 경직 0.7초·넉백 거리 축소 |
 | 2026-11-11 | PartBreak | 보스 최대 체력 120 → 600 |
+| 2026-11-11 | Objective, Enemy, UI, InspectorGuide | 목표 시스템: 목표 단계·챕터 SO, 적 처치 전역 알림(`EnemyEvents`), 트래커·프레젠터, HUD 목표 표시, 단계 완료 색 연출 후 다음 목표 |

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d007761bfc15b4b94ae7a90f825324, type: 3}
+  m_Name: Chapter1
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Objective.ObjectiveSequence
+  objectiveDatas:
+  - {fileID: 11400000, guid: ce80d65d93cd829408cf346df9266683, type: 2}
+  - {fileID: 11400000, guid: ee7d1fb0ae13e224a80c042331a22474, type: 2}
