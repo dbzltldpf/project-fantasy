@@ -63,3 +63,4 @@ Assets/Project/Scripts/
 | 2026-11-05 | PartBreak, Enemy, Combat, Core, InspectorGuide | 보스 부위 파괴: 맞은 콜라이더 전달·대상별 가장 가까운 콜라이더 선택, 부위 피해 배율(`IDamageMultiplier`), 부위 내구도·파괴 이벤트·피해 로그, 귀환·리스폰 시 부위 복구(`CombatReset`), 파괴 부위 아웃라인 번쩍임 |
 | 2026-11-06 | PartBreak, Enemy, InspectorGuide | 부위 파괴 그로기, 부위 내구도를 최대 체력 비율로 변경 |
 | 2026-11-10 | Enemy, Combat, Weapon, Core, InspectorGuide | 무기별 경직 규칙(근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직, 경직 후 반격 지연), 칼날 판정 두께만 늘리기(양 끝 당김), 경직 0.7초·넉백 거리 축소 |
+| 2026-11-11 | PartBreak | 보스 최대 체력 120 → 600 |
