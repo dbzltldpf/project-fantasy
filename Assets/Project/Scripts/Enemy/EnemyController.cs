@@ -221,7 +221,11 @@ namespace ProjectFantasy.Enemy
             if (stateMachine.CurrentState == GuardState) GuardState.OnBlocked(damageInfo);
         }
 
-        private void HandleDied() => ChangeState(DeadState);
+        private void HandleDied()
+        {
+            EnemyEvents.RaiseEnemyKilled(data);
+            ChangeState(DeadState);
+        }
 
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         private void ValidateStates()
