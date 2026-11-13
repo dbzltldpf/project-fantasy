@@ -19,11 +19,11 @@ namespace ProjectFantasy.Combat
         private IDamageReducer damageReducer;
         private IDamageMultiplier damageMultiplier;
         private float invincibleEndTime;
-
+        private bool isInvincibleForced;
         public int MaxHealth => maxHealth;
         public int CurrentHealth { get; private set; }
         public bool IsAlive => CurrentHealth > 0;
-        public bool IsInvincible => Time.time < invincibleEndTime;
+        public bool IsInvincible => isInvincibleForced || Time.time < invincibleEndTime;
 
         public event Action<int, int> HealthChanged;
         public event Action<DamageInfo> Damaged;
@@ -87,7 +87,9 @@ namespace ProjectFantasy.Combat
         {
             CurrentHealth = maxHealth;
             invincibleEndTime = 0f;
+            isInvincibleForced = false;
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
         }
+        public void SetInvincible(bool isInvincible) => isInvincibleForced = isInvincible;
     }
 }

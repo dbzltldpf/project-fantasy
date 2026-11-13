@@ -42,6 +42,16 @@ namespace ProjectFantasy.Player
         [Tooltip("지면을 벗어난 뒤 점프·지상 판정 유지 시간 (초)")]
         [SerializeField, Min(0f)] private float coyoteTime = 0.15f;
 
+        [Header("Dodge")]
+        [Tooltip("회피 속도 (m/s, 달리기 속도 보다 빨라야 회피로 느껴짐)")]
+        [SerializeField, Min(0f)] private float dodgeSpeed = 7;
+        [Tooltip("회피 시간 (초, 클립 길이와 맞춤)")]
+        [SerializeField, Min(0f)] private float dodgeDuration = 0.4f;
+        [Tooltip("회피 쿨타임 (초)")]
+        [SerializeField, Min(0f)] private float dodgeCooldown = 1f;
+
+
+
         public float WalkSpeed => walkSpeed;
         public float RunSpeed => runSpeed;
         public float GuardMoveSpeed => guardMoveSpeed;
@@ -54,6 +64,9 @@ namespace ProjectFantasy.Player
         public float GroundedStickForce => groundedStickForce;
         public float MaxFallSpeed => maxFallSpeed;
         public float CoyoteTime => coyoteTime;
+        public float DodgeSpeed => dodgeSpeed;
+        public float DodgeDuration => dodgeDuration;
+        public float DodgeCooldown => dodgeCooldown;
 
         // v = √(2gh)
         public float JumpVelocity => Mathf.Sqrt(JumpVelocityFactor * gravity * jumpHeight);

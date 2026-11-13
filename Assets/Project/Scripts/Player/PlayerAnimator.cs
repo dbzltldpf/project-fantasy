@@ -26,6 +26,10 @@ namespace ProjectFantasy.Player
         private int guardHash;
         private int blockHitHash;
         private int pickUpHash;
+        private int dodgeForwardHash;
+        private int dodgeBackwardHash;
+        private int dodgeLeftHash;
+        private int dodgeRightHash;
         private int walkBackwardHash;
         private int strafeLeftHash;
         private int strafeRightHash;
@@ -54,6 +58,10 @@ namespace ProjectFantasy.Player
             guardHash = Animator.StringToHash(data.GuardState);
             blockHitHash = Animator.StringToHash(data.BlockHitState);
             pickUpHash = Animator.StringToHash(data.PickUpState);
+            dodgeForwardHash = Animator.StringToHash(data.DodgeForwardState);
+            dodgeBackwardHash = Animator.StringToHash(data.DodgeBackwardState);
+            dodgeLeftHash = Animator.StringToHash(data.DodgeLeftState);
+            dodgeRightHash = Animator.StringToHash(data.DodgeRightState);
             walkBackwardHash = Animator.StringToHash(data.WalkBackwardState);
             strafeLeftHash = Animator.StringToHash(data.StrafeLeftState);
             strafeRightHash = Animator.StringToHash(data.StrafeRightState);
@@ -85,6 +93,7 @@ namespace ProjectFantasy.Player
         public void PlayHit() => CrossFade(hitHash, data.ActionCrossFade, true);
         public void PlayDeath() => CrossFade(deathHash, data.ActionCrossFade, true);
         public void PlayPickUp() => CrossFade(pickUpHash, data.ActionCrossFade, true);
+        public void PlayDodge(Vector3 localDirection) => CrossFade(PlayerDodgeLocomotion(localDirection), data.ActionCrossFade, true);
         public void PlayAction(int stateHash) => CrossFade(stateHash, data.ActionCrossFade, true);
 
         // 액션 타임라인 재생 (애니메이션 속도 = 이벤트 시계 속도)
@@ -108,6 +117,16 @@ namespace ProjectFantasy.Player
             CrossFade(targetHash, data.LocomotionCrossFade, false);
 
             if (targetHash == aimIdleHash) poseHold.Hold(aimIdleHash, holdNormalizedTime);
+        }
+        public int PlayerDodgeLocomotion(Vector3 localVelocity)
+        {
+            float absForward = Mathf.Abs(localVelocity.z);
+            float absSide = Mathf.Abs(localVelocity.x);
+
+            int targetHash = absForward >= absSide ? (localVelocity.z >= 0f ? dodgeForwardHash : dodgeBackwardHash)
+                : (localVelocity.x >= 0f ? dodgeRightHash : dodgeLeftHash);
+
+            return targetHash;
         }
 
         // 누락된 상태를 이름으로 보고 (릴리즈 빌드에서는 호출 제거)
@@ -134,6 +153,10 @@ namespace ProjectFantasy.Player
             ValidateState(data.StrafeRightState);
             ValidateState(data.BlockHitState);
             ValidateState(data.PickUpState);
+            ValidateState(data.DodgeForwardState);
+            ValidateState(data.DodgeBackwardState);
+            ValidateState(data.DodgeLeftState);
+            ValidateState(data.DodgeRightState);
 
             if (!poseHold.IsAvailable)
             {

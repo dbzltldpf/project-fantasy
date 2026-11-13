@@ -1,3 +1,4 @@
+
 namespace ProjectFantasy.Player
 {
     // 지상 대기/걷기/달리기 (애니메이션은 속도로 분기), 줍기·퀵슬롯 입력 처리
@@ -8,6 +9,12 @@ namespace ProjectFantasy.Player
         public override void Tick(float deltaTime)
         {
             if (TryStartPrimaryAction()) return;
+
+            if (TryStartDodge())
+            {
+                Controller.ChangeState(Controller.DodgeState);
+                return;
+            }
 
             if (Motor.CanJump && InputHandler.ConsumeJump())
             {
