@@ -252,6 +252,7 @@
 | Jump Height / Gravity | 점프 높이·중력 | 1.2 / 25 |
 | Grounded Stick Force / Max Fall Speed | 경사 밀착·최대 낙하 | 2 / 50 |
 | Coyote Time | 지면 이탈 후 점프 허용 | 0.15 |
+| Dodge Speed / Duration / Cooldown | 회피 속도 / 시간(클립 길이와 맞춤) / 종료 후 쿨타임 (초) | 7 / 0.4 / 1 |
 
 Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run Speed는 크게 둘 것.
 
@@ -259,7 +260,7 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | 필드 | 하는 일 | 기본값 |
 |---|---|---|
 | Pose Speed / Action Speed Parameter | 조준 자세 고정 / 공격 재생 속도용 Float 파라미터 | `PoseSpeed` / `ActionSpeed` |
-| 상태 이름 13개 | 대기·걷기·달리기·공중·피격·사망·가드·막기·줍기·조준 이동 | 애니메이터 상태 이름과 **정확히 일치** (누락 시 시작할 때 에러) |
+| 상태 이름 17개 | 대기·걷기·달리기·공중·피격·사망·가드·막기·줍기·회피 4방향·조준 이동 | 애니메이터 상태 이름과 **정확히 일치** (누락 시 시작할 때 에러) |
 | Idle / Run Speed Threshold | 대기 → 걷기 → 달리기 분기 속도 | 0.1 / 3.5 |
 | Locomotion / Action Cross Fade | 이동 / 동작 전환 시간 | 0.15 / 0.1 |
 

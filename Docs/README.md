@@ -6,7 +6,7 @@
 | 문서 | 내용 |
 |---|---|
 | [Core](Features/Core.md) | 상태 머신, 피해/방어 인터페이스, 유틸 등 공용 코드 |
-| [Player](Features/Player.md) | 플레이어 입력·이동·애니메이션·상태(FSM)·가드 |
+| [Player](Features/Player.md) | 플레이어 입력·이동·회피·애니메이션·상태(FSM)·가드 |
 | [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링, 처치 보상 |
 | [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 티어(외형 아우라·테두리 발광)·등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
 | [Mastery](Features/Mastery.md) | 무기 종류별 숙련도(알비온식), 처치 경험치, 티어 장착 조건, 숙련 보너스, 숙련도 창(K) |
@@ -66,4 +66,5 @@ Assets/Project/Scripts/
 | 2026-11-06 | PartBreak, Enemy, InspectorGuide | 부위 파괴 그로기, 부위 내구도를 최대 체력 비율로 변경 |
 | 2026-11-10 | Enemy, Combat, Weapon, Core, InspectorGuide | 무기별 경직 규칙(근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직, 경직 후 반격 지연), 칼날 판정 두께만 늘리기(양 끝 당김), 경직 0.7초·넉백 거리 축소 |
 | 2026-11-11 | PartBreak | 보스 최대 체력 120 → 600 |
+| 2026-11-13 | Player, Combat, InspectorGuide | 회피: 4방향 회피·회피 중 무적(`Health` 강제 무적)·쿨타임, 가드·조준 중 회피 후 우클릭 유지 시 복귀 |
 | 2026-11-11 | Objective, Enemy, UI, InspectorGuide | 목표 시스템: 목표 단계·챕터 SO, 적 처치 전역 알림(`EnemyEvents`), 트래커·프레젠터, HUD 목표 표시, 단계 완료 색 연출 후 다음 목표 |
