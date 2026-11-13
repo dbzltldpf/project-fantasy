@@ -1,13 +1,13 @@
 # Player
 
 ## 개요
-카메라 기준 이동, 걷기/달리기, 점프, 콤보 공격, 방패 가드, 원거리 조준·발사, 마법 시전, 줍기·아이템 사용, 퀵슬롯 장착, 피격/사망을 처리하는 플레이어 캐릭터. 기준 캐릭터는 KayKit **Rogue**.
+카메라 기준 이동, 걷기/달리기, 점프, 회피(무적·쿨타임), 콤보 공격, 방패 가드, 원거리 조준·발사, 마법 시전, 줍기·아이템 사용, 퀵슬롯 장착, 피격/사망을 처리하는 플레이어 캐릭터. 기준 캐릭터는 KayKit **Rogue**.
 
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
 | [PlayerController.cs](../../Assets/Project/Scripts/Player/PlayerController.cs) | 컴포넌트 조립, 상태 머신 구동, 카메라 기준 이동 벡터 계산, 체력/무기 이벤트 → 상태 전이 |
-| [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 액션 에셋에서 이름으로 액션 탐색, 공격/점프/줍기/퀵슬롯 선입력 버퍼, 메뉴 중 게임플레이 입력 차단 |
+| [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 액션 에셋에서 이름으로 액션 탐색, 공격/점프/회피/줍기/퀵슬롯 선입력 버퍼, 메뉴 중 게임플레이 입력 차단 |
 | [PlayerMotor.cs](../../Assets/Project/Scripts/Player/PlayerMotor.cs) | CharacterController 이동, 가속/감속, 중력, 접지, 회전 |
 | [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 (상태 이름은 `PlayerAnimationData`), 자세 고정은 `AnimatorPoseHold`(적과 공용) |
 | [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 **개체** 적용, 무기와 맞지 않는 보조 장비 비활성 ([Weapon](Weapon.md), [Inventory](Inventory.md)) |
@@ -17,9 +17,9 @@
 | [PlayerItemHandler.cs](../../Assets/Project/Scripts/Player/PlayerItemHandler.cs) / [PlayerInteractor.cs](../../Assets/Project/Scripts/Player/PlayerInteractor.cs) | 아이템 장착·사용·버리기·줍기, 주변 아이템 탐색 ([Inventory](Inventory.md)) |
 | [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
 | [PlayerMasteryRewarder.cs](../../Assets/Project/Scripts/Player/PlayerMasteryRewarder.cs) / [WeaponMastery.cs](../../Assets/Project/Scripts/Mastery/WeaponMastery.cs) | 처치 보상 → 장착 무기·보조 장비 숙련 경험치, 숙련 레벨·티어 장착 조건·보너스 ([Mastery](Mastery.md)) |
-| [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프 튜닝 데이터 (SO) |
+| [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프/회피 튜닝 데이터 (SO) |
 | [PlayerAnimationData.cs](../../Assets/Project/Scripts/Player/Data/PlayerAnimationData.cs) | 애니메이터 상태 이름·파라미터·전환 시간·이동 모션 분기 속도 (SO) |
-| [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Aim`, `RangedFire`, `Reload`, `Cast`, `SpellTarget`, `PickUp`, `UseItem`, `Hit`, `Dead` |
+| [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Aim`, `RangedFire`, `Reload`, `Cast`, `SpellTarget`, `PickUp`, `UseItem`, `Dodge`, `Hit`, `Dead` |
 
 ## 동작 흐름
 ### 프레임 처리 순서
@@ -42,6 +42,12 @@ flowchart LR
     Guard -->|"가드 해제"| Locomotion
     Locomotion -->|"점프 / 코요테 타임 초과"| Air
     Air -->|"착지"| Locomotion
+    Locomotion -->|"회피 입력 + 쿨 완료"| Dodge
+    Guard -->|"회피 입력 + 쿨 완료"| Dodge
+    Aim -->|"회피 입력 + 쿨 완료"| Dodge
+    Dodge -->|"종료 + 우클릭 유지"| Guard
+    Dodge -->|"종료 + 우클릭 유지"| Aim
+    Dodge -->|"종료"| Locomotion
     Any["모든 상태<br/>(Dead 제외)"] -->|"피격"| Hit
     Hit -->|"재피격 → 재진입"| Hit
     Hit -->|"경직 종료"| Locomotion
@@ -54,6 +60,7 @@ flowchart LR
 | PickUp / UseItem | 줍기 모션 후 가방에 추가 / 소모품 사용(느린 이동, 효과 시점에 소모) ([Inventory](Inventory.md)) |
 | Air | 점프·낙하. 공중 가속(airAcceleration)으로 제어, 코요테 타임 내 점프 허용 |
 | Attack | 입력 방향으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션 ([Combat](Combat.md)) |
+| Dodge | 진입 시 입력 방향(없으면 뒤)으로 고정해 `dodgeSpeed`로 `dodgeDuration` 동안 이동. 몸 방향 기준 4방향 애니, 회피 내내 무적. 종료 시 우클릭 유지면 `TryStartSecondaryAction`(가드·조준), 아니면 Locomotion |
 | Guard | 방패 가드 홀드. 느린 이동(guardMoveSpeed), 막으면 Block_Hit + 넉백 경직, 가드 중 공격 가능 |
 | Aim / RangedFire / Reload | 활·석궁 조준·발사·장전 ([Ranged Combat](RangedCombat.md)) |
 | Cast / SpellTarget | 마법 시전 / Staff 마법진 조준 ([Magic](Magic.md)) |
@@ -82,6 +89,7 @@ flowchart LR
 | Move | WASD | 왼쪽 스틱 | 매 프레임 읽기 |
 | Attack | 마우스 왼쪽 | West 버튼 | 선입력 버퍼 |
 | Jump | Space | South 버튼 | 선입력 버퍼 |
+| Dodge | Left Ctrl | East 버튼 | 선입력 버퍼 (Locomotion·Guard·Aim에서 쿨 완료 시) |
 | Sprint | Left Shift | 왼쪽 스틱 누름 | 홀드 |
 | Secondary (구 Guard) | 마우스 오른쪽 | 왼쪽 트리거 | 홀드 (무기에 따라 가드/조준) |
 | Interact | E | North | 선입력 버퍼 (줍기) |
@@ -91,7 +99,7 @@ flowchart LR
 | Zoom | 마우스 휠 | — | 카메라 줌 ([Camera](Camera.md)) |
 
 ### 선입력 / 코요테 타임
-- 공격·점프·줍기·퀵슬롯 입력은 `inputBufferTime`(0.2초) 동안 보관 후 `Consume*()` 시 소모.
+- 공격·점프·회피·줍기·퀵슬롯 입력은 `inputBufferTime`(0.2초) 동안 보관 후 `Consume*()` 시 소모.
 - 지면을 벗어난 뒤 `coyoteTime`(0.15초)까지는 지상 판정 유지 → 경사·계단에서 Air 전환 떨림 방지 + 늦은 점프 허용.
 
 ## 데이터 파라미터
@@ -110,6 +118,9 @@ flowchart LR
 | groundedStickForce | 2 | 접지 유지용 하강 속도 |
 | maxFallSpeed | 50 | 최대 낙하 속도 |
 | coyoteTime | 0.15 | 코요테 타임 (초) |
+| dodgeSpeed | 7 | 회피 이동 속도 (m/s, 달리기보다 빠르게) |
+| dodgeDuration | 0.4 | 회피 시간 (초, 클립 길이와 맞춤) |
+| dodgeCooldown | 1 | 회피 종료 후 다시 회피 가능까지 (초) |
 
 ### 컴포넌트 인스펙터 값
 | 컴포넌트 | 필드 | 기본값 | 의미 |
@@ -134,6 +145,7 @@ flowchart LR
    | 피격 / 사망 | `Hit_A` / `Death_A` | Rig_Medium_General |
    | 가드 / 막기 | `Melee_Blocking` / `Melee_Block_Hit` | Rig_Medium_CombatMelee |
    | 조준 이동 | `Walking_Backwards` / `Running_Strafe_Left` / `Running_Strafe_Right` (Loop) | Rig_Medium_MovementAdvanced |
+   | 회피 | `Dodge_Forward` / `Dodge_Backward` / `Dodge_Left` / `Dodge_Right` (0.4초, Root Bake Into Pose) | `Animation/Clip/Movement/` (재추출 .anim) |
 
    Float 파라미터 `PoseSpeed`(기본 1) 추가, 자세 고정이 필요한 조준 대기 상태의 Speed Multiplier에 연결.
    Float 파라미터 `ActionSpeed`(기본 1) 추가, 모든 공격 상태의 Speed Multiplier에 연결.
@@ -148,7 +160,10 @@ flowchart LR
 - `walkSpeed`를 `runSpeedThreshold`(3.5) 이상으로 올리면 걷기에도 Run 애니메이션이 나온다. 두 값을 함께 조정.
 - 루트 모션은 사용하지 않음 (`applyRootMotion = false`), 이동은 전부 PlayerMotor가 담당.
 - 가드 중 이동은 전신 가드 모션이라 발이 미끄러져 보임 → 상체 레이어(Avatar Mask) 도입 시 개선.
-- 예정: 주목(락온), 회피/저스트 회피, 스태미나, 점프 시작/착지 애니메이션.
+- 회피 무적은 `Health.SetInvincible`(강제 무적 플래그)로 켜고 `Exit`에서 끈다 → 피격·사망으로 끊겨도 무적이 남지 않음. 쿨타임도 `Exit`에서 기록.
+- 이동 중에는 몸이 입력 방향을 보므로 항상 앞 회피 애니가 나온다. 좌·우·후방은 몸 방향이 고정된 가드·조준 중이나 입력 없이(뒤로) 회피할 때 나온다.
+- 회피 진입은 `PlayerStateBase.TryStartDodge`(쿨 확인 후 입력 소비 → 쿨 중 입력은 버퍼에 남음). 공격 중 회피 캔슬은 지원하지 않는다.
+- 예정: 주목(락온), 저스트 회피, 스태미나, 점프 시작/착지 애니메이션.
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -162,3 +177,4 @@ flowchart LR
 | 2026-10-07 | 무기 숙련도(`WeaponMastery`·`PlayerMasteryRewarder`), 숙련도 창 입력(K), 숙련 보너스가 공격력·마법력·방패 방어력에 반영, 숙련 부족 장비 장착 거부 |
 | 2026-10-07 | HUD 체력 상태바 연결 (`PlayerHudPresenter.healthBar`), 플레이어 버리기가 `WorldItem.Spawn` 사용 |
 | 2026-10-08 | 조준 자세 고정 로직을 `Utils/AnimatorPoseHold`로 분리 (동작 동일) |
+| 2026-11-13 | 회피(Dodge): 입력 방향 4방향 회피, 회피 중 무적, 쿨타임, Locomotion·Guard·Aim에서 진입, 종료 시 우클릭 유지면 가드·조준 복귀 |

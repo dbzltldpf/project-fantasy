@@ -43,7 +43,11 @@ namespace ProjectFantasy.Player
                 Controller.ChangeState(Motor.IsAirborne ? Controller.AirState : Controller.LocomotionState);
                 return;
             }
-
+            if (TryStartDodge())
+            {
+                Controller.ChangeState(Controller.DodgeState);
+                return;
+            }
             // 가드 중 좌클릭: 근접 공격 또는 한손 석궁 발사
             if (TryStartPrimaryAction()) return;
 

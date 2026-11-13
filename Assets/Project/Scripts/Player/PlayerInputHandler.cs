@@ -14,6 +14,7 @@ namespace ProjectFantasy.Player
         private const string MoveName = "Move";
         private const string AttackName = "Attack";
         private const string JumpName = "Jump";
+        private const string DodgeName = "Dodge";
         private const string SprintName = "Sprint";
         private const string SecondaryName = "Secondary";
         private const string InteractName = "Interact";
@@ -30,6 +31,7 @@ namespace ProjectFantasy.Player
         private InputAction moveAction;
         private InputAction attackAction;
         private InputAction jumpAction;
+        private InputAction dodgeAction;
         private InputAction sprintAction;
         private InputAction secondaryAction;
         private InputAction interactAction;
@@ -39,6 +41,7 @@ namespace ProjectFantasy.Player
 
         private float lastAttackPressedTime = float.NegativeInfinity;
         private float lastJumpPressedTime = float.NegativeInfinity;
+        private float lastDodgePressedTime = float.NegativeInfinity;
         private float lastInteractPressedTime = float.NegativeInfinity;
         private float lastQuickSlotPressedTime = float.NegativeInfinity;
         private int pendingQuickSlot = NoQuickSlot;
@@ -59,6 +62,7 @@ namespace ProjectFantasy.Player
             moveAction = playerMap.FindAction(MoveName, true);
             attackAction = playerMap.FindAction(AttackName, true);
             jumpAction = playerMap.FindAction(JumpName, true);
+            dodgeAction = playerMap.FindAction(DodgeName, true);
             sprintAction = playerMap.FindAction(SprintName, true);
             secondaryAction = playerMap.FindAction(SecondaryName, true);
             interactAction = playerMap.FindAction(InteractName, true);
@@ -71,6 +75,7 @@ namespace ProjectFantasy.Player
         {
             attackAction.performed += OnAttackPerformed;
             jumpAction.performed += OnJumpPerformed;
+            dodgeAction.performed += OnDodgePerformed;
             interactAction.performed += OnInteractPerformed;
             inventoryAction.performed += OnInventoryPerformed;
             masteryAction.performed += OnMasteryPerformed;
@@ -82,6 +87,7 @@ namespace ProjectFantasy.Player
         {
             attackAction.performed -= OnAttackPerformed;
             jumpAction.performed -= OnJumpPerformed;
+            dodgeAction.performed -= OnDodgePerformed;
             interactAction.performed -= OnInteractPerformed;
             inventoryAction.performed -= OnInventoryPerformed;
             masteryAction.performed -= OnMasteryPerformed;
@@ -97,6 +103,7 @@ namespace ProjectFantasy.Player
 
         public bool ConsumeAttack() => ConsumeBuffered(ref lastAttackPressedTime);
         public bool ConsumeJump() => ConsumeBuffered(ref lastJumpPressedTime);
+        public bool ConsumeDodge() => ConsumeBuffered(ref lastDodgePressedTime);
         public bool ConsumeInteract() => ConsumeBuffered(ref lastInteractPressedTime);
 
         // 버퍼된 퀵슬롯 번호 (없으면 NoQuickSlot)
@@ -111,6 +118,7 @@ namespace ProjectFantasy.Player
         {
             lastAttackPressedTime = float.NegativeInfinity;
             lastJumpPressedTime = float.NegativeInfinity;
+            lastDodgePressedTime = float.NegativeInfinity;
             lastInteractPressedTime = float.NegativeInfinity;
             lastQuickSlotPressedTime = float.NegativeInfinity;
             pendingQuickSlot = NoQuickSlot;
@@ -138,6 +146,10 @@ namespace ProjectFantasy.Player
         private void OnJumpPerformed(InputAction.CallbackContext _)
         {
             if (isGameplayEnabled) lastJumpPressedTime = Time.time;
+        }
+        private void OnDodgePerformed(InputAction.CallbackContext _)
+        {
+            if (isGameplayEnabled) lastDodgePressedTime = Time.time;
         }
 
         private void OnInteractPerformed(InputAction.CallbackContext _)

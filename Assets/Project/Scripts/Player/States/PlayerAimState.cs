@@ -36,7 +36,11 @@ namespace ProjectFantasy.Player
             }
 
             if (TryStartPrimaryAction()) return;
-
+            if (TryStartDodge())
+            {
+                Controller.ChangeState(Controller.DodgeState);
+                return;
+            }
             ApplyMoveInput(MovementData.AimMoveSpeed, MovementData.Acceleration, MovementData.Deceleration, deltaTime, false);
             FaceAim(deltaTime);
 

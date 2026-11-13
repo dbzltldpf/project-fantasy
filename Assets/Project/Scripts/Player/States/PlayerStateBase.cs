@@ -113,5 +113,9 @@ namespace ProjectFantasy.Player
             if (faceMoveDirection) Motor.RotateTowards(direction, deltaTime);
             return true;
         }
+        protected bool TryStartDodge()
+        {
+            return Controller.DodgeState.IsReady && InputHandler.ConsumeDodge();
+        }
     }
 }

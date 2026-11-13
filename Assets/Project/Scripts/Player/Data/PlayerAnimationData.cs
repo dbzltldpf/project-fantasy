@@ -32,6 +32,16 @@ namespace ProjectFantasy.Player
         [Tooltip("줍기 상태")]
         [SerializeField] private string pickUpState = "PickUp";
 
+        [Header("Dodge (회피)")]
+        [Tooltip("뒤 회피")]
+        [SerializeField] private string dodgeBackwardState = "Dodge_Backward";
+        [Tooltip("앞 회피")]
+        [SerializeField] private string dodgeForwardState = "Dodge_Forward";
+        [Tooltip("왼쪽 회피")]
+        [SerializeField] private string dodgeLeftState = "Dodge_Left";
+        [Tooltip("오른쪽 회피")]
+        [SerializeField] private string dodgeRightState = "Dodge_Right";
+
         [Header("Aim Locomotion (조준 중 이동)")]
         [Tooltip("조준 중 뒤로 걷기")]
         [SerializeField] private string walkBackwardState = "Walking_Backwards";
@@ -63,6 +73,10 @@ namespace ProjectFantasy.Player
         public string GuardState => guardState;
         public string BlockHitState => blockHitState;
         public string PickUpState => pickUpState;
+        public string DodgeBackwardState => dodgeBackwardState;
+        public string DodgeForwardState => dodgeForwardState;
+        public string DodgeLeftState => dodgeLeftState;
+        public string DodgeRightState => dodgeRightState;
         public string WalkBackwardState => walkBackwardState;
         public string StrafeLeftState => strafeLeftState;
         public string StrafeRightState => strafeRightState;

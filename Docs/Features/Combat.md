@@ -6,7 +6,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Died` 이벤트, `SetMaxHealth`(데이터 기반 최대 체력), `TakeDamage`가 결과(`DamageResult`) 반환 |
+| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 강제 무적(`SetInvincible`, 회피 등 상태가 켜고 끔), 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Died` 이벤트, `SetMaxHealth`(데이터 기반 최대 체력), `TakeDamage`가 결과(`DamageResult`) 반환 |
 | [TrainingDummy.cs](../../Assets/Project/Scripts/Combat/TrainingDummy.cs) | 훈련용 허수아비: 피격 직후 체력 복구로 죽지 않음, 가상 체력 처치 판정, 피해 로그(에디터/개발 빌드) |
 | [KillReward.cs](../../Assets/Project/Scripts/Combat/KillReward.cs) | 처치 보상: 피해를 준 공격자 기록 → 처치 시 각자에게 경험치 전액 (`IKillRewardReceiver`), `SetExperience`·`ClearContributors`(적 데이터·귀환/리스폰) |
 | [EffectPool.cs](../../Assets/Project/Scripts/Combat/Effects/EffectPool.cs) / [PooledEffect.cs](../../Assets/Project/Scripts/Combat/Effects/PooledEffect.cs) | 파티클 이펙트 풀링: 1회 재생(파티클 종료 시 반환) / 시간 지정 / 수동 종료 |
@@ -200,4 +200,5 @@ Length               ───────────────────�
 | 2026-10-07 | `Health.SetMaxHealth`, `KillReward.SetExperience`·`ClearContributors` (적 데이터 연동), 이펙트 Variant 위치 `Art/Prefabs/Effects` |
 | 2026-10-08 | `DamageResult`(적용/막힘/무시) 반환, 이펙트 색 변환 도구(`Recolor Effect`) |
 | 2026-11-05 | 맞은 콜라이더 전달(`HitColliderUtility`, 근접·범위는 가장 가까운 콜라이더), Health 피해 배율 단계(`IDamageMultiplier`, 방어력 계산 전) |
+| 2026-11-13 | `Health.SetInvincible` 강제 무적 플래그 (`IsInvincible`에 포함, `RestoreFull` 시 해제) |
 | 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |

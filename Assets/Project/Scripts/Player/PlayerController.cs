@@ -72,6 +72,7 @@ namespace ProjectFantasy.Player
         public PlayerUseItemState UseItemState { get; private set; }
         public PlayerHitState HitState { get; private set; }
         public PlayerDeadState DeadState { get; private set; }
+        public PlayerDodgeState DodgeState { get; private set; }
 
         // 숄더뷰/조준점 전환 알림 (카메라·UI는 PlayerAimPresenter가 연결)
         public event Action<bool> AimViewChanged;
@@ -206,7 +207,7 @@ namespace ProjectFantasy.Player
             launchVelocity = RangedAttacker.ResolveLaunchVelocity(origin, GetAimPoint(), profile);
             return true;
         }
-
+        public void SetInvincible(bool isInvincible) => health.SetInvincible(isInvincible);
         private void CreateStates()
         {
             LocomotionState = new PlayerLocomotionState(this);
@@ -222,6 +223,7 @@ namespace ProjectFantasy.Player
             UseItemState = new PlayerUseItemState(this);
             HitState = new PlayerHitState(this);
             DeadState = new PlayerDeadState(this);
+            DodgeState = new PlayerDodgeState(this);
             stateMachine = new StateMachine<PlayerStateBase>();
         }
 
