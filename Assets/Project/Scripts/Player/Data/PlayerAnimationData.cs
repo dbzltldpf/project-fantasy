@@ -6,11 +6,15 @@ namespace ProjectFantasy.Player
     [CreateAssetMenu(fileName = "PlayerAnimationData", menuName = "ProjectFantasy/Player/Player Animation Data")]
     public sealed class PlayerAnimationData : ScriptableObject
     {
+        private const float MinAnimationSpeed = 0.01f;
+
         [Header("Parameters")]
         [Tooltip("조준 대기 상태의 Speed Multiplier로 연결한 Float 파라미터 (자세 고정)")]
         [SerializeField] private string poseSpeedParameter = "PoseSpeed";
         [Tooltip("공격 상태의 Speed Multiplier로 연결한 Float 파라미터 (ActionData 재생 속도)")]
         [SerializeField] private string actionSpeedParameter = "ActionSpeed";
+        [Tooltip("걷기·달리기 상태의 Speed Multiplier로 연결한 Float 파라미터 (이동 속도 맞춤)")]
+        [SerializeField] private string locomotionSpeedParameter = "LocomotionSpeed";
 
         [Header("States (애니메이터 상태 이름과 정확히 일치)")]
         [Tooltip("맨손 기본 대기 (무기별 대기는 WeaponData.idleStateName)")]
@@ -53,8 +57,12 @@ namespace ProjectFantasy.Player
         [Header("Locomotion")]
         [Tooltip("수평 속도가 이 값(m/s) 미만이면 대기 모션")]
         [SerializeField, Min(0f)] private float idleSpeedThreshold = 0.1f;
-        [Tooltip("수평 속도가 이 값(m/s) 이상이면 달리기 모션 (걷기 속도보다 크고 달리기 속도보다 작게)")]
-        [SerializeField, Min(0f)] private float runSpeedThreshold = 3.5f;
+        [Tooltip("걷기(0)~달리기(1) 속도 사이 어디서 달리기 모션으로 바꿀지 (이동 속도가 바뀌어도 자동으로 따라감)")]
+        [SerializeField, Range(0f, 1f)] private float runThresholdBlend = 0.5f;
+        [Tooltip("걷기 클립 재생 배율 1일 때 발이 미끄러지지 않는 이동 속도 (m/s)")]
+        [SerializeField, Min(MinAnimationSpeed)] private float walkAnimationSpeed = 1.5f;
+        [Tooltip("달리기 클립 재생 배율 1일 때 발이 미끄러지지 않는 이동 속도 (m/s)")]
+        [SerializeField, Min(MinAnimationSpeed)] private float runAnimationSpeed = 4f;
 
         [Header("Transition (초)")]
         [Tooltip("대기·걷기·달리기·공중 전환 시간")]
@@ -64,6 +72,7 @@ namespace ProjectFantasy.Player
 
         public string PoseSpeedParameter => poseSpeedParameter;
         public string ActionSpeedParameter => actionSpeedParameter;
+        public string LocomotionSpeedParameter => locomotionSpeedParameter;
         public string DefaultIdleState => defaultIdleState;
         public string WalkState => walkState;
         public string RunState => runState;
@@ -81,7 +90,9 @@ namespace ProjectFantasy.Player
         public string StrafeLeftState => strafeLeftState;
         public string StrafeRightState => strafeRightState;
         public float IdleSpeedThreshold => idleSpeedThreshold;
-        public float RunSpeedThreshold => runSpeedThreshold;
+        public float RunThresholdBlend => runThresholdBlend;
+        public float WalkAnimationSpeed => walkAnimationSpeed;
+        public float RunAnimationSpeed => runAnimationSpeed;
         public float LocomotionCrossFade => locomotionCrossFade;
         public float ActionCrossFade => actionCrossFade;
     }

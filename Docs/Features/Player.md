@@ -18,7 +18,7 @@
 | [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
 | [PlayerMasteryRewarder.cs](../../Assets/Project/Scripts/Player/PlayerMasteryRewarder.cs) / [WeaponMastery.cs](../../Assets/Project/Scripts/Mastery/WeaponMastery.cs) | 처치 보상 → 장착 무기·보조 장비 숙련 경험치, 숙련 레벨·티어 장착 조건·보너스 ([Mastery](Mastery.md)) |
 | [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프/회피 튜닝 데이터 (SO) |
-| [PlayerAnimationData.cs](../../Assets/Project/Scripts/Player/Data/PlayerAnimationData.cs) | 애니메이터 상태 이름·파라미터·전환 시간·이동 모션 분기 속도 (SO) |
+| [PlayerAnimationData.cs](../../Assets/Project/Scripts/Player/Data/PlayerAnimationData.cs) | 애니메이터 상태 이름·파라미터·전환 시간·이동 모션 분기 비율·클립 속도 (SO) |
 | [States/](../../Assets/Project/Scripts/Player/States/) | `PlayerStateBase`, `Locomotion`, `Air`, `Attack`, `Guard`, `Aim`, `RangedFire`, `Reload`, `Cast`, `SpellTarget`, `PickUp`, `UseItem`, `Dodge`, `Hit`, `Dead` |
 
 ## 동작 흐름
@@ -82,6 +82,8 @@ flowchart LR
 - 기본은 **걷기(WalkSpeed)**, 달리기 버튼(Sprint)을 누르고 있으면 **달리기(RunSpeed)**, 가드 중은 **GuardMoveSpeed**.
 - 최종 속도 = 기본 속도 × 입력 크기 → 패드 스틱은 기울기에 비례, 키보드는 항상 최대.
 - 이동 방향은 카메라 forward/right를 수평 투영해 계산 (`PlayerController.GetCameraRelativeMove`).
+- 걷기 → 달리기 모션 전환 속도 = 걷기~달리기 속도 사이 `runThresholdBlend` 지점 (5~8의 0.5 = 6.5). 시작 시 `PlayerAnimator.SetSpeedRange`로 1회 계산 → 이동 속도를 바꿔도 따로 맞출 필요 없음.
+- 걷기·달리기 재생 속도 = 실제 수평 속도 ÷ 클립 속도(`walkAnimationSpeed` 2.5 / `runAnimationSpeed` 4) → 발이 미끄러지지 않음. 조준 중 앞으로 걷기도 같은 배율 적용.
 
 ### 입력
 | 액션 | 키보드/마우스 | 게임패드 | 처리 |
@@ -126,9 +128,10 @@ flowchart LR
 | 컴포넌트 | 필드 | 기본값 | 의미 |
 |---|---|---|---|
 | PlayerInputHandler | inputBufferTime | 0.2 | 선입력 유지 시간 |
-| PlayerAnimationData | idle / runSpeedThreshold | 0.1 / 3.5 | 대기 → 걷기 → 달리기 분기 속도 |
+| PlayerAnimationData | idleSpeedThreshold / runThresholdBlend | 0.1 / 0.5 | 대기 → 걷기 분기 속도(m/s) / 걷기(0)~달리기(1) 속도 사이 달리기 모션 전환 지점 |
+| PlayerAnimationData | walk / runAnimationSpeed | 2.5 / 4 | 재생 배율 1일 때 발이 맞는 이동 속도 (m/s) |
 | PlayerAnimationData | locomotion / actionCrossFade | 0.15 / 0.1 | 전환 시간 |
-| PlayerAnimationData | pose / actionSpeedParameter | PoseSpeed / ActionSpeed | 조준 자세 고정 / 공격 재생 속도 Float 파라미터 |
+| PlayerAnimationData | pose / action / locomotionSpeedParameter | PoseSpeed / ActionSpeed / LocomotionSpeed | 조준 자세 고정 / 공격 재생 속도 / 걷기·달리기 재생 속도 Float 파라미터 |
 | PlayerController | minAimFacingDistance | 1.5 | 조준 지점이 가까우면 카메라 정면을 바라봄 |
 
 ### 조준 자세 고정
@@ -149,6 +152,7 @@ flowchart LR
 
    Float 파라미터 `PoseSpeed`(기본 1) 추가, 자세 고정이 필요한 조준 대기 상태의 Speed Multiplier에 연결.
    Float 파라미터 `ActionSpeed`(기본 1) 추가, 모든 공격 상태의 Speed Multiplier에 연결.
+   Float 파라미터 `LocomotionSpeed`(기본 1) 추가, `Walking_B`·`Running_B` 상태의 Speed Multiplier에 연결.
 
 2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, PlayerRangedWeapon, RangedAttacker, PlayerAmmoVisual, PlayerMagicCaster, SpellCaster, HitStop, CharacterController). 이미 있는 오브젝트는 RequireComponent가 자동 추가되지 않으므로 수동 추가.
    - CharacterController Height/Center를 캐릭터 크기에 맞춤
@@ -157,7 +161,8 @@ flowchart LR
 
 ## 주의사항 / 확장 포인트
 - 애니메이터 상태 이름은 **정확히 일치**해야 한다. 누락 시 시작할 때 콘솔에 `[PlayerAnimator] 애니메이터에 'XXX' 상태가 없습니다.` 에러 (에디터/개발 빌드 전용 `[Conditional]` 검증, 보유 무기의 콤보·대기 상태 포함).
-- `walkSpeed`를 `runSpeedThreshold`(3.5) 이상으로 올리면 걷기에도 Run 애니메이션이 나온다. 두 값을 함께 조정.
+- 걷기·달리기 클립은 제자리 애니메이션(루트 모션 없음)이라 클립 속도를 FBX에서 읽을 수 없다. 플레이 중 `walk/runAnimationSpeed`를 바꿔 발이 바닥에 붙어 보이는 값으로 맞춘다 (앞으로 미끄러지면 낮추고, 뒤로 끌리면 높임). 적과 같은 클립이라 같은 값 사용.
+- 전환 속도는 시작 시 1회 계산이라 플레이 중 이동 속도를 바꾸면 다시 플레이해야 반영된다 (재생 배율은 즉시 반영).
 - 루트 모션은 사용하지 않음 (`applyRootMotion = false`), 이동은 전부 PlayerMotor가 담당.
 - 가드 중 이동은 전신 가드 모션이라 발이 미끄러져 보임 → 상체 레이어(Avatar Mask) 도입 시 개선.
 - 회피 무적은 `Health.SetInvincible`(강제 무적 플래그)로 켜고 `Exit`에서 끈다 → 피격·사망으로 끊겨도 무적이 남지 않음. 쿨타임도 `Exit`에서 기록.
@@ -179,3 +184,4 @@ flowchart LR
 | 2026-10-08 | 조준 자세 고정 로직을 `Utils/AnimatorPoseHold`로 분리 (동작 동일) |
 | 2026-11-13 | 회피(Dodge): 입력 방향 4방향 회피, 회피 중 무적, 쿨타임, Locomotion·Guard·Aim에서 진입, 종료 시 우클릭 유지면 가드·조준 복귀 |
 | 2026-11-17 | 이동 속도 표기를 실제 값(걷기 5 / 달리기 8)으로 수정, 적 이동 속도의 기준이 됨 |
+| 2026-11-17 | 달리기 모션 전환 속도를 걷기~달리기 속도 비율(`runThresholdBlend`)로 자동 계산(`runSpeedThreshold` 제거), 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`) |

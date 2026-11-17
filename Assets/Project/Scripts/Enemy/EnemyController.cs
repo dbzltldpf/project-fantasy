@@ -90,6 +90,7 @@ namespace ProjectFantasy.Enemy
             killReward.SetExperience(data.Experience);
             Loadout.Apply(data);
             EnemyAnimator.Initialize(data.AnimationData, data.Weapon != null ? data.Weapon.IdleStateName : null);
+            EnemyAnimator.SetSpeedRange(data.WalkSpeed, data.RunSpeed);
             Perception.Configure(data.SightRange, data.SightAngle, data.LoseRange, data.ProvokedDuration);
             Perception.SetTerritory(territory);
 

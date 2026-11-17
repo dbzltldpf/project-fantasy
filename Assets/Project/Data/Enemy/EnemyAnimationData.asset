@@ -13,15 +13,20 @@ MonoBehaviour:
   m_Name: EnemyAnimationData
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyAnimationData
   actionSpeedParameter: ActionSpeed
+  poseSpeedParameter: PoseSpeed
+  locomotionSpeedParameter: LocomotionSpeed
   defaultIdleState: Idle_A
   walkState: Walking_B
   runState: Running_B
   hitState: Hit_A
+  groggyState: Hit_B
   deathState: Death_A
   spawnState: Spawn_Ground
   guardState: Melee_Blocking
   blockHitState: Melee_Block_Hit
   idleSpeedThreshold: 0.1
-  runSpeedThreshold: 2.5
+  runThresholdBlend: 0.5
+  walkAnimationSpeed: 2.5
+  runAnimationSpeed: 4
   locomotionCrossFade: 0.15
   actionCrossFade: 0.1

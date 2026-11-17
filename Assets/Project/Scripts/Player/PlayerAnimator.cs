@@ -38,6 +38,9 @@ namespace ProjectFantasy.Player
         private AnimatorPoseHold poseHold;
         private int actionSpeedHash;
         private bool hasActionSpeedParameter;
+        private int locomotionSpeedHash;
+        private bool hasLocomotionSpeedParameter;
+        private float runSpeedThreshold;
 
         private void Reset()
         {
@@ -69,6 +72,8 @@ namespace ProjectFantasy.Player
             poseHold = new AnimatorPoseHold(animator, Animator.StringToHash(data.PoseSpeedParameter));
             actionSpeedHash = Animator.StringToHash(data.ActionSpeedParameter);
             hasActionSpeedParameter = animator.HasFloatParameter(actionSpeedHash);
+            locomotionSpeedHash = Animator.StringToHash(data.LocomotionSpeedParameter);
+            hasLocomotionSpeedParameter = animator.HasFloatParameter(locomotionSpeedHash);
 
             ValidateBaseStates();
         }
@@ -79,11 +84,15 @@ namespace ProjectFantasy.Player
         // 무기 종류별 대기 모션 교체 (다음 PlayLocomotion에서 반영)
         public void SetIdleState(int stateHash) => idleHash = stateHash;
 
+        // 이동 속도 범위에서 달리기 모션 전환 속도 계산 (시작 시 1회)
+        public void SetSpeedRange(float walkSpeed, float runSpeed) => runSpeedThreshold = Mathf.Lerp(walkSpeed, runSpeed, data.RunThresholdBlend);
+
         public void PlayLocomotion(float horizontalSpeed)
         {
             int targetHash = horizontalSpeed < data.IdleSpeedThreshold ? idleHash
-                : horizontalSpeed < data.RunSpeedThreshold ? walkHash
+                : horizontalSpeed < runSpeedThreshold ? walkHash
                 : runHash;
+            if (targetHash != idleHash) SetLocomotionSpeed(targetHash, horizontalSpeed);
             CrossFade(targetHash, data.LocomotionCrossFade, false);
         }
 
@@ -114,9 +123,19 @@ namespace ProjectFantasy.Player
             int targetHash = !isMoving ? aimIdleHash
                 : absForward >= absSide ? (localVelocity.z >= 0f ? walkHash : walkBackwardHash)
                 : (localVelocity.x >= 0f ? strafeRightHash : strafeLeftHash);
+            if (targetHash == walkHash) SetLocomotionSpeed(walkHash, localVelocity.magnitude);
             CrossFade(targetHash, data.LocomotionCrossFade, false);
 
             if (targetHash == aimIdleHash) poseHold.Hold(aimIdleHash, holdNormalizedTime);
+        }
+
+        // 걷기·달리기 재생 배율을 실제 이동 속도에 맞춤 (발 미끄러짐 방지)
+        private void SetLocomotionSpeed(int stateHash, float horizontalSpeed)
+        {
+            if (!hasLocomotionSpeedParameter) return;
+
+            float clipSpeed = stateHash == runHash ? data.RunAnimationSpeed : data.WalkAnimationSpeed;
+            animator.SetFloat(locomotionSpeedHash, horizontalSpeed / clipSpeed);
         }
         public int PlayerDodgeLocomotion(Vector3 localVelocity)
         {

@@ -101,7 +101,7 @@ namespace ProjectFantasy.EnemyEditor
                     state.speedParameter = data.AnimationData.PoseSpeedParameter;
                     state.speedParameterActive = true;
                 }
-                else if (stateName == data.AnimationData.RunState)
+                else if (stateName == data.AnimationData.RunState || stateName == data.AnimationData.WalkState)
                 {
                     state.speedParameter = data.AnimationData.LocomotionSpeedParameter;
                     state.speedParameterActive = true;
