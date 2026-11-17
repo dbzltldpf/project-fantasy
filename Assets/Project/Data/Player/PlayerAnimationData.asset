@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Player.PlayerAnimationData
   poseSpeedParameter: PoseSpeed
   actionSpeedParameter: ActionSpeed
+  locomotionSpeedParameter: LocomotionSpeed
   defaultIdleState: Idle_A
   walkState: Walking_B
   runState: Running_B
@@ -23,10 +24,16 @@ MonoBehaviour:
   guardState: Melee_Blocking
   blockHitState: Melee_Block_Hit
   pickUpState: PickUp
+  dodgeBackwardState: Dodge_Backward
+  dodgeForwardState: Dodge_Forward
+  dodgeLeftState: Dodge_Left
+  dodgeRightState: Dodge_Right
   walkBackwardState: Walking_Backwards
   strafeLeftState: Running_Strafe_Left
   strafeRightState: Running_Strafe_Right
   idleSpeedThreshold: 0.1
-  runSpeedThreshold: 3.5
+  runThresholdBlend: 0.5
+  walkAnimationSpeed: 2.5
+  runAnimationSpeed: 4
   locomotionCrossFade: 0.15
   actionCrossFade: 0.1

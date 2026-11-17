@@ -82,6 +82,7 @@ namespace ProjectFantasy.Player
             InputHandler = GetComponent<PlayerInputHandler>();
             Motor = GetComponent<PlayerMotor>();
             PlayerAnimator = GetComponent<PlayerAnimator>();
+            PlayerAnimator.SetSpeedRange(Motor.Data.WalkSpeed, Motor.Data.RunSpeed);
             Attacker = GetComponent<MeleeAttacker>();
             Loadout = GetComponent<PlayerLoadout>();
             ShieldGuard = GetComponent<ShieldGuard>();
