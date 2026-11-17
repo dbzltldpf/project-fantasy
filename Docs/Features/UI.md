@@ -7,9 +7,9 @@
 | 파일 | 책임 |
 |---|---|
 | [CrosshairView.cs](../../Assets/Project/Scripts/UI/CrosshairView.cs) | 화면 중앙 조준점 표시/숨김 (기본 숨김, 조준 모드에서 표시) |
-| [DamageNumberEmitter.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberEmitter.cs) | `Health.Damaged` 구독 → 스포너에 표시 요청 (허수아비·적 공용) |
-| [DamageNumberSpawner.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberSpawner.cs) | 씬 단위 데미지 숫자 생성·풀링, 겹침 방지 랜덤 오프셋 |
-| [DamageNumber.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumber.cs) | 떠오르며 사라지는 TextMeshPro 숫자, 카메라 방향 빌보드, `SetText`로 GC 없음 |
+| [DamageNumberEmitter.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberEmitter.cs) | `Health.Damaged`·`Rejected` 구독 → 스포너에 숫자·무효 표시 요청 (허수아비·적 공용) |
+| [DamageNumberSpawner.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberSpawner.cs) | 씬 단위 데미지 숫자 생성·풀링, 겹침 방지 랜덤 오프셋, 무효 글자(`SpawnImmune`) |
+| [DamageNumber.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumber.cs) | 떠오르며 사라지는 TextMeshPro 숫자·글자(`ShowText`), 카메라 방향 빌보드, `SetText`로 GC 없음 |
 | [Inventory/](../../Assets/Project/Scripts/UI/Inventory/) | 인벤토리 창, 아이템 칸, 우클릭 메뉴, 드래그 고스트, 능력치 비교 문구 ([Inventory](Inventory.md)) |
 | [HUD/](../../Assets/Project/Scripts/UI/HUD/) | 상태바(`StatusBarView`: 체력·자원 공용, 수치, 낮으면 깜빡임), 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(여러 줄 동시 표시), 목표 표시(`ObjectiveView`, [Objective](Objective.md)) |
 | [Mastery/](../../Assets/Project/Scripts/UI/Mastery/) | 숙련도 창(K)·줄 ([Mastery](Mastery.md)) |
@@ -28,6 +28,7 @@
 아이템: Inventory·QuickSlots·IItemActions 변경 → PlayerMenuPresenter / PlayerHudPresenter → InventoryWindow · QuickSlotBarView · AmmoCounterView · NoticeView
 숙련: WeaponMastery.ExperienceGained·LevelChanged → MasteryWindow(해당 줄만) · PlayerHudPresenter → NoticeView
 피해: Health.Damaged → DamageNumberEmitter → DamageNumberSpawner.Spawn(피해량, 타격 지점) → DamageNumber (수명 후 풀 반환)
+무효: Health.Rejected → DamageNumberEmitter → DamageNumberSpawner.SpawnImmune(타격 지점) → DamageNumber.ShowText("무효")
 목표: ObjectiveTracker.StepCompleted·Changed → ObjectivePresenter → ObjectiveView (단계 완료 연출 후 다음 목표)
 체력: Health.HealthChanged → PlayerHudPresenter → StatusBarView (플레이어) / EnemyHealthBarPresenter → EnemyHealthBarView (적)
 ```
@@ -38,6 +39,7 @@
 | DamageNumber | lifetime / riseSpeed | 0.8 / 1.5 | 표시 시간 / 상승 속도 |
 | DamageNumber | alphaOverLifetime / scaleOverLifetime | 1→0 / 1 | 수명 비율별 투명도·크기 커브 |
 | DamageNumberSpawner | damageColor | 흰색 | 숫자 색 |
+| DamageNumberSpawner | immuneText / immuneColor | `무효` / 회색 | 피해 거부(적 진영 구역 밖 공격) 시 글자·색 |
 | DamageNumberSpawner | spawnOffset / randomHorizontalRadius | (0, 0.3, 0) / 0.3 | 타격 지점 기준 위치, 겹침 방지 반경 |
 | DamageNumberSpawner | poolRoot | 비움 | 숫자 부모 (비우면 `Pools/DamageNumbers/프리팹 이름`) |
 | StatusBarView | warningThreshold / blinkSpeed / minBlinkAlpha | 0.3 / 2 / 0.35 | 깜빡임 시작 비율 / 속도 / 가장 흐린 알파 |
@@ -61,3 +63,4 @@
 | 2026-10-07 | 숙련도 창(K)·UI 빌더, Presenter를 `UI Presenters` 오브젝트로 분리, 아이템 칸 티어 표시, 안내 문구 여러 줄, 데미지 숫자 풀 부모 폴더 |
 | 2026-10-07 | 플레이어 상태바(하단 중앙, 체력 수치·저체력 깜빡임, 자원 줄 자리), 적 머리 위 체력바(어두운 배경 + 마스크 채움), `BarFill`·3조각 바 생성 공용화 |
 | 2026-11-11 | HUD 목표 표시(`ObjectiveView`: 문구·진행도, 단계 완료 색 연출, 전체 완료 문구) |
+| 2026-11-17 | 데미지 숫자 "무효" 글자 (`Health.Rejected`, 적 진영 구역 밖 공격) |

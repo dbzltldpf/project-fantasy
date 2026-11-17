@@ -244,7 +244,7 @@
 ## 이동 (PlayerMovementData)
 | 필드 | 하는 일 | 기본값 |
 |---|---|---|
-| Walk / Run Speed | 걷기 / 달리기 버튼 속도 | 2 / 5 |
+| Walk / Run Speed | 걷기 / 달리기 버튼 속도 (적 배회·추격 속도의 기준이기도 함) | 5 / 8 |
 | Guard / Aim Move Speed | 가드·조준 중 이동 속도 | 1.2 / 1.5 |
 | Acceleration / Deceleration | 지상 가속·감속 | 30 / 40 |
 | Air Acceleration | 공중 제어 | 8 |
@@ -298,8 +298,10 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | Info | Max Health / Attack Power / Experience | 체력 / 공격력(× 액션·마법 피해 배율) / 처치 경험치 | 60·8·30 / 120·12·60 / 50·10·40 / 42·12·45 |
 | Equipment | Weapon / Shield / Defense / Magic Defense | 무기·방패 데이터 재사용, 방어력은 고정값 | SkeletonAxe / SkeletonBlade + SkeletonShield·20·5 / SkeletonCrossBow2H / SkeletonStaff |
 | Perception | Sight Range / Sight Angle | 감지 거리 / 각도 (360 = 등 뒤도 감지) | 10 / 360 |
-| Perception | Lose Range / Provoked Duration / Leash Range | 추적 포기 거리 / 맞은 뒤 거리 무관 추적 시간 / 스폰 지점 귀환 거리 | 18 / 5 / 25 |
-| Movement | Walk / Run / Turn Speed, Patrol Radius, Idle Time Range | 이동·회전, 배회 | 1.5 / 4 / 540, 6, 2~5 |
+| Perception | Lose Range / Provoked Duration / Leash Range | 추적 포기 거리 / 맞은 뒤 거리 무관 추적 시간 / 스폰 지점 귀환 거리 (진영 구역이 없을 때만) | 18 / 5 / 25 |
+| Movement | **Player Speed Reference** | 적 속도의 기준 (비우면 에러) | `PlayerMovementData` |
+| Movement | Patrol Speed Ratio / Chase Speed Blend | 배회 = 플레이어 걷기 × 비율 / 추격 = 플레이어 걷기(0)~달리기(1) 사이 지점 | 0.3 / 0.5 (보스 0.33) → 1.5 / 6.5 m/s |
+| Movement | Return Speed / Turn Speed, Patrol Radius, Idle Time Range | 귀환 질주 속도 / 회전, 배회 | 16 / 540, 6, 2~5 |
 | Combat | **Combat Style** | 전투 방식 드롭다운 (비우면 근접) | Melee / Melee / Shooter / Caster |
 | Combat | Attack Angle / Attack Cooldown Range | 공격 시작 정면 각도 / 공격 후 쿨타임 | 40 / 1.2~2 · 1.2~2 · 0~0 · 1~1.5 |
 | Combat | Stagger Immunity / Hit Reaction | 근접 경직 횟수(무기 `Stagger Limit`)를 다 쓴 뒤 추가 면역 시간 (면역 = Stun Duration + 이 값) / 경직·넉백 | 1, `HitReactionData` |
@@ -376,6 +378,7 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | 컴포넌트 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|---|
 | EnemyController | **Data** | 적 종류 (프리팹 복제 시 꼭 바꿀 것) | `Minion` / `Warrior` / `Rogue` / `Mage` |
+| EnemyController | Territory | 진영 구역 (씬에 직접 둔 적만, 스포너가 만든 적은 스포너 값 사용) | 프리팹은 비움 |
 | EnemyPerception | **Target Layers** / **Obstacle Layers** | 감지 대상 / 시야 가림 | Player / Default (캐릭터 제외) |
 | EnemyPerception | Eye Height / Scan Interval | 가림 판정 높이 / 감지 간격 | 1.5 / 0.2 |
 | MeleeAttacker | **Target Layers** | 타격 대상 | **Player** (다른 적을 때리지 않게) |
@@ -408,9 +411,12 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 | Canvas / UI Presenters | PlayerAimPresenter · PlayerMenuPresenter · PlayerHudPresenter | 플레이어·카메라·UI 참조 (Menu는 Inventory Window·**Mastery Window**) | `Create Inventory UI` → `Create Mastery UI`가 자동 연결 |
 | UI Presenters | PlayerHudPresenter | Experience / Level Up / Tier Unlock Format | 숙련 안내 문구, 기본값 (`{0}` 이름, `{1}` 값, `{2}` 티어) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Pool Root | 비움 (`Pools/DamageNumbers` 자동) |
+| 데미지 숫자 스포너 | DamageNumberSpawner | Immune Text / Immune Color | `무효` / 회색 (적 진영 구역 밖 공격) |
 | 필드 아이템 | WorldItem | Item / Count / Tier / Model Root | 아이템 / 수량 (장비는 1) / 티어 / 비움 |
 | 허수아비 | Health · TrainingDummy · DamageNumberEmitter · KillReward | Invincible Duration / Virtual Health / Experience | 0 / 100 / 30 |
 | 스폰 지점 | EnemySpawner | Enemy Prefab / Count / Spawn Radius / Respawn Delay | 적 프리팹 / 3 / 5 / 30 |
+| 스폰 지점 | EnemySpawner | Territory | 진영 구역 (비우면 Leash Range 원) |
+| 진영 구역 | EnemyTerritory + MeshCollider(ProBuilder Poly Shape) 또는 BoxCollider | **Areas** / Convex·Is Trigger / Layer | 구역 콜라이더들 / 둘 다 켬 / `Ignore Raycast`, MeshRenderer 끔 ([Enemy](Features/Enemy.md) 에디터 설정 9) |
 | NavMesh | NavMeshSurface | Use Geometry / Include Layers | Physics Colliders / 지면만 (지형 MeshCollider는 Convex 끔) |
 | Canvas / Status UI | StatusBarView | Warning Threshold / Blink Speed / Value Format | 0.3 / 2 / `{0} / {1}` (`Create Player Status UI`로 생성) |
 | ObjectiveTracker | ObjectiveTracker | **Goals** | 챕터 `ObjectiveSequence` (예: `Chapter1`, [Objective](Features/Objective.md)) |

@@ -12,6 +12,7 @@
 | [IDamageBlocker.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageBlocker.cs) | 피해 적용 전 방어 여부 판정 (`TryBlock`), Health가 호출 |
 | [IDamageReducer.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageReducer.cs) | 피해 적용 직전 피해량 감소 (`Reduce`, 방어력 등), Health가 호출 |
 | [IDamageMultiplier.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageMultiplier.cs) | 피해 배율 (`GetMultiplier`, 보스 부위 등), Health가 방어력 계산 전에 호출 |
+| [IDamageFilter.cs](../../Assets/Project/Scripts/Core/Interfaces/IDamageFilter.cs) | 피해를 받을지 결정 (`CanReceive`, false면 무시 + `Rejected`), Health가 방어 판정 전에 호출 (적 진영 구역 등) |
 | [DamageType.cs](../../Assets/Project/Scripts/Core/Types/DamageType.cs) | `Physical` / `Magic` (방어력 종류 구분) |
 | [DamageResult.cs](../../Assets/Project/Scripts/Core/Types/DamageResult.cs) | `Applied` / `Blocked` / `Ignored` (투사체가 박힐지 튕길지 등 공격 측 반응 결정) |
 | [DamageInfo.cs](../../Assets/Project/Scripts/Core/Types/DamageInfo.cs) | 피해 정보 값 타입 (양, 타격 지점, 방향, 가해자, 종류, 맞은 콜라이더 `HitCollider`, 경직 횟수 `StaggerLimit`), `WithAmount` |
@@ -51,4 +52,5 @@
 | 2026-10-07 | `IKillRewardReceiver`, `Utils/RendererExtensions`, 풀 부모 폴더(`PoolContainers`·`PoolContainerMap`, `PrefabPool.SetRoot`) 추가 |
 | 2026-10-08 | `DamageResult`(`IDamageable.TakeDamage` 반환), `Utils/FloatRange`·`AnimatorPoseHold`·`AnimatorExtensions` 추가 |
 | 2026-11-05 | `IDamageMultiplier`, `DamageInfo.HitCollider` 추가 |
+| 2026-11-17 | `IDamageFilter` 추가 |
 | 2026-11-10 | `DamageInfo.StaggerLimit`·`NoStaggerLimit` 추가 |
