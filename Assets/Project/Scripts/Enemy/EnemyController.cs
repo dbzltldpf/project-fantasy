@@ -13,12 +13,13 @@ namespace ProjectFantasy.Enemy
     [RequireComponent(typeof(EnemyLoadout), typeof(Health), typeof(HitStop))]
     [RequireComponent(typeof(KillReward))]
     [DisallowMultipleComponent]
-    public sealed class EnemyController : MonoBehaviour
+    public sealed class EnemyController : MonoBehaviour, IDamageFilter
     {
         private const float HalfAngleDivisor = 2f;
 
         [SerializeField] private EnemyData data;
-
+        [Tooltip("비어 있으면 스폰 지점 기준 Leash Range 원 사용")]
+        [SerializeField] private EnemyTerritory territory;
         private StateMachine<EnemyStateBase> stateMachine;
         private Health health;
         private HitStop hitStop;
@@ -28,6 +29,8 @@ namespace ProjectFantasy.Enemy
         private float nextAttackTime;
         private float nextGuardTime;
         private readonly EnemyStaggerCounter enemyStaggerCounter = new EnemyStaggerCounter();
+        private bool isEngaged;
+
         public EnemyData Data => data;
         public EnemyNavigator Navigator { get; private set; }
         public EnemyAnimator EnemyAnimator { get; private set; }
@@ -39,8 +42,17 @@ namespace ProjectFantasy.Enemy
         public SpellCaster SpellCaster { get; private set; }
         public Health Health => health;
         public Vector3 HomePosition { get; private set; }
-
-        public bool IsBeyondLeash => (transform.position - HomePosition).sqrMagnitude > data.LeashRange * data.LeashRange;
+        public Vector3 ReturnPosition { get; private set; }
+        public Quaternion ReturnRotation { get; private set; }
+        public bool IsBeyondLeash
+        {
+            get
+            {
+                if (Perception.Target == null) return false;
+                if (territory != null) return false; // 구역 이탈은 Perception이 대상 상실로 처리
+                return (transform.position - HomePosition).sqrMagnitude > data.LeashRange * data.LeashRange;
+            }
+        }
         public bool CanGuard => data.HasShield && Time.time >= nextGuardTime;
         public bool IsAttackReady => Time.time >= nextAttackTime;
 
@@ -55,7 +67,6 @@ namespace ProjectFantasy.Enemy
         public EnemyReturnState ReturnState { get; private set; }
         public EnemyDeadState DeadState { get; private set; }
         public EnemyGroggyState GroggyState { get; private set; }
-
         // 시체 유지가 끝나 비활성화됨 (스포너가 리스폰 예약)
         public event Action<EnemyController> Despawned;
         // 귀환·리스폰으로 전투 상태가 초기화됨
@@ -80,6 +91,7 @@ namespace ProjectFantasy.Enemy
             Loadout.Apply(data);
             EnemyAnimator.Initialize(data.AnimationData, data.Weapon != null ? data.Weapon.IdleStateName : null);
             Perception.Configure(data.SightRange, data.SightAngle, data.LoseRange, data.ProvokedDuration);
+            Perception.SetTerritory(territory);
 
             CreateStates();
             ValidateStates();
@@ -90,6 +102,7 @@ namespace ProjectFantasy.Enemy
             health.Damaged += HandleDamaged;
             health.Blocked += HandleBlocked;
             health.Died += HandleDied;
+            Perception.TargetChanged += HandleTargetChanged;
         }
 
         private void OnDisable()
@@ -97,6 +110,7 @@ namespace ProjectFantasy.Enemy
             health.Damaged -= HandleDamaged;
             health.Blocked -= HandleBlocked;
             health.Died -= HandleDied;
+            Perception.TargetChanged -= HandleTargetChanged;
         }
 
         // 씬에 직접 배치한 적은 제자리에서 스폰 (스포너가 생성한 적은 이미 스폰됨)
@@ -125,6 +139,8 @@ namespace ProjectFantasy.Enemy
         {
             isSpawned = true;
             HomePosition = position;
+            ReturnPosition = position;
+            ReturnRotation = rotation;
             ResetCombat();
             SetCollidersEnabled(true);
             Navigator.Warp(position, rotation);
@@ -138,7 +154,11 @@ namespace ProjectFantasy.Enemy
             gameObject.SetActive(false);
             Despawned?.Invoke(this);
         }
-
+        public void SetTerritory(EnemyTerritory value)
+        {
+            territory = value;
+            Perception.SetTerritory(value);
+        }
         // 귀환·리스폰 시 전투 흔적 제거 (체력·기여자·대상)
         public void ResetCombat()
         {
@@ -150,6 +170,7 @@ namespace ProjectFantasy.Enemy
             enemyStaggerCounter.Reset();
             CastState.ResetCooldowns();
             CombatReset?.Invoke();
+            isEngaged = false;
         }
 
         // 유지 거리 안에서 대상을 바라보는 중: 전투 방식이 공격·막기·사격·시전 결정
@@ -162,7 +183,7 @@ namespace ProjectFantasy.Enemy
         }
 
         // 공격·막기·경직이 끝난 뒤 대상 유무에 따라 복귀
-        public void ReturnToCombat() => ChangeState(Perception.HasTarget ? (EnemyStateBase)ChaseState : PatrolState);
+        public void ReturnToCombat() => ChangeState(Perception.HasTarget ? (EnemyStateBase)ChaseState : ReturnState);
 
         public void StartAttackCooldown() => nextAttackTime = Time.time + data.RollAttackCooldown();
         public void StartGuardCooldown() => nextGuardTime = Time.time + data.Guard.GuardCooldown;
@@ -201,7 +222,6 @@ namespace ProjectFantasy.Enemy
             GroggyState = new EnemyGroggyState(this);
             stateMachine = new StateMachine<EnemyStateBase>();
         }
-
         // 경직 면역 중에는 피해만 받고 행동 유지 (무한 경직 방지)
         private void HandleDamaged(DamageInfo damageInfo)
         {
@@ -226,7 +246,13 @@ namespace ProjectFantasy.Enemy
             EnemyEvents.RaiseEnemyKilled(data);
             ChangeState(DeadState);
         }
-
+        private void HandleTargetChanged(Transform target)
+        {
+            if (target == null || isEngaged) return;
+            isEngaged = true;
+            ReturnPosition = transform.position;
+            ReturnRotation = transform.rotation;
+        }
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         private void ValidateStates()
         {
@@ -254,6 +280,12 @@ namespace ProjectFantasy.Enemy
             {
                 if (action != null) EnemyAnimator.ValidateState(action.StateName);
             }
+        }
+
+        public bool CanReceive(in DamageInfo damageInfo)
+        {
+            if (territory == null || damageInfo.Instigator == null) return true;
+            return territory.Contains(damageInfo.Instigator.transform.position);
         }
     }
 }

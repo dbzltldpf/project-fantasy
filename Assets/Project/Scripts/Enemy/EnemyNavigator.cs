@@ -44,6 +44,12 @@ namespace ProjectFantasy.Enemy
             defaultAutoBraking = agent.autoBraking;
             defaultStoppingDistance = agent.stoppingDistance;
         }
+        public bool IsNear(Vector3 point)
+        {
+            Vector3 offset = point - transform.position;
+            offset.y = 0f;
+            return offset.sqrMagnitude <= ArrivalDistance * ArrivalDistance;
+        }
 
         // 넉백은 경로와 무관하게 NavMesh 위에서만 밀림
         public void Tick(float deltaTime)

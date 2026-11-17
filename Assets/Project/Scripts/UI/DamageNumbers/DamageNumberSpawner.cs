@@ -9,8 +9,11 @@ namespace ProjectFantasy.UI
     public sealed class DamageNumberSpawner : MonoBehaviour
     {
         [SerializeField] private DamageNumber damageNumberPrefab;
-        [SerializeField] private Transform cameraTransform;
         [SerializeField] private Color damageColor = Color.white;
+        [Tooltip("구역 밖 공격 등 피해 거부 시 표시할 글자")]
+        [SerializeField] private string immuneText = "무효";
+        [SerializeField] private Color immuneColor = Color.green;
+        [SerializeField] private Transform cameraTransform;
         [Tooltip("타격 지점 기준 생성 오프셋")]
         [SerializeField] private Vector3 spawnOffset = new Vector3(0f, 0.3f, 0f);
         [Tooltip("숫자가 겹치지 않도록 수평 랜덤 오프셋 반경")]
@@ -31,14 +34,19 @@ namespace ProjectFantasy.UI
         public void Spawn(int amount, Vector3 worldPosition)
         {
             if (damageNumberPrefab == null) return;
-
-            Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * randomHorizontalRadius;
-            Vector3 position = worldPosition + spawnOffset + new Vector3(randomOffset.x, 0f, randomOffset.y);
-
-            DamageNumber number = pool.Rent(damageNumberPrefab);
-            number.Show(amount, position, damageColor, cameraTransform, returnAction);
+            Rent(worldPosition, out Vector3 position).Show(amount, position, damageColor, cameraTransform, returnAction);
         }
-
+        public void SpawnImmune(Vector3 worldPosition)
+        {
+            if (damageNumberPrefab == null) return;
+            Rent(worldPosition, out Vector3 position).ShowText(immuneText, position, immuneColor, cameraTransform, returnAction);
+        }
+        private DamageNumber Rent(Vector3 worldPosition, out Vector3 position)
+        {
+            Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * randomHorizontalRadius;
+            position = worldPosition + spawnOffset + new Vector3(randomOffset.x, 0f, randomOffset.y);
+            return pool.Rent(damageNumberPrefab);
+        }
         private void ReturnToPool(DamageNumber number) => pool.Return(damageNumberPrefab, number);
     }
 }

@@ -20,12 +20,25 @@ namespace ProjectFantasy.UI
             if (spawner == null) spawner = FindFirstObjectByType<DamageNumberSpawner>();
         }
 
-        private void OnEnable() => health.Damaged += HandleDamaged;
-        private void OnDisable() => health.Damaged -= HandleDamaged;
+        private void OnEnable()
+        {
+            health.Damaged += HandleDamaged;
+            health.Rejected += HandleImmune;
+        }
+        private void OnDisable()
+        {
+            health.Damaged -= HandleDamaged;
+            health.Rejected -= HandleImmune;
+        }
 
         private void HandleDamaged(DamageInfo damageInfo)
         {
             if (spawner != null) spawner.Spawn(damageInfo.Amount, damageInfo.HitPoint);
         }
+        private void HandleImmune(DamageInfo damageInfo)
+        {
+            if (spawner != null) spawner.SpawnImmune(damageInfo.HitPoint);
+        }
+
     }
 }
