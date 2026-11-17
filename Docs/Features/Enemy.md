@@ -15,7 +15,7 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/EnemyStaggerCounter.cs](../../Assets/Project/Scripts/Enemy/EnemyStaggerCounter.cs) | 무기별 경직 횟수·면역 판정 (`TryStagger`, 일반 클래스) |
 | [Enemy/EnemyNavigator.cs](../../Assets/Project/Scripts/Enemy/EnemyNavigator.cs) | NavMeshAgent 래퍼: 목적지 이동(재탐색 최소화)·정지·회전(직접 제어)·넉백·직접 이동·히트스톱 정지·순간 이동, 즉시 가속(`SetInstantSpeed`), 수평 거리 도착 판정(`IsNear`) |
 | [Enemy/EnemyPerception.cs](../../Assets/Project/Scripts/Enemy/EnemyPerception.cs) | 대상 감지(구역 → 거리 → 시야각 → 가림, NonAlloc·간격), 공격받으면 공격자 추적(도발 시간), 구역 밖 대상 상실, 사선 확인, `TargetChanged` |
-| [Enemy/EnemyAnimator.cs](../../Assets/Project/Scripts/Enemy/EnemyAnimator.cs) | 상태 재생(해시 캐싱·중복 방지), 액션 재생 속도, 달리기 재생 속도를 실제 이동 속도에 맞춤(LocomotionSpeed), 자세 고정(`AnimatorPoseHold`), 클립 종료 확인, 누락 상태 검증 |
+| [Enemy/EnemyAnimator.cs](../../Assets/Project/Scripts/Enemy/EnemyAnimator.cs) | 상태 재생(해시 캐싱·중복 방지), 액션 재생 속도, 걷기·달리기 전환 속도 계산·재생 속도를 실제 이동 속도에 맞춤(LocomotionSpeed), 자세 고정(`AnimatorPoseHold`), 클립 종료 확인, 누락 상태 검증 |
 | [Enemy/EnemyLoadout.cs](../../Assets/Project/Scripts/Enemy/EnemyLoadout.cs) | 무기·방패 모델, 근접 판정(칼날/몸 기준), 방패 방어력 |
 | [Enemy/EnemyLoot.cs](../../Assets/Project/Scripts/Enemy/EnemyLoot.cs) | 사망 시 드랍 표 → 주변에 `WorldItem` 생성 |
 | [Enemy/EnemySpawner.cs](../../Assets/Project/Scripts/Enemy/EnemySpawner.cs) | 반경 안 N마리 유지, 사라진 적은 대기 후 같은 인스턴스로 리스폰 (풀링), 생성한 적에 진영 구역 전달 |
@@ -56,7 +56,8 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
   - 배회(걷기) = 플레이어 걷기 × `patrolSpeedRatio` (5 × 0.3 = 1.5)
   - 추격(달리기) = 플레이어 걷기~달리기 사이 `chaseSpeedBlend` 지점 (5~8의 0.5 = 6.5, 보스 0.33 ≈ 6) → 걷는 플레이어보다 빠르고 달리는 플레이어보다 느림
 - 평소 이동은 NavMeshAgent 가감속을 그대로 쓰고, **귀환 중에만 즉시 가속**(가속 1000, 자동 감속 끔, 정지 거리 0.3)으로 "파파박" 돌아간다. 나가면 원래 값 복원.
-- 달리기 모션 재생 속도 = 실제 수평 속도 ÷ `runAnimationSpeed`(클립 기준 4 m/s) → 추격·귀환 모두 발이 미끄러지지 않음.
+- 걷기 → 달리기 모션 전환 속도 = 배회~추격 속도 사이 `runThresholdBlend` 지점 (1.5~6.5의 0.5 = 4), `EnemyAnimator.SetSpeedRange`로 시작 시 1회 계산.
+- 걷기·달리기 재생 속도 = 실제 수평 속도 ÷ 클립 속도(`walkAnimationSpeed` 2.5 / `runAnimationSpeed` 4) → 배회·추격·귀환 모두 발이 미끄러지지 않음.
 
 ### 귀환 위치
 - **처음 대상을 잡은 순간**(시야 발견·공격받음)의 위치·방향을 기록하고, 귀환은 스폰 지점이 아니라 그 위치로 간다. 전투가 끝날(`ResetCombat`) 때까지 다시 기록하지 않음.
@@ -173,7 +174,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 3. **적 전용 마법**: 플레이어 마법을 복제해 쿨타임·예고 시간·이펙트 조정. 빨간 이펙트는 `Tools → ProjectFantasy → Recolor Effect`로 생성 ([Combat](Combat.md)).
 4. **데이터**: Enemy Animation Data(기본값), Enemy Data(위 표, **Combat Style** 드롭다운), Drop Table.
 5. **애니메이터**: EnemyData 선택 → `Tools → ProjectFantasy → Create Enemy Animator` → `Animation/Controller/Enemy_<이름>.controller`.
-   - 상태 = 기본 상태 + 전투 방식이 알려 주는 상태(근접 콤보·반격 / 장전·조준·발사 / 마법 시전 모션). 액션 상태는 ActionSpeed, 조준 대기는 PoseSpeed 연결.
+   - 상태 = 기본 상태 + 전투 방식이 알려 주는 상태(근접 콤보·반격 / 장전·조준·발사 / 마법 시전 모션). 액션 상태는 ActionSpeed, 조준 대기는 PoseSpeed, 걷기·달리기는 LocomotionSpeed 연결.
    - Spells·무기를 바꾸면 **다시 실행** (같은 에셋 갱신, 프리팹 연결 유지).
 6. **체력바**: `Tools → ProjectFantasy → Create Enemy Health Bar Prefab` → 적 프리팹 자식으로.
 7. **적 프리팹** (레이어 **Enemy**): 루트에 `EnemyController`(나머지 대부분 자동 추가) + `CapsuleCollider`(Center Y 1, Height 2, Radius 0.4) + `DamageNumberEmitter` + `EnemyLoot`(World Item Prefab), 자식에 Skeleton 모델(Animator = 5번 컨트롤러)·체력바.
@@ -212,4 +213,5 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-10 | 무기별 경직 규칙(`EnemyStaggerCounter`): 근접은 무기별 횟수 후 면역, 화살·마법은 항상 경직. 단순 시간 면역 대체. 경직 시작 시 공격 쿨타임 시작 |
 | 2026-11-11 | 사망 시 전역 알림 `EnemyEvents.EnemyKilled` 발생 (목표 시스템 연동) |
 | 2026-11-17 | 귀환 속도 분리(`returnSpeed`)·귀환 중 무적·즉시 가속, 달리기 모션 속도를 이동 속도에 맞춤(`LocomotionSpeed`), 배회·추격 속도를 플레이어 이동 데이터 기준으로 계산 |
+| 2026-11-17 | 달리기 모션 전환 속도를 배회~추격 속도 비율(`runThresholdBlend`)로 자동 계산, 걷기에도 재생 속도 맞춤(`walkAnimationSpeed`), 애니메이터 재생성 |
 | 2026-11-17 | 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·구역 이탈 시 귀환·구역 밖 공격 무효, 귀환 위치를 발견 지점으로·도착 후 원래 방향으로 돌아섬, 전투 종료 시 항상 귀환 |

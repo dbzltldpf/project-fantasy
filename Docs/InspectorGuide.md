@@ -254,14 +254,15 @@
 | Coyote Time | 지면 이탈 후 점프 허용 | 0.15 |
 | Dodge Speed / Duration / Cooldown | 회피 속도 / 시간(클립 길이와 맞춤) / 종료 후 쿨타임 (초) | 7 / 0.4 / 1 |
 
-Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run Speed는 크게 둘 것.
+달리기 모션 전환 속도는 Walk~Run Speed 사이에서 자동 계산된다 (애니메이션 데이터의 Run Threshold Blend). 속도를 바꿔도 따로 맞출 필요 없음.
 
 ## 애니메이션 (PlayerAnimationData)
 | 필드 | 하는 일 | 기본값 |
 |---|---|---|
-| Pose Speed / Action Speed Parameter | 조준 자세 고정 / 공격 재생 속도용 Float 파라미터 | `PoseSpeed` / `ActionSpeed` |
+| Pose Speed / Action Speed / Locomotion Speed Parameter | 조준 자세 고정 / 공격 재생 속도 / 걷기·달리기 재생 속도용 Float 파라미터 | `PoseSpeed` / `ActionSpeed` / `LocomotionSpeed` |
 | 상태 이름 17개 | 대기·걷기·달리기·공중·피격·사망·가드·막기·줍기·회피 4방향·조준 이동 | 애니메이터 상태 이름과 **정확히 일치** (누락 시 시작할 때 에러) |
-| Idle / Run Speed Threshold | 대기 → 걷기 → 달리기 분기 속도 | 0.1 / 3.5 |
+| Idle Speed Threshold / Run Threshold Blend | 대기 → 걷기 분기 속도(m/s) / 걷기(0)~달리기(1) 속도 사이 달리기 모션 전환 지점 | 0.1 / 0.5 |
+| Walk / Run Animation Speed | 재생 배율 1일 때 발이 맞는 이동 속도 (플레이 중 조정, 앞으로 미끄러지면 낮춤) | 2.5 / 4 |
 | Locomotion / Action Cross Fade | 이동 / 동작 전환 시간 | 0.15 / 0.1 |
 
 ## 카메라 (CameraData)
@@ -291,7 +292,7 @@ Walk Speed는 애니메이션의 **Run Speed Threshold(3.5)보다 작게**, Run 
 ---
 
 ## 적 (EnemyData)
-`Create → ProjectFantasy → Enemy → Enemy Data`. 공용 상태 이름은 `Enemy Animation Data` 한 개를 모든 적이 공유한다. 범위 값(Min ~ Max)은 한 줄로 입력한다.
+`Create → ProjectFantasy → Enemy → Enemy Data`. 공용 상태 이름은 `Enemy Animation Data` 한 개를 모든 적이 공유한다 (Run Threshold Blend 0.5, Walk / Run Animation Speed 2.5 / 4는 플레이어와 같은 의미). 범위 값(Min ~ Max)은 한 줄로 입력한다.
 
 | 묶음 | 필드 | 하는 일 | Minion / Warrior / Rogue / Mage |
 |---|---|---|---|

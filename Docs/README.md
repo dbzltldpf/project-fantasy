@@ -69,4 +69,5 @@ Assets/Project/Scripts/
 | 2026-11-13 | Player, Combat, InspectorGuide | 회피: 4방향 회피·회피 중 무적(`Health` 강제 무적)·쿨타임, 가드·조준 중 회피 후 우클릭 유지 시 복귀 |
 | 2026-11-11 | Objective, Enemy, UI, InspectorGuide | 목표 시스템: 목표 단계·챕터 SO, 적 처치 전역 알림(`EnemyEvents`), 트래커·프레젠터, HUD 목표 표시, 단계 완료 색 연출 후 다음 목표 |
 | 2026-11-17 | Enemy, Player, InspectorGuide | 적 귀환 속도 분리·귀환 중 무적·즉시 가속, 달리기 모션 속도 동기화, 적 속도를 플레이어 이동 데이터 기준으로 계산, 플레이어 속도 표기 수정 |
+| 2026-11-17 | Player, Enemy, InspectorGuide | 달리기 모션 전환 속도를 걷기~달리기 속도 비율로 자동 계산, 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`, 플레이어 조준 걷기 포함) |
 | 2026-11-17 | Enemy, Combat, Core, UI, InspectorGuide | 적 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·이탈 시 귀환·구역 밖 공격 무효(`IDamageFilter`, "무효" 표시), 발견 지점으로 귀환 후 원래 방향으로 돌아섬 |
