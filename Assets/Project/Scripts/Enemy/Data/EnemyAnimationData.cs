@@ -11,6 +11,9 @@ namespace ProjectFantasy.Enemy
         [SerializeField] private string actionSpeedParameter = "ActionSpeed";
         [Tooltip("조준 대기 상태의 Speed Multiplier로 연결한 Float 파라미터 (자세 고정)")]
         [SerializeField] private string poseSpeedParameter = "PoseSpeed";
+        [Tooltip("달리기 상태의 Speed Multiplier로 연결한 Float 파라미터 (이동 속도 맞춤)")]
+        [SerializeField] private string locomotionSpeedParameter = "LocomotionSpeed";
+
 
         [Header("States (애니메이터 상태 이름 = 클립 이름)")]
         [Tooltip("무기 대기 모션이 없을 때 기본 대기")]
@@ -32,6 +35,7 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Min(0f)] private float idleSpeedThreshold = 0.1f;
         [Tooltip("수평 속도가 이 값(m/s) 이상이면 달리기 모션")]
         [SerializeField, Min(0f)] private float runSpeedThreshold = 2.5f;
+        private float runAnimationSpeed = 4f;
 
         [Header("Transition (초)")]
         [SerializeField, Min(0f)] private float locomotionCrossFade = 0.15f;
@@ -39,6 +43,7 @@ namespace ProjectFantasy.Enemy
 
         public string ActionSpeedParameter => actionSpeedParameter;
         public string PoseSpeedParameter => poseSpeedParameter;
+        public string LocomotionSpeedParameter => locomotionSpeedParameter;
         public string DefaultIdleState => defaultIdleState;
         public string WalkState => walkState;
         public string RunState => runState;
@@ -52,7 +57,7 @@ namespace ProjectFantasy.Enemy
         public float RunSpeedThreshold => runSpeedThreshold;
         public float LocomotionCrossFade => locomotionCrossFade;
         public float ActionCrossFade => actionCrossFade;
-
+        public float RunAnimationSpeed => runAnimationSpeed;
         // 애니메이터 생성 도구용 기본 상태 목록
         public string[] GetBaseStates() => new[] { defaultIdleState, walkState, runState, hitState, groggyState, deathState, spawnState, guardState, blockHitState };
     }

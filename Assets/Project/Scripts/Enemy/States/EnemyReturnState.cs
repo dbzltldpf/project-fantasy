@@ -7,8 +7,10 @@ namespace ProjectFantasy.Enemy
 
         public override void Enter()
         {
+            Controller.Health.SetInvincible(true);
             Perception.ClearTarget();
-            Navigator.MoveTo(Controller.HomePosition, Data.RunSpeed);
+            Navigator.SetInstantSpeed(true);
+            Navigator.MoveTo(Controller.HomePosition, Data.ReturnSpeed);
         }
 
         public override void Tick(float deltaTime)
@@ -18,6 +20,11 @@ namespace ProjectFantasy.Enemy
 
             Controller.ResetCombat();
             Controller.ChangeState(Controller.PatrolState);
+        }
+        public override void Exit()
+        {
+            Controller.Health.SetInvincible(false);
+            Navigator.SetInstantSpeed(false);
         }
     }
 }

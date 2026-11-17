@@ -11,7 +11,8 @@ namespace ProjectFantasy.Enemy
         private const float RepathDistance = 0.5f;
         private const float SampleMaxDistance = 2f;
         private const int SampleAttempts = 8;
-
+        private const float InstantAcceleration = 1000f;
+        private const float ArrivalDistance = 0.3f;
         private NavMeshAgent agent;
         private Vector3 lastDestination;
         private Vector3 knockbackVelocity;
@@ -19,6 +20,9 @@ namespace ProjectFantasy.Enemy
         private bool isPaused;
         private bool wasStoppedBeforePause;
 
+        private float defaultAcceleration;
+        private bool defaultAutoBraking;
+        private float defaultStoppingDistance;
         public float HorizontalSpeed
         {
             get
@@ -36,6 +40,9 @@ namespace ProjectFantasy.Enemy
         {
             agent = GetComponent<NavMeshAgent>();
             agent.updateRotation = false;
+            defaultAcceleration = agent.acceleration;
+            defaultAutoBraking = agent.autoBraking;
+            defaultStoppingDistance = agent.stoppingDistance;
         }
 
         // 넉백은 경로와 무관하게 NavMesh 위에서만 밀림
@@ -118,7 +125,12 @@ namespace ProjectFantasy.Enemy
                 agent.isStopped = wasStoppedBeforePause;
             }
         }
-
+        public void SetInstantSpeed(bool isInstant)
+        {
+            agent.acceleration = isInstant ? InstantAcceleration : defaultAcceleration;
+            agent.autoBraking = isInstant ? false : defaultAutoBraking;
+            agent.stoppingDistance = isInstant ? ArrivalDistance : defaultStoppingDistance;
+        }
         // 리스폰: 에이전트를 켜고 NavMesh 위 지점으로 이동
         public void Warp(Vector3 position, Quaternion rotation)
         {
