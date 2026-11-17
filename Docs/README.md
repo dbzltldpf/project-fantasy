@@ -10,7 +10,7 @@
 | [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링, 처치 보상 |
 | [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 티어(외형 아우라·테두리 발광)·등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
 | [Mastery](Features/Mastery.md) | 무기 종류별 숙련도(알비온식), 처치 경험치, 티어 장착 조건, 숙련 보너스, 숙련도 창(K) |
-| [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 무기별 경직 규칙, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
+| [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 무기별 경직 규칙, 플레이어 기준 이동 속도, 진영 구역, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
 | [Part Break](Features/PartBreak.md) | 보스 부위 파괴: 맞은 부위 판별, 체력 비율 내구도·피해 배율, 파괴 이벤트, 파괴 부위 아웃라인 번쩍임, 그로기, 귀환·리스폰 시 복구 |
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
@@ -36,7 +36,7 @@ Assets/Project/Scripts/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
 ├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/, Mastery/, Enemy/, Editor/
 ├─ Objective/     ObjectiveData, ObjectiveSequence, ObjectiveTracker, ObjectivePresenter
-├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
+├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, Territory, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
 셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
@@ -68,3 +68,5 @@ Assets/Project/Scripts/
 | 2026-11-11 | PartBreak | 보스 최대 체력 120 → 600 |
 | 2026-11-13 | Player, Combat, InspectorGuide | 회피: 4방향 회피·회피 중 무적(`Health` 강제 무적)·쿨타임, 가드·조준 중 회피 후 우클릭 유지 시 복귀 |
 | 2026-11-11 | Objective, Enemy, UI, InspectorGuide | 목표 시스템: 목표 단계·챕터 SO, 적 처치 전역 알림(`EnemyEvents`), 트래커·프레젠터, HUD 목표 표시, 단계 완료 색 연출 후 다음 목표 |
+| 2026-11-17 | Enemy, Player, InspectorGuide | 적 귀환 속도 분리·귀환 중 무적·즉시 가속, 달리기 모션 속도 동기화, 적 속도를 플레이어 이동 데이터 기준으로 계산, 플레이어 속도 표기 수정 |
+| 2026-11-17 | Enemy, Combat, Core, UI, InspectorGuide | 적 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·이탈 시 귀환·구역 밖 공격 무효(`IDamageFilter`, "무효" 표시), 발견 지점으로 귀환 후 원래 방향으로 돌아섬 |

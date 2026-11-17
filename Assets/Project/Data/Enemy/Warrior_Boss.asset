@@ -25,8 +25,10 @@ MonoBehaviour:
   loseRange: 18
   provokedDuration: 5
   leashRange: 25
-  walkSpeed: 1.5
-  runSpeed: 4
+  playerSpeedReference: {fileID: 11400000, guid: 7a2d9a4e68ececc4c91dcbee4adb2225, type: 2}
+  patrolSpeedRatio: 0.3
+  chaseSpeedBlend: 0.33
+  returnSpeed: 16
   turnSpeed: 540
   patrolRadius: 6
   idleTimeRange:

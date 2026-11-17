@@ -28,6 +28,8 @@ namespace ProjectFantasy.Enemy
         private int blockHitHash;
         private int actionSpeedHash;
         private bool hasActionSpeedParameter;
+        private int locomotionSpeedHash;
+        private bool hasLocomotionSpeedParameter;
         private AnimatorPoseHold poseHold;
         private int currentStateHash;
 
@@ -51,6 +53,8 @@ namespace ProjectFantasy.Enemy
             blockHitHash = Animator.StringToHash(data.BlockHitState);
             actionSpeedHash = Animator.StringToHash(data.ActionSpeedParameter);
             hasActionSpeedParameter = animator.HasFloatParameter(actionSpeedHash);
+            locomotionSpeedHash = Animator.StringToHash(data.LocomotionSpeedParameter);
+            hasLocomotionSpeedParameter = animator.HasFloatParameter(locomotionSpeedHash);
             poseHold = new AnimatorPoseHold(animator, Animator.StringToHash(data.PoseSpeedParameter));
         }
 
@@ -65,6 +69,10 @@ namespace ProjectFantasy.Enemy
             int targetHash = horizontalSpeed < data.IdleSpeedThreshold ? idleHash
                 : horizontalSpeed < data.RunSpeedThreshold ? walkHash
                 : runHash;
+            if (targetHash == runHash && hasLocomotionSpeedParameter)
+            {
+                animator.SetFloat(locomotionSpeedHash, horizontalSpeed / data.RunAnimationSpeed);
+            }
             CrossFade(targetHash, data.LocomotionCrossFade, false);
         }
 
@@ -100,7 +108,6 @@ namespace ProjectFantasy.Enemy
             if (hasActionSpeedParameter) animator.SetFloat(actionSpeedHash, playbackSpeed);
             CrossFade(stateHash, crossFadeDuration, true);
         }
-
         // 누락된 상태를 이름으로 보고 (릴리즈 빌드에서는 호출 제거)
         [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
         public void ValidateState(string stateName)

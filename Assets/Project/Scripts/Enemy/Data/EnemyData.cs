@@ -1,5 +1,6 @@
 using ProjectFantasy.Combat;
 using ProjectFantasy.Items;
+using ProjectFantasy.Player;
 using ProjectFantasy.Utils;
 using ProjectFantasy.Weapon;
 using UnityEngine;
@@ -44,8 +45,15 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Min(0f)] private float leashRange = 25f;
 
         [Header("Movement")]
-        [SerializeField, Min(0f)] private float walkSpeed = 1.5f;
-        [SerializeField, Min(0f)] private float runSpeed = 4f;
+        [Tooltip("적 이동 속도의 기준 (플레이어 이동 데이터)")]
+        [SerializeField] private PlayerMovementData playerSpeedReference;
+        [Tooltip("배회 속도 = 플레이어 걷기 × 비율")]
+        [SerializeField, Range(0f, 1f)] private float patrolSpeedRatio = 0.3f;
+        [Tooltip("추격 속도: 0 = 플레이어 걷기, 1 = 플레이어 달리기")]
+        [SerializeField, Range(0f, 1f)] private float chaseSpeedBlend = 0.5f;
+
+        [Tooltip("대상 상실·리쉬 초과 후 스폰 지점으로 돌아가는 속도 (m/s)")]
+        [SerializeField, Min(0f)] private float returnSpeed = 16f;
         [Tooltip("회전 속도 (도/초)")]
         [SerializeField, Min(0f)] private float turnSpeed = 540f;
         [Tooltip("스폰 지점 주변 배회 반경 (m)")]
@@ -99,8 +107,9 @@ namespace ProjectFantasy.Enemy
         public float LoseRange => loseRange;
         public float ProvokedDuration => provokedDuration;
         public float LeashRange => leashRange;
-        public float WalkSpeed => walkSpeed;
-        public float RunSpeed => runSpeed;
+        public float WalkSpeed => playerSpeedReference.WalkSpeed * patrolSpeedRatio;
+        public float RunSpeed => Mathf.Lerp(playerSpeedReference.WalkSpeed, playerSpeedReference.RunSpeed, chaseSpeedBlend);
+        public float ReturnSpeed => returnSpeed;
         public float TurnSpeed => turnSpeed;
         public float PatrolRadius => patrolRadius;
         public EnemyCombatStyle CombatStyle => combatStyle ?? DefaultMeleeStyle;

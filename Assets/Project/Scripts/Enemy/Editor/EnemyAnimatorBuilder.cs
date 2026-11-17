@@ -82,6 +82,7 @@ namespace ProjectFantasy.EnemyEditor
             ClearStates(stateMachine);
             EnsureFloatParameter(controller, data.AnimationData.ActionSpeedParameter);
             EnsureFloatParameter(controller, data.AnimationData.PoseSpeedParameter);
+            EnsureFloatParameter(controller, data.AnimationData.LocomotionSpeedParameter);
 
             StringBuilder missing = new StringBuilder();
             foreach (string stateName in stateNames)
@@ -98,6 +99,11 @@ namespace ProjectFantasy.EnemyEditor
                 else if (holdStates.Contains(stateName))
                 {
                     state.speedParameter = data.AnimationData.PoseSpeedParameter;
+                    state.speedParameterActive = true;
+                }
+                else if (stateName == data.AnimationData.RunState)
+                {
+                    state.speedParameter = data.AnimationData.LocomotionSpeedParameter;
                     state.speedParameterActive = true;
                 }
                 if (stateName == idleState) stateMachine.defaultState = state;

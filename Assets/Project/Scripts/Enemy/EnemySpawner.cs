@@ -17,6 +17,8 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Min(0f)] private float spawnRadius = 5f;
         [Tooltip("사라진 뒤 다시 나타나기까지 시간 (초)")]
         [SerializeField, Min(0f)] private float respawnDelay = 30f;
+        [Tooltip("생성한 적이 사용할 진영 영역 (비우면 Leash Range 원)")]
+        [SerializeField] private EnemyTerritory territory;
         [Tooltip("선택 시 스폰 반경 Gizmo 색")]
         [SerializeField] private Color gizmoColor = new Color(1f, 0.3f, 0.3f, 0.5f);
 
@@ -46,6 +48,7 @@ namespace ProjectFantasy.Enemy
             {
                 Vector3 position = GetSpawnPoint();
                 EnemyController enemy = Instantiate(enemyPrefab, position, GetRandomRotation(), transform);
+                enemy.SetTerritory(territory);
                 enemy.Despawned += HandleDespawned;
                 enemy.Spawn(position, enemy.transform.rotation);
             }

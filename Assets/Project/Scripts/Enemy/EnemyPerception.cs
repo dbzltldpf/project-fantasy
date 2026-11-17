@@ -19,7 +19,7 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Min(0f)] private float eyeHeight = 1.5f;
         [Tooltip("감지 간격 (초)")]
         [SerializeField, Min(0.01f)] private float scanInterval = 0.2f;
-
+        private EnemyTerritory territory;
         private readonly Collider[] scanBuffer = new Collider[ScanBufferSize];
         private float sightRange;
         private float sightHalfAngle;
@@ -28,10 +28,8 @@ namespace ProjectFantasy.Enemy
         private float provokedEndTime;
         private float nextScanTime;
         private IDamageable targetDamageable;
-
         public Transform Target { get; private set; }
         public bool HasTarget => Target != null && targetDamageable != null && targetDamageable.IsAlive;
-
         // 대상 획득(대상) / 상실(null)
         public event Action<Transform> TargetChanged;
 
@@ -42,7 +40,7 @@ namespace ProjectFantasy.Enemy
             loseRange = lose;
             provokedDuration = provoked;
         }
-
+        public void SetTerritory(EnemyTerritory value) => territory = value;
         public void Tick()
         {
             if (Target != null && !IsTargetValid()) ClearTarget();
@@ -85,11 +83,13 @@ namespace ProjectFantasy.Enemy
 
         // 원거리 공격 전 사선 확인 (지형·벽에 가리면 false)
         public bool HasLineOfSightToTarget() => Target != null && HasClearLine(Target);
-
+        // 구역이 없으면 어디든, 있으면 구역 안만 대상 자격
+        private bool IsInTerritory(Vector3 position) => territory == null || territory.Contains(position);
         // 공격받은 직후에는 추적 포기 거리를 무시 (리쉬는 EnemyController가 판정)
         private bool IsTargetValid()
         {
             if (targetDamageable == null || !targetDamageable.IsAlive || !Target.gameObject.activeInHierarchy) return false;
+            if (!IsInTerritory(Target.position)) return false;
             return Time.time < provokedEndTime || GetDirectionToTarget().sqrMagnitude <= loseRange * loseRange;
         }
 
@@ -106,8 +106,11 @@ namespace ProjectFantasy.Enemy
                 if (damageable == null || !damageable.IsAlive) continue;
 
                 Transform candidate = ((Component)damageable).transform;
+                if (!IsInTerritory(candidate.position)) continue;
+
                 Vector3 toCandidate = candidate.position - origin;
                 toCandidate.y = 0f;
+
 
                 float sqrDistance = toCandidate.sqrMagnitude;
                 if (sqrDistance >= closestSqr || !IsInSight(candidate, toCandidate)) continue;
@@ -141,7 +144,6 @@ namespace ProjectFantasy.Enemy
             targetDamageable = damageable;
             TargetChanged?.Invoke(target);
         }
-
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;

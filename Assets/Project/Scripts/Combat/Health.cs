@@ -18,6 +18,7 @@ namespace ProjectFantasy.Combat
         private IDamageBlocker damageBlocker;
         private IDamageReducer damageReducer;
         private IDamageMultiplier damageMultiplier;
+        private IDamageFilter damageFilter;
         private float invincibleEndTime;
         private bool isInvincibleForced;
         public int MaxHealth => maxHealth;
@@ -28,6 +29,7 @@ namespace ProjectFantasy.Combat
         public event Action<int, int> HealthChanged;
         public event Action<DamageInfo> Damaged;
         public event Action<DamageInfo> Blocked;
+        public event Action<DamageInfo> Rejected;
         public event Action Died;
 
         private void Awake()
@@ -36,6 +38,7 @@ namespace ProjectFantasy.Combat
             damageBlocker = GetComponent<IDamageBlocker>();
             damageReducer = GetComponent<IDamageReducer>();
             damageMultiplier = GetComponent<IDamageMultiplier>();
+            damageFilter = GetComponent<IDamageFilter>();
         }
 
         private DamageInfo ApplyMultiplier(in DamageInfo damageInfo)
@@ -48,7 +51,11 @@ namespace ProjectFantasy.Combat
         public DamageResult TakeDamage(in DamageInfo damageInfo)
         {
             if (!IsAlive || IsInvincible || damageInfo.Amount <= 0) return DamageResult.Ignored;
-
+            if (damageFilter != null && !damageFilter.CanReceive(damageInfo))
+            {
+                Rejected?.Invoke(damageInfo);
+                return DamageResult.Ignored;
+            }
             if (damageBlocker != null && damageBlocker.TryBlock(damageInfo))
             {
                 Blocked?.Invoke(damageInfo);

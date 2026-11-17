@@ -25,3 +25,6 @@ MonoBehaviour:
   groundedStickForce: 2
   maxFallSpeed: 50
   coyoteTime: 0.15
+  dodgeSpeed: 7
+  dodgeDuration: 0.4
+  dodgeCooldown: 1

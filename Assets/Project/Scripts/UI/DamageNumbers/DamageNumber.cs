@@ -38,11 +38,19 @@ namespace ProjectFantasy.UI
         public void Show(int amount, Vector3 position, Color color, Transform cameraTransform, Action<DamageNumber> finished)
         {
             text.SetText(NumberFormat, amount);
+            Begin(position, color, cameraTransform, finished);
+        }
+        public void ShowText(string message, Vector3 position, Color color, Transform cameraTransform, Action<DamageNumber> finished)
+        {
+            text.SetText(message);
+            Begin(position, color, cameraTransform, finished);
+        }
+        private void Begin(Vector3 position, Color color, Transform cameraTransform, Action<DamageNumber> finished)
+        {
             baseColor = color;
             viewCamera = cameraTransform;
             onFinished = finished;
             elapsedTime = 0f;
-
             cachedTransform.position = position;
             ApplyLifetimeVisual(StartProgress);
             gameObject.SetActive(true);

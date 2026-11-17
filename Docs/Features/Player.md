@@ -106,8 +106,8 @@ flowchart LR
 ### PlayerMovementData
 | 필드 | 기본값 | 의미 |
 |---|---|---|
-| walkSpeed | 2 | 기본 이동 속도 (m/s) |
-| runSpeed | 5 | 달리기 버튼 입력 시 속도 |
+| walkSpeed | 5 | 기본 이동 속도 (m/s), 적 배회·추격 속도의 기준 ([Enemy](Enemy.md)) |
+| runSpeed | 8 | 달리기 버튼 입력 시 속도, 적 추격 속도의 기준 |
 | guardMoveSpeed | 1.2 | 가드 중 이동 속도 |
 | aimMoveSpeed | 1.5 | 조준 모드 이동 속도 |
 | acceleration / deceleration | 30 / 40 | 지상 가속·감속 (m/s²) |
@@ -178,3 +178,4 @@ flowchart LR
 | 2026-10-07 | HUD 체력 상태바 연결 (`PlayerHudPresenter.healthBar`), 플레이어 버리기가 `WorldItem.Spawn` 사용 |
 | 2026-10-08 | 조준 자세 고정 로직을 `Utils/AnimatorPoseHold`로 분리 (동작 동일) |
 | 2026-11-13 | 회피(Dodge): 입력 방향 4방향 회피, 회피 중 무적, 쿨타임, Locomotion·Guard·Aim에서 진입, 종료 시 우클릭 유지면 가드·조준 복귀 |
+| 2026-11-17 | 이동 속도 표기를 실제 값(걷기 5 / 달리기 8)으로 수정, 적 이동 속도의 기준이 됨 |
