@@ -423,3 +423,6 @@
 | ObjectiveTracker | ObjectiveTracker | **Goals** | 챕터 `ObjectiveSequence` (예: `Chapter1`, [Objective](Features/Objective.md)) |
 | Canvas / 목표 패널 | ObjectiveView | Root / **Label** / **Progress Label** / Completed | 패널 / 문구 TMP / 진행도 TMP / `완료` |
 | ObjectivePresenter | ObjectivePresenter | **Objective Tracker** / **Objective View** | 씬의 트래커 / 목표 패널 |
+| 도착 트리거 (예: TriggerField) | LocationTrigger + BoxCollider | **Location Data** / **Target Layers** / Is Trigger / Layer | 장소 에셋 / `Player` / 켬 / `Ignore Raycast`, 구역 문 너머에 배치 ([World](Features/World.md)) |
+| 구역 문 (예: GateField) | AreaGate · ObjectiveGateOpener | **Blocker** / **Objective Tracker** / **Target Objective** / **Area Gate** | 자식 벽 / 씬의 트래커 / 완료 시 열 목표 / 같은 오브젝트 |
+| 구역 문 / Blocker | Cube(BoxCollider) · NonStickSurface | Material / Layer | `Gate`(반투명) / **Default** (Ignore Raycast면 화살·카메라·적 시야가 통과) |

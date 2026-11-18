@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56de0230a84bc714b913eb4158757e49, type: 3}
+  m_Name: ReachField
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Objective.ReachObjectiveData
+  description: "\uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C \uC774\uB3D9"
+  locationData: {fileID: 11400000, guid: f68c25f3a62dc6543ba95de6139b1929, type: 2}

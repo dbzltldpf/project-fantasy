@@ -36,7 +36,7 @@ namespace ProjectFantasy.Objective
             }
 
             ObjectiveData objectiveData = objectiveTracker.CurrentObjective;
-            objectiveView.Show(objectiveData.Description, objectiveTracker.KillCount, objectiveData.RequiredCount);
+            objectiveView.Show(objectiveData.Description, objectiveTracker.ProgressCount, objectiveData.RequiredCount, objectiveData.ShowProgress);
         }
         private void Directing(ObjectiveData objectiveData)
         {
@@ -46,7 +46,7 @@ namespace ProjectFantasy.Objective
         IEnumerator Check(ObjectiveData objectiveData)
         {
             directing = true;
-            yield return objectiveView.PlayCompleted(objectiveData.Description, objectiveData.RequiredCount);
+            yield return objectiveView.PlayCompleted(objectiveData.Description, objectiveData.RequiredCount, objectiveData.ShowProgress);
 
             directing = false;
             Refresh();
