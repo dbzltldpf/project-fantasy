@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a04c55433b42f4b91645e778321a42, type: 3}
   m_Name: Kill_Warrior_1
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Objective.ObjectiveData
-  description: "\uD574\uACE8 \uC804\uC0AC 1\uB9C8\uB9AC \uCC98\uCE58"
+  description: "\uC591\uC190\uAC80\uC73C\uB85C \uD574\uACE8 \uC804\uC0AC 1\uB9C8\uB9AC
+    \uCC98\uCE58"
   target: {fileID: 11400000, guid: d4a66637d65761d46bea93a5918e7f23, type: 2}
   requiredCount: 1

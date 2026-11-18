@@ -4,6 +4,7 @@ using System.Diagnostics;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Core;
 using ProjectFantasy.Magic;
+using ProjectFantasy.Weapon;
 using UnityEngine;
 
 namespace ProjectFantasy.Enemy
@@ -285,8 +286,18 @@ namespace ProjectFantasy.Enemy
 
         public bool CanReceive(in DamageInfo damageInfo)
         {
+            return IsInTerritory(damageInfo) && IsAllowedWeapon(damageInfo);
+        }
+        private bool IsInTerritory(in DamageInfo damageInfo)
+        {
             if (territory == null || damageInfo.Instigator == null) return true;
             return territory.Contains(damageInfo.Instigator.transform.position);
+        }
+        private bool IsAllowedWeapon(in DamageInfo damageInfo)
+        {
+            if (damageInfo.Instigator == null) return true;
+            if (!damageInfo.Instigator.TryGetComponent(out IWeaponWielder wielder)) return true;
+            return data.AllowsWeapon(wielder.CurrentWeaponType);
         }
     }
 }

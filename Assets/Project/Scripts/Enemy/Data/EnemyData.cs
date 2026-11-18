@@ -51,7 +51,6 @@ namespace ProjectFantasy.Enemy
         [SerializeField, Range(0f, 1f)] private float patrolSpeedRatio = 0.3f;
         [Tooltip("추격 속도: 0 = 플레이어 걷기, 1 = 플레이어 달리기")]
         [SerializeField, Range(0f, 1f)] private float chaseSpeedBlend = 0.5f;
-
         [Tooltip("대상 상실·리쉬 초과 후 스폰 지점으로 돌아가는 속도 (m/s)")]
         [SerializeField, Min(0f)] private float returnSpeed = 16f;
         [Tooltip("회전 속도 (도/초)")]
@@ -93,6 +92,10 @@ namespace ProjectFantasy.Enemy
         [Header("Animation")]
         [SerializeField] private EnemyAnimationData animationData;
 
+        [Header("Restriction")]
+        [Tooltip("피해를 줄 수 있는 무기 종류 (비우면 모든 무기)")]
+        [SerializeField] private WeaponType[] allowedWeapons;
+
         public string DisplayName => displayName;
         public int MaxHealth => maxHealth;
         public int AttackPower => attackPower;
@@ -127,5 +130,14 @@ namespace ProjectFantasy.Enemy
 
         public float RollIdleTime() => idleTimeRange.Random();
         public float RollAttackCooldown() => attackCooldownRange.Random();
+        public bool AllowsWeapon(WeaponType weaponType)
+        {
+            if (allowedWeapons == null || allowedWeapons.Length == 0) return true;
+            for (int i = 0; i < allowedWeapons.Length; i++)
+            {
+                if (allowedWeapons[i] == weaponType) return true;
+            }
+            return false;
+        }
     }
 }
