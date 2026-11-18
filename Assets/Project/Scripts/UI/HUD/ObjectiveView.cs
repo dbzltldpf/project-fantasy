@@ -20,11 +20,11 @@ namespace ProjectFantasy.UI
             waitForSeconds = new WaitForSeconds(completedDisplayDuration);
             baseColor = label.color;
         }
-        public void Show(string description, int current, int required)
+        public void Show(string description, int current, int required, bool showProgress)
         {
             ResetLabelColor();
             label.text = description;
-            progressLabel.enabled = true;
+            progressLabel.enabled = showProgress;
             progressLabel.SetText("{0} / {1}", current, required);
         }
         public void ShowCompleted()
@@ -33,10 +33,11 @@ namespace ProjectFantasy.UI
             progressLabel.enabled = false;
             label.text = completed;
         }
-        public IEnumerator PlayCompleted(string description, int required)
+        public IEnumerator PlayCompleted(string description, int required, bool showProgress)
         {
             ResetLabelColor();
             label.SetText($"{description} {completed}");
+            progressLabel.enabled = showProgress;
             progressLabel.SetText("{0} / {1}", required, required);
             label.color = completedColor;
             progressLabel.color = completedColor;

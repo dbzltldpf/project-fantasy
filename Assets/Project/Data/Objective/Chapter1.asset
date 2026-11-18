@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Objective.ObjectiveSequence
   objectiveDatas:
   - {fileID: 11400000, guid: ce80d65d93cd829408cf346df9266683, type: 2}
+  - {fileID: 11400000, guid: c4e5eaf389f254e4eb1a71f947a3a12c, type: 2}
   - {fileID: 11400000, guid: ee7d1fb0ae13e224a80c042331a22474, type: 2}

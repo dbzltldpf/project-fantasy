@@ -1,18 +1,17 @@
 using ProjectFantasy.Enemy;
+using ProjectFantasy.World;
 using UnityEngine;
 namespace ProjectFantasy.Objective
 {
-    // 목표 한 단계: 화면 문구, 대상, 필요 횟수
-    [CreateAssetMenu(fileName = "ObjectiveData", menuName = "ProjectFantasy/Objective/Objective Data")]
-    public sealed class ObjectiveData : ScriptableObject
+    // 목표 한 단계의 공통 틀: 화면 문구, 필요 횟수, 알림 일치 여부
+    public abstract class ObjectiveData : ScriptableObject
     {
         [SerializeField] private string description;
-        [SerializeField] private EnemyData target;
-        [SerializeField, Min(1)] private int requiredCount;
-
         public string Description => description;
-        public EnemyData Target => target;
-        public int RequiredCount => requiredCount;
+        public abstract int RequiredCount { get; }
+        public virtual bool IsMatch(EnemyData enemyData) => false;
+        public virtual bool IsMatch(LocationData locationData) => false;
+        public virtual bool ShowProgress => true;
     }
-}
 
+}

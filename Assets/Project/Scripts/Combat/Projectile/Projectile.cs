@@ -95,8 +95,9 @@ namespace ProjectFantasy.Combat
 
             if (owner != null) owner.PlayImpactEffect(profile, hit.point, hit.normal);
 
-            // 방패에 막히면 몸에 박히지 않고 튕겨 나감 (풀 반환)
-            if (profile.StickOnHit && result != DamageResult.Blocked) StickTo(hit.collider.transform, hit.point, Quaternion.LookRotation(velocity));
+            bool canStick = !hit.collider.TryGetComponent(out NonStickSurface _);
+            // 방패나 박히지 않는 표면이면 튕겨 나감 (풀 반환)
+            if (profile.StickOnHit && result != DamageResult.Blocked && canStick) StickTo(hit.collider.transform, hit.point, Quaternion.LookRotation(velocity));
             else Release();
         }
 
