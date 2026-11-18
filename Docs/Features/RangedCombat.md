@@ -29,6 +29,7 @@
 | [Ballistics.cs](../../Assets/Project/Scripts/Combat/Projectile/Ballistics.cs) | 포물선 위치/속도 공식, 경로 샘플링 (미리보기·비행 공용) |
 | [Projectile.cs](../../Assets/Project/Scripts/Combat/Projectile/Projectile.cs) | 범용 투사체: 비행, 구간 레이캐스트, 명중 시 피해·이펙트 후 박힘 또는 소멸, 대상 소멸 시 풀 반환 |
 | [ProjectileProfile.cs](../../Assets/Project/Scripts/Combat/Projectile/ProjectileProfile.cs) | 투사체 설정 값 타입 (속도, 중력, 수명, 박힘 여부, 명중 이펙트) |
+| [NonStickSurface.cs](../../Assets/Project/Scripts/Combat/Projectile/NonStickSurface.cs) | 투사체가 박히지 않고 사라지는 표면 표시 (필드 없음) |
 | [TrajectoryPreview.cs](../../Assets/Project/Scripts/Combat/Projectile/TrajectoryPreview.cs) | LineRenderer 경로 표시 (버퍼 재사용) |
 
 ## 동작 흐름
@@ -69,6 +70,7 @@ release 시점: 발사 속도 계산 → 화살 소모(활) 또는 장전 볼트
 - `IDamageable`이면 피해(화살 = 장착 개체 공격력, 물리 / 마법탄 = 마법 피해), 명중 이펙트(1회 재생) 후 화살은 박힘 / 마법탄은 소멸.
 - 박힐 때 부모로 붙이지 않고 **맞은 Transform 기준 로컬 자세를 기억해 `LateUpdate`에서 추적** → 움직이는 대상도 따라감.
 - **방패에 막히면**(`DamageResult.Blocked`) 박히지 않고 명중 이펙트 후 풀 반환 (플레이어 몸에 화살이 남지 않음).
+- **`NonStickSurface`가 붙은 콜라이더**(구역 문 벽 등)도 박히지 않고 명중 이펙트 후 풀 반환. 명중 시 `TryGetComponent`로 한 번만 검사.
 - 대상이 **파괴/비활성화되면 즉시 풀 반환**, 그 외 `stickDuration` 후, 비행 중 `lifetime` 초과 시 반환.
 - 투사체는 `PrefabPool<Projectile>`, 이펙트는 `EffectPool`로 풀링 ([Combat](Combat.md)).
 - Hierarchy 정리: 투사체는 `Pools/Projectiles/프리팹 이름`(활 화살·석궁 화살 각각), 명중 이펙트는 `Pools/Effects/프리팹 이름` 아래 생성. `RangedAttacker`의 `projectileRoot`·`effectRoot`를 지정하면 그 아래 (박힌 화살은 부모가 아닌 추적 방식이라 영향 없음).
@@ -131,3 +133,4 @@ release 시점: 발사 속도 계산 → 화살 소모(활) 또는 장전 볼트
 | 2026-10-06 | `AmmoPouch` 삭제 → 화살 수는 가방 기준, 화살 피해 = 장착 개체 공격력, 원거리 무기 장착 시 화살 수 HUD ([Inventory](Inventory.md)) |
 | 2026-10-07 | 투사체·명중 이펙트 풀 부모 폴더(`Pools/Projectiles`, `Pools/Effects`), 원거리 피해에 무기 숙련 보너스 ([Mastery](Mastery.md)) |
 | 2026-10-08 | 막힌 화살 미부착, 중력 보정 발사 각도 계산(`Ballistics.TrySolveLaunchVelocity`, 적 사수용) |
+| 2026-11-18 | 박히지 않는 표면 표시 컴포넌트(`NonStickSurface`, [World](World.md) 구역 문 벽) |

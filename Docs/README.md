@@ -15,7 +15,8 @@
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
-| [Objective](Features/Objective.md) | 스토리 목표 단계·챕터 SO, 적 처치 알림으로 진행도 집계, HUD 목표 표시·단계 완료 연출 |
+| [Objective](Features/Objective.md) | 스토리 목표 단계·챕터 SO, 처치·도착 목표(`IsMatch`), 진행도 집계, HUD 목표 표시·단계 완료 연출, 완료 시 구역 개방 |
+| [World](Features/World.md) | 장소 SO·도착 트리거·전역 알림, 목표 완료로 열리는 구역 문 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라, 휠 줌, 조준 숄더뷰 |
 | [UI](Features/UI.md) | 조준점, 데미지 숫자, 인벤토리·숙련도 창, 퀵슬롯 바·플레이어 상태바·HUD, 적 체력바 |
 | [인스펙터 설정 가이드](InspectorGuide.md) | 에셋·컴포넌트별 필드 역할과 넣을 값, 새 무기 만들기 체크리스트 |
@@ -35,14 +36,15 @@ Assets/Project/Scripts/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
 ├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/, Mastery/, Enemy/, Editor/
-├─ Objective/     ObjectiveData, ObjectiveSequence, ObjectiveTracker, ObjectivePresenter
+├─ Objective/     ObjectiveData(Kill/Reach), ObjectiveSequence, ObjectiveTracker, ObjectivePresenter, ObjectiveGateOpener
+├─ World/         LocationData, LocationEvents, LocationTrigger, AreaGate
 ├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, Territory, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
 셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
 (에디터 전용: `CombatEditor` · `WeaponEditor` · `ItemsEditor` · `EnemyEditor` · `UIEditor` · `UtilsEditor`)
 
 ## 변경 이력
@@ -71,3 +73,4 @@ Assets/Project/Scripts/
 | 2026-11-17 | Enemy, Player, InspectorGuide | 적 귀환 속도 분리·귀환 중 무적·즉시 가속, 달리기 모션 속도 동기화, 적 속도를 플레이어 이동 데이터 기준으로 계산, 플레이어 속도 표기 수정 |
 | 2026-11-17 | Player, Enemy, InspectorGuide | 달리기 모션 전환 속도를 걷기~달리기 속도 비율로 자동 계산, 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`, 플레이어 조준 걷기 포함) |
 | 2026-11-17 | Enemy, Combat, Core, UI, InspectorGuide | 적 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·이탈 시 귀환·구역 밖 공격 무효(`IDamageFilter`, "무효" 표시), 발견 지점으로 귀환 후 원래 방향으로 돌아섬 |
+| 2026-11-18 | World, Objective, RangedCombat, UI, InspectorGuide | 트리거·이벤트: 장소 도착 알림(`LocationTrigger`·`LocationEvents`), 목표 추상화(처치·도착 목표, `IsMatch`), 목표 완료 시 구역 개방(`AreaGate`·`ObjectiveGateOpener`), 목표별 진행도 표시 여부, 박히지 않는 표면(`NonStickSurface`) |
