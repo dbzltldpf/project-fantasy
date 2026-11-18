@@ -10,7 +10,7 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/Data/EnemyAnimationData.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyAnimationData.cs) | 애니메이터 상태 이름·파라미터(ActionSpeed·PoseSpeed·LocomotionSpeed)·전환 시간 (적 공용 SO) |
 | [Enemy/Data/EnemyGuardSettings.cs](../../Assets/Project/Scripts/Enemy/Data/EnemyGuardSettings.cs) | 막기 확률·시간·쿨타임·반격 |
 | [Enemy/Combat/](../../Assets/Project/Scripts/Enemy/Combat/) | 전투 방식: `EnemyCombatStyle`(기반) · `MeleeCombatStyle` · `EnemyRangedStyle`(원거리 공통) · `ShooterCombatStyle` · `CasterCombatStyle` · `CasterSpell` |
-| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 판정, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔, 사망 시 `EnemyEvents.RaiseEnemyKilled`, 귀환 위치·방향 기록, 진영 구역(`SetTerritory`)·구역 밖 공격 거부(`IDamageFilter`) |
+| [Enemy/EnemyController.cs](../../Assets/Project/Scripts/Enemy/EnemyController.cs) | 컴포넌트 조립, 상태 머신, 스폰·리스폰, 공격 쿨타임·막기 쿨타임·경직 판정, `Despawned`, `CombatReset`(귀환·리스폰 초기화 알림), `StartGroggy`(외부 그로기 요청), 사망 시 자식 콜라이더까지 끔, 사망 시 `EnemyEvents.RaiseEnemyKilled`, 귀환 위치·방향 기록, 진영 구역(`SetTerritory`)·구역 밖 공격 거부, 허용되지 않은 무기 공격 거부(`IDamageFilter`: `IsInTerritory && IsAllowedWeapon`) |
 | [Enemy/EnemyEvents.cs](../../Assets/Project/Scripts/Enemy/EnemyEvents.cs) | 적 전역 알림 `EnemyKilled(EnemyData)` (목표 시스템 등 적을 직접 모르는 쪽이 구독, [Objective](Objective.md)) |
 | [Enemy/EnemyStaggerCounter.cs](../../Assets/Project/Scripts/Enemy/EnemyStaggerCounter.cs) | 무기별 경직 횟수·면역 판정 (`TryStagger`, 일반 클래스) |
 | [Enemy/EnemyNavigator.cs](../../Assets/Project/Scripts/Enemy/EnemyNavigator.cs) | NavMeshAgent 래퍼: 목적지 이동(재탐색 최소화)·정지·회전(직접 제어)·넉백·직접 이동·히트스톱 정지·순간 이동, 즉시 가속(`SetInstantSpeed`), 수평 거리 도착 판정(`IsNear`) |
@@ -73,6 +73,21 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
   - 구역 밖에서 한 공격(공격자 위치 기준)은 피해 없이 회색 **"무효"** 표시 ([Combat](Combat.md) `IDamageFilter`).
 - 구역이 없으면 기존처럼 스폰 지점에서 `leashRange` 원을 넘으면 귀환.
 
+### 무기 제한 (Allowed Weapons)
+- 적마다 피해를 줄 수 있는 무기 종류를 `EnemyData.allowedWeapons`로 정한다. **비우면 모든 무기** (허수아비·보스 등 기존 동작 유지).
+- 판정: `EnemyController.CanReceive` → 공격자(`DamageInfo.Instigator`)의 `IWeaponWielder.CurrentWeaponType`을 `EnemyData.AllowsWeapon`으로 확인. 허용되지 않으면 구역 밖 공격과 같이 **"무효"** 표시.
+- `IWeaponWielder`가 없는 공격자(함정 등)는 제한 대상이 아니다.
+- 맞는 순간의 무기로 판정한다. 화살이 날아가는 중에 무기를 바꾸면 바꾼 무기 기준 (플레이어에게 불리한 쪽으로만 틀려 허용).
+- 쓸 무기는 목표 문구로 알린다 (예: "한손검으로 해골 병사 2마리 처치", [Objective](Objective.md)).
+
+| 적 | 허용 무기 |
+|---|---|
+| Minion | Unarmed, OneHanded |
+| Warrior | TwoHanded |
+| Rogue | Bow, Crossbow |
+| Mage | Wand, Staff |
+| Warrior_Boss | (비움 = 모든 무기, 부위별 지정 예정) |
+
 ### 전투 방식 (Combat Style)
 | 방식 | 공격 거리 | 공격 상태 | 내용 |
 |---|---|---|---|
@@ -128,6 +143,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 |---|---|---|---|---|---|
 | maxHealth / attackPower / experience | 60 / 8 / 30 | 120 / 12 / 60 | 50 / 10 / 40 | 42 / 12 / 45 | 체력 / 공격력 / 처치 경험치 |
 | weapon | SkeletonAxe | SkeletonBlade (+ SkeletonShield) | SkeletonCrossBow2H | SkeletonStaff | 무기 (WeaponData·ShieldData 재사용) |
+| allowedWeapons | Unarmed, OneHanded | TwoHanded | Bow, Crossbow | Wand, Staff | 피해를 줄 수 있는 무기 종류 (비우면 모든 무기) |
 | combatStyle | Melee | Melee | Shooter | Caster | 전투 방식 |
 | defense / magicDefense | 0 / 0 | 20 / 5 | 0 / 0 | 0 / 0 | 방패 방어력 (적은 고정값) |
 | sightRange / sightAngle | 10 / 360 | 같음 | 같음 | 같음 | 시야 거리 / 각도 |
@@ -215,3 +231,4 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-17 | 귀환 속도 분리(`returnSpeed`)·귀환 중 무적·즉시 가속, 달리기 모션 속도를 이동 속도에 맞춤(`LocomotionSpeed`), 배회·추격 속도를 플레이어 이동 데이터 기준으로 계산 |
 | 2026-11-17 | 달리기 모션 전환 속도를 배회~추격 속도 비율(`runThresholdBlend`)로 자동 계산, 걷기에도 재생 속도 맞춤(`walkAnimationSpeed`), 애니메이터 재생성 |
 | 2026-11-17 | 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·구역 이탈 시 귀환·구역 밖 공격 무효, 귀환 위치를 발견 지점으로·도착 후 원래 방향으로 돌아섬, 전투 종료 시 항상 귀환 |
+| 2026-11-18 | 무기 제한: `EnemyData.allowedWeapons`·`AllowsWeapon`, 허용되지 않은 무기 공격 무효(`IWeaponWielder`), 적 4종 무기 지정 |

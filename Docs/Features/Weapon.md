@@ -8,6 +8,7 @@
 |---|---|
 | [WeaponType.cs](../../Assets/Project/Scripts/Weapon/WeaponType.cs) | `Unarmed` `OneHanded` `TwoHanded` `Wand` `Staff` `Bow` `Crossbow` |
 | [EquipHand.cs](../../Assets/Project/Scripts/Weapon/EquipHand.cs) | `Right` / `Left` (쥐는 손) |
+| [IWeaponWielder.cs](../../Assets/Project/Scripts/Weapon/IWeaponWielder.cs) | 현재 든 무기 종류(`CurrentWeaponType`)를 알려 주는 쪽, `PlayerLoadout`이 구현 (적 무기 제한 판정용, [Enemy](Enemy.md)) |
 | [EquipmentData.cs](../../Assets/Project/Scripts/Weapon/Data/EquipmentData.cs) | 장비 공통 (`ItemData` 상속): 모델 프리팹, 손 위치/회전 보정, 티어표·등급표, 티어별 머티리얼(선택), 개체 생성 시 능력치 굴림, `ApplyModelVisual`(티어 외형) |
 | [Items/Tier/](../../Assets/Project/Scripts/Items/Tier/) | `ItemTier`·`ItemTierTable`(SO), `TierAura`(불씨 파티클), `TierOutline`(테두리 발광), `TierTintCache`(선택 색조) |
 | [Shaders/WeaponOutline.shader](../../Assets/Project/Shaders/WeaponOutline.shader) | Inverted Hull 테두리 발광 (URP, 가산, 맥동) |
@@ -153,3 +154,4 @@
 | 2026-10-07 | 티어(T1~T5, 데이터 하나로 공용): 접두어·능력치 배율, 티어 외형(불씨 아우라·테두리 발광·선택 머티리얼/색조), 티어 이펙트 생성 메뉴, 무기 인스펙터 섹션을 Foldout으로 변경 |
 | 2026-10-07 | 티어를 0부터로 변경 (T0~T4, 데이터·화면 표시 동일) |
 | 2026-11-10 | 근접 무기 `staggerLimit`(무기별 경직 횟수) 추가, 한손검 `bladeRadius` 0.3 |
+| 2026-11-18 | `IWeaponWielder` 추가 (현재 무기 종류 조회, 적 무기 제한) |

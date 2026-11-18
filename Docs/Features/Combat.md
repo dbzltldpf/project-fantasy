@@ -63,7 +63,7 @@ frame 0 ──── 6 ────── 10 ── 14 ────────�
 ```
 TakeDamage
  ├─ 사망·무적·0 이하 데미지 → 무시
- ├─ IDamageFilter.CanReceive == false → Rejected 이벤트 후 무시 (적 진영 구역 밖 공격 → "무효" 표시)
+ ├─ IDamageFilter.CanReceive == false → Rejected 이벤트 후 무시 (적 진영 구역 밖 공격·허용되지 않은 무기 → "무효" 표시)
  ├─ IDamageBlocker.TryBlock == true → Blocked 이벤트 후 종료 (피해 없음)
  ├─ IDamageMultiplier.GetMultiplier → 피해 × 배율, 반올림 (보스 부위 배율 등, 없으면 1)
  ├─ IDamageReducer.Reduce → 피해 × 100 / (100 + 방어력), 최소 1 (물리 = 방어력, 마법 = 마법 방어력)

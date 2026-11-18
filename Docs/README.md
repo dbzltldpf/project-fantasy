@@ -10,7 +10,7 @@
 | [Combat](Features/Combat.md) | 체력·방어, 액션 타임라인(프레임 이벤트), 칼날 궤적 판정, 히트스톱, 콤보/피격 데이터, 이펙트 풀링, 처치 보상 |
 | [Weapon](Features/Weapon.md) | 무기·보조 장비 데이터, 손 소켓 장착, 티어(외형 아우라·테두리 발광)·등급·능력치, 보조 장비 규칙, 애니메이션 마스크 임포트 |
 | [Mastery](Features/Mastery.md) | 무기 종류별 숙련도(알비온식), 처치 경험치, 티어 장착 조건, 숙련 보너스, 숙련도 창(K) |
-| [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 무기별 경직 규칙, 플레이어 기준 이동 속도, 진영 구역, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
+| [Enemy](Features/Enemy.md) | 적 4종(근접 Minion·Warrior, 사격 Rogue, 시전 Mage), 전투 방식 드롭다운: 감지·추격·공격·막기·반격·귀환, 무기별 경직 규칙, 적별 허용 무기(무기 제한), 플레이어 기준 이동 속도, 진영 구역, 스폰·리스폰, 드랍, 머리 위 체력바, 애니메이터 생성 |
 | [Part Break](Features/PartBreak.md) | 보스 부위 파괴: 맞은 부위 판별, 체력 비율 내구도·피해 배율, 파괴 이벤트, 파괴 부위 아웃라인 번쩍임, 그로기, 귀환·리스폰 시 복구 |
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
@@ -29,7 +29,7 @@ Assets/Project/Scripts/
 ├─ Core/          StateMachine/, Interfaces/, Types/
 ├─ Player/        PlayerController, Input, Motor, Animator, Loadout, RangedWeapon, AmmoVisual, MagicCaster, ItemHandler, Interactor, MasteryRewarder, Presenters(Aim/Menu/Hud), States/, Data/
 ├─ Combat/        Health, ShieldGuard, MeleeAttacker, HitColliderUtility, WeaponTrace, HitStop, RangedAttacker, TrainingDummy, KillReward, Action/(Events/, Editor/), Projectile/, Effects/(Editor/), Data/
-├─ Weapon/        WeaponType, EquipHand, EquipmentVisual, Data/, Editor/
+├─ Weapon/        WeaponType, EquipHand, EquipmentVisual, IWeaponWielder, Data/, Editor/
 ├─ Items/         ItemInstance, WorldItem, ItemNotice, Data/, Effects/, Grade/, Stats/, Tier/, Loot/, Editor/
 ├─ InventorySystem/  Inventory, ItemStack, QuickSlots, IItemActions, EquipRequirement, Data/
 ├─ Mastery/       MasteryType, MasteryMapping, WeaponMastery, Data/
@@ -74,3 +74,4 @@ Assets/Project/Scripts/
 | 2026-11-17 | Player, Enemy, InspectorGuide | 달리기 모션 전환 속도를 걷기~달리기 속도 비율로 자동 계산, 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`, 플레이어 조준 걷기 포함) |
 | 2026-11-17 | Enemy, Combat, Core, UI, InspectorGuide | 적 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·이탈 시 귀환·구역 밖 공격 무효(`IDamageFilter`, "무효" 표시), 발견 지점으로 귀환 후 원래 방향으로 돌아섬 |
 | 2026-11-18 | World, Objective, RangedCombat, UI, InspectorGuide | 트리거·이벤트: 장소 도착 알림(`LocationTrigger`·`LocationEvents`), 목표 추상화(처치·도착 목표, `IsMatch`), 목표 완료 시 구역 개방(`AreaGate`·`ObjectiveGateOpener`), 목표별 진행도 표시 여부, 박히지 않는 표면(`NonStickSurface`) |
+| 2026-11-18 | Enemy, Weapon, Player, Combat, Core, InspectorGuide | 적 무기 제한: 적마다 허용 무기(`allowedWeapons`, 비우면 모두), 다른 무기 공격 "무효"(`IWeaponWielder`), 적 4종 무기 지정, 목표 문구에 무기 표기 |
