@@ -13,7 +13,7 @@ namespace ProjectFantasy.Player
     [RequireComponent(typeof(EquipmentVisual), typeof(MeleeAttacker), typeof(ShieldGuard))]
     [RequireComponent(typeof(Inventory), typeof(WeaponMastery))]
     [DisallowMultipleComponent]
-    public sealed class PlayerLoadout : MonoBehaviour
+    public sealed class PlayerLoadout : MonoBehaviour, IWeaponWielder
     {
         [Tooltip("무기가 없을 때 쓰는 맨손 데이터 (필수)")]
         [SerializeField] private WeaponData unarmedWeapon;
@@ -129,7 +129,7 @@ namespace ProjectFantasy.Player
         {
             attacker.SetHitShape(CurrentWeapon.HitOffset, CurrentWeapon.HitRadius);
             attacker.SetStaggerLimit(CurrentWeapon.StaggerLimit);
-            
+
             Transform model = equipmentVisual.GetActiveModel(CurrentWeapon.GripHand);
             if (CurrentWeapon.HasBlade && model != null)
             {
@@ -192,5 +192,6 @@ namespace ProjectFantasy.Player
                 else if (instance?.Data is OffHandData offHand) equipmentVisual.Preload(offHand, EquipHand.Left, instance.Tier);
             }
         }
+        public WeaponType CurrentWeaponType => CurrentWeapon == null ? WeaponType.Unarmed : CurrentWeapon.WeaponType;
     }
 }

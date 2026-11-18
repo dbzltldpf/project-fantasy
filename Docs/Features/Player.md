@@ -10,7 +10,7 @@
 | [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 액션 에셋에서 이름으로 액션 탐색, 공격/점프/회피/줍기/퀵슬롯 선입력 버퍼, 메뉴 중 게임플레이 입력 차단 |
 | [PlayerMotor.cs](../../Assets/Project/Scripts/Player/PlayerMotor.cs) | CharacterController 이동, 가속/감속, 중력, 접지, 회전 |
 | [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 (상태 이름은 `PlayerAnimationData`), 자세 고정은 `AnimatorPoseHold`(적과 공용) |
-| [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 **개체** 적용, 무기와 맞지 않는 보조 장비 비활성 ([Weapon](Weapon.md), [Inventory](Inventory.md)) |
+| [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 **개체** 적용, 무기와 맞지 않는 보조 장비 비활성, `IWeaponWielder` 구현(현재 무기 종류, 없으면 Unarmed) ([Weapon](Weapon.md), [Inventory](Inventory.md)) |
 | [PlayerRangedWeapon.cs](../../Assets/Project/Scripts/Player/PlayerRangedWeapon.cs) / [PlayerAmmoVisual.cs](../../Assets/Project/Scripts/Player/PlayerAmmoVisual.cs) | 원거리 발사·장전 규칙, 화살 표시 ([Ranged Combat](RangedCombat.md)) |
 | [PlayerMagicCaster.cs](../../Assets/Project/Scripts/Player/PlayerMagicCaster.cs) | 마법 쿨타임·데미지 ([Magic](Magic.md)) |
 | [PlayerAimPresenter.cs](../../Assets/Project/Scripts/Player/PlayerAimPresenter.cs) | 조준 뷰 → 카메라 숄더뷰·조준점 |
@@ -185,3 +185,4 @@ flowchart LR
 | 2026-11-13 | 회피(Dodge): 입력 방향 4방향 회피, 회피 중 무적, 쿨타임, Locomotion·Guard·Aim에서 진입, 종료 시 우클릭 유지면 가드·조준 복귀 |
 | 2026-11-17 | 이동 속도 표기를 실제 값(걷기 5 / 달리기 8)으로 수정, 적 이동 속도의 기준이 됨 |
 | 2026-11-17 | 달리기 모션 전환 속도를 걷기~달리기 속도 비율(`runThresholdBlend`)로 자동 계산(`runSpeedThreshold` 제거), 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`) |
+| 2026-11-18 | `PlayerLoadout`이 `IWeaponWielder` 구현 (적 무기 제한 판정) |

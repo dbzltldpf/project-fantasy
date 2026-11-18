@@ -309,6 +309,7 @@
 | Melee | Attack Range / Max Combo Actions | 근접 공격 거리 / 공격마다 1 ~ 이 값 중 무작위 타수 | 1.8 / 2 · 3 |
 | Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (근접 + 방패) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
 | Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 | 1.5 / 3 / 종류별 표 |
+| Restriction | Allowed Weapons | 피해를 줄 수 있는 무기 종류, 다른 무기는 "무효" (비우면 모든 무기) | Unarmed·OneHanded / TwoHanded / Bow·Crossbow / Wand·Staff (보스는 비움) |
 
 ### 전투 방식 (Combat Style) 값
 | 방식 | 필드 | 하는 일 | 넣을 값 |

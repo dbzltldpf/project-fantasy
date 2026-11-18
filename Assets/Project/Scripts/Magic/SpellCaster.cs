@@ -128,8 +128,6 @@ namespace ProjectFantasy.Magic
                 if (target == null || target == owner || !target.IsAlive || !damagedTargets.Add(target)) continue;
 
                 Collider nearestCollider = HitColliderUtility.FindNearest(overlapBuffer, overlapBufferTargets, hitCount, target, area.Position);
-                Debug.Log($"{nearestCollider.name},{area.Position}");
-
                 Vector3 direction = nearestCollider.transform.position - area.Position;
                 direction.y = 0f;
                 Vector3 knockbackDirection = direction.sqrMagnitude > Mathf.Epsilon ? direction.normalized : transform.forward;
