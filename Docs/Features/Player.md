@@ -6,7 +6,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [PlayerController.cs](../../Assets/Project/Scripts/Player/PlayerController.cs) | 컴포넌트 조립, 상태 머신 구동, 카메라 기준 이동 벡터 계산, 체력/무기 이벤트 → 상태 전이 |
+| [PlayerController.cs](../../Assets/Project/Scripts/Player/PlayerController.cs) | 컴포넌트 조립, 상태 머신 구동, 카메라 기준 이동 벡터 계산, 체력/무기 이벤트 → 상태 전이, 부활(`Revive`: 체력 회복 → 순간이동 → 이동 상태) |
 | [PlayerInputHandler.cs](../../Assets/Project/Scripts/Player/PlayerInputHandler.cs) | 입력 액션 에셋에서 이름으로 액션 탐색, 공격/점프/회피/줍기/퀵슬롯 선입력 버퍼, 메뉴 중 게임플레이 입력 차단 |
 | [PlayerMotor.cs](../../Assets/Project/Scripts/Player/PlayerMotor.cs) | CharacterController 이동, 가속/감속, 중력, 접지, 회전, 순간이동(`Teleport`: CharacterController 끄고 이동 후 속도 초기화) |
 | [PlayerAnimator.cs](../../Assets/Project/Scripts/Player/PlayerAnimator.cs) | 애니메이터 상태 재생(해시 캐싱, 중복 CrossFade 방지), 무기별 대기 모션, 상태 누락 검증 (상태 이름은 `PlayerAnimationData`), 자세 고정은 `AnimatorPoseHold`(적과 공용) |
@@ -187,4 +187,5 @@ flowchart LR
 | 2026-11-17 | 달리기 모션 전환 속도를 걷기~달리기 속도 비율(`runThresholdBlend`)로 자동 계산(`runSpeedThreshold` 제거), 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`) |
 | 2026-11-18 | `PlayerLoadout`이 `IWeaponWielder` 구현 (적 무기 제한 판정) |
 | 2026-11-19 | `PlayerMotor.Teleport` (스테이지 이동, [Stage](Stage.md)) |
+| 2026-11-19 | `PlayerController.Revive` (사망 후 스테이지 재시작, [Stage](Stage.md)) |
 | 2026-11-19 | 공격 후딜레이 캔슬: 캔슬 구간에서 회피·이동으로 공격 상태 종료 (`TryCancel`, `CanChainCombo`) |
