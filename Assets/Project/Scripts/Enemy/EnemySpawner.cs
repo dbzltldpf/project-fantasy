@@ -89,7 +89,19 @@ namespace ProjectFantasy.Enemy
             enemy.gameObject.SetActive(true);
             enemy.Spawn(GetSpawnPoint(), GetRandomRotation());
         }
-
+        // 대기 중인 리스폰을 취소하고 자식 적 전부를 껐다 켜서 처음 상태로 다시 스폰 (스테이지 재시작)
+        public void ResetEnemies()
+        {
+            pendingRespawns.Clear();
+            foreach (Transform child in transform)
+            {
+                if (child.TryGetComponent(out EnemyController enemy))
+                {
+                    enemy.gameObject.SetActive(false);
+                    Respawn(enemy);
+                }
+            }
+        }
         private Vector3 GetSpawnPoint()
         {
             EnemyNavigator.TryGetRandomPoint(transform.position, spawnRadius, out Vector3 point);

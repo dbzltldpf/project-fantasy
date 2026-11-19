@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using ProjectFantasy.CameraSystem;
+using ProjectFantasy.Combat;
+using ProjectFantasy.Enemy;
 using ProjectFantasy.Objective;
 using ProjectFantasy.Player;
 using ProjectFantasy.World;
@@ -24,8 +27,15 @@ namespace ProjectFantasy.Stage
         [SerializeField] private Transform playerSpawn;
         [SerializeField] private PlayerMotor playerMotor;
         [SerializeField] private ThirdPersonCamera thirdPersonCamera;
+        [SerializeField] private PlayerController playerController;
+        [SerializeField] private Health playerHealth;
+        [Tooltip("쓰러진 뒤 재시작까지 대기 시간 (사망 모션을 보여 줄 시간)")]
+        [SerializeField, Min(0f)] private float retryDelay = 2f;
         private int stageIndex;
         private bool HasCurrentStage => stageIndex < stages.Length;
+        private WaitForSeconds retryWait;
+        private Coroutine retryCoroutine;
+
         private List<ObjectiveData> BuildObjectives()
         {
             List<ObjectiveData> objectiveDatas = new List<ObjectiveData>(stages.Length * 2);
@@ -37,6 +47,10 @@ namespace ProjectFantasy.Stage
             return objectiveDatas;
         }
         private bool IsLastStage => stageIndex == stages.Length - 1;
+        private void Awake()
+        {
+            retryWait = new WaitForSeconds(retryDelay);
+        }
         private void Start()
         {
             objectiveTracker.Begin(BuildObjectives());
@@ -49,11 +63,14 @@ namespace ProjectFantasy.Stage
         {
             objectiveTracker.StepCompleted += HandleStepCompleted;
             LocationEvents.Reached += HandleLocationReached;
+            playerHealth.Died += HandlePlayerDied;
         }
         private void OnDisable()
         {
             objectiveTracker.StepCompleted -= HandleStepCompleted;
             LocationEvents.Reached -= HandleLocationReached;
+            playerHealth.Died -= HandlePlayerDied;
+
         }
         private void HandleStepCompleted(ObjectiveData objectiveData)
         {
@@ -77,6 +94,31 @@ namespace ProjectFantasy.Stage
             stageIndex++;
             if (stageIndex >= stages.Length) return;
             stages[stageIndex].group.SetActive(true);
+        }
+        private void HandlePlayerDied()
+        {
+            if (retryCoroutine != null) return;
+            retryCoroutine = StartCoroutine(RetryAfterDelay());
+        }
+        private IEnumerator RetryAfterDelay()
+        {
+            yield return retryWait;
+            Retry();
+            retryCoroutine = null;
+        }
+        private void Retry()
+        {
+            if (!areaGate.IsOpen)
+            {
+                EnemySpawner[] spawners = stages[stageIndex].group.GetComponentsInChildren<EnemySpawner>();
+                for (int i = 0; i < spawners.Length; i++)
+                {
+                    spawners[i].ResetEnemies();
+                }
+                objectiveTracker.RestartStep();
+            }
+            playerController.Revive(playerSpawn.position, playerSpawn.rotation);
+            thirdPersonCamera.SnapToTarget();
         }
     }
 }

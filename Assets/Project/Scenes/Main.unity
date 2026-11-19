@@ -10889,7 +10889,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1021710416}
+  m_Mesh: {fileID: 1749047239}
 --- !u!33 &610865288
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -16818,7 +16818,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1416883317}
+  m_Mesh: {fileID: 1021710416}
 --- !u!33 &955398995
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -17684,7 +17684,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -200}
+  m_AnchoredPosition: {x: 0, y: -150}
   m_SizeDelta: {x: 500, y: 100}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &993902071
@@ -20796,27 +20796,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -18.859715
+      value: -4.4770665
       objectReference: {fileID: 0}
     - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 66.364204
+      value: 91.42936
       objectReference: {fileID: 0}
     - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -8.626196
+      value: -50.702324
       objectReference: {fileID: 0}
     - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -55.727615
+      value: 0.0000011550549
       objectReference: {fileID: 0}
     - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -3.8099532
+      value: -0.0000016170757
       objectReference: {fileID: 0}
     - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 94.79183
+      value: 90.00001
       objectReference: {fileID: 0}
     - target: {fileID: 5964241837311074526, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_Name
@@ -20864,27 +20864,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -29.788385
+      value: 2.724513
       objectReference: {fileID: 0}
     - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -25.672672
+      value: 7.831495
       objectReference: {fileID: 0}
     - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -1.3663509
+      value: 55.586308
       objectReference: {fileID: 0}
     - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.00000046809762
+      value: 0.0000003274656
       objectReference: {fileID: 0}
     - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.000004610683
+      value: 0.0000036150218
       objectReference: {fileID: 0}
     - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -90.00001
+      value: -99.39286
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24994,7 +24994,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1552712169}
+  m_Mesh: {fileID: 1416883317}
 --- !u!33 &1450346088
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -25508,7 +25508,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 1749047239}
+  m_Mesh: {fileID: 1981711292}
 --- !u!33 &1451869134
 MeshFilter:
   m_ObjectHideFlags: 10
@@ -31105,6 +31105,9 @@ MonoBehaviour:
   playerSpawn: {fileID: 1235819032}
   playerMotor: {fileID: 214369294}
   thirdPersonCamera: {fileID: 1564652902}
+  playerController: {fileID: 214369290}
+  playerHealth: {fileID: 214369291}
+  retryDelay: 2
 --- !u!1 &1699715480 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1069567032315564, guid: bdf8e7438a7816543998181bd3067573, type: 3}
