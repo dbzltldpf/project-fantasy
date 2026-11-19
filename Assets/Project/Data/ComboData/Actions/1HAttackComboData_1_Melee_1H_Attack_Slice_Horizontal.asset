@@ -20,9 +20,15 @@ MonoBehaviour:
   events:
   - rid: 1646186660429561940
   - rid: 1646186660429561941
+  - rid: 1056537649960190031
   references:
     version: 2
     RefIds:
+    - rid: 1056537649960190031
+      type: {class: CancelWindowEvent, ns: ProjectFantasy.Combat, asm: Assembly-CSharp}
+      data:
+        startFrame: 10
+        endFrame: 30
     - rid: 1646186660429561940
       type: {class: HitWindowEvent, ns: ProjectFantasy.Combat, asm: Assembly-CSharp}
       data:

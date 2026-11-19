@@ -9,5 +9,7 @@ namespace ProjectFantasy.Combat
         void OpenComboWindow(int transitionFrame);
         void CloseComboWindow();
         void SetMoveSpeed(float speed);
+        void OpenCancelWindow();
+        void CloseCancelWindow();
     }
 }

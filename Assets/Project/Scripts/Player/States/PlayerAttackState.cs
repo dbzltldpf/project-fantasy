@@ -7,6 +7,7 @@ namespace ProjectFantasy.Player
     public sealed class PlayerAttackState : PlayerStateBase, IActionContext
     {
         private const int FirstComboIndex = 0;
+        private const float MoveCancelThreshold = 0.01f;
 
         private readonly ActionPlayer actionPlayer;
         private Vector3 moveDirection;
@@ -15,9 +16,10 @@ namespace ProjectFantasy.Player
         private int comboTransitionFrame;
         private bool isComboWindowOpen;
         private bool hasQueuedAttack;
+        private bool CanChainCombo => isComboWindowOpen && ComboData.HasNextAction(comboIndex);
 
         private AttackComboData ComboData => Controller.AttackComboData;
-
+        private bool isCancelWindowOpen;
         public PlayerAttackState(PlayerController controller) : base(controller)
         {
             actionPlayer = new ActionPlayer(this);
@@ -34,7 +36,7 @@ namespace ProjectFantasy.Player
             if (!actionPlayer.IsPlaying) return;
 
             Motor.SetVelocityImmediate(moveDirection * (moveSpeed * actionPlayer.Current.PlaybackSpeed));
-
+            if (TryCancel()) return;
             if (TryChainCombo()) return;
 
             if (actionPlayer.IsFinished)
@@ -42,7 +44,22 @@ namespace ProjectFantasy.Player
                 Controller.ChangeState(Controller.LocomotionState);
             }
         }
-
+        private bool TryCancel()
+        {
+            if (!isCancelWindowOpen) return false;
+            if (TryStartDodge())
+            {
+                Controller.ChangeState(Controller.DodgeState);
+                return true;
+            }
+            if (hasQueuedAttack || CanChainCombo) return false;
+            if (Controller.GetCameraRelativeMove().sqrMagnitude > MoveCancelThreshold)
+            {
+                Controller.ChangeState(Controller.LocomotionState);
+                return true;
+            }
+            return false;
+        }
         public override void Exit()
         {
             actionPlayer.Stop();
@@ -67,6 +84,7 @@ namespace ProjectFantasy.Player
 
         private void StartAction(int index)
         {
+            isCancelWindowOpen = false;
             comboIndex = index;
             hasQueuedAttack = false;
             ActionData action = ComboData.GetAction(index);
@@ -96,5 +114,8 @@ namespace ProjectFantasy.Player
 
         void IActionContext.CloseComboWindow() => isComboWindowOpen = false;
         void IActionContext.SetMoveSpeed(float speed) => moveSpeed = speed;
+
+        void IActionContext.OpenCancelWindow() => isCancelWindowOpen = true;
+        void IActionContext.CloseCancelWindow() => isCancelWindowOpen = false;
     }
 }

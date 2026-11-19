@@ -78,3 +78,4 @@ Assets/Project/Scripts/
 | 2026-11-18 | World, Objective, RangedCombat, UI, InspectorGuide | 트리거·이벤트: 장소 도착 알림(`LocationTrigger`·`LocationEvents`), 목표 추상화(처치·도착 목표, `IsMatch`), 목표 완료 시 구역 개방(`AreaGate`·`ObjectiveGateOpener`), 목표별 진행도 표시 여부, 박히지 않는 표면(`NonStickSurface`) |
 | 2026-11-18 | Enemy, Weapon, Player, Combat, Core, InspectorGuide | 적 무기 제한: 적마다 허용 무기(`allowedWeapons`, 비우면 모두), 다른 무기 공격 "무효"(`IWeaponWielder`), 적 4종 무기 지정, 목표 문구에 무기 표기 |
 | 2026-11-19 | Stage, World, Objective, Enemy, Player, Camera, InspectorGuide | 스테이지 진행: 맵·게이트 재사용 5스테이지(`StageDirector`), 목표 목록 자동 생성(`ObjectiveTracker.Begin`, `ObjectiveSequence` 제거), 게이트 닫기·반투명 열림 문·반복 진입 알림, 순간이동(`PlayerMotor.Teleport`·`SnapToTarget`), 스포너 리스폰 여부, Warrior 반격 제거·보스 반격 0.3 |
+| 2026-11-19 | Combat, Player, InspectorGuide | 공격 후딜레이 캔슬 구간(`CancelWindowEvent`): 회피 최우선·이동은 이어 갈 콤보가 없을 때, 방향키 유지 연타 시 콤보 유지, 플레이어 공격 액션 8개에 구간 추가 |
