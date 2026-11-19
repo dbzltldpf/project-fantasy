@@ -10,7 +10,7 @@
 |---|---|
 | [Stage/StageDirector.cs](../../Assets/Project/Scripts/Stage/StageDirector.cs) | 스테이지 목록(적 그룹 + 클리어 목표), 목표 목록 생성, 지정 스테이지로 시작(`GoToStage`), 클리어 시 게이트 개방, 게이트 진입 시 순간이동·게이트 닫기·그룹 교체, 플레이어 사망 시 대기 후 현재 스테이지 재시작 |
 
-연동: [World](World.md) `AreaGate`·`LocationEvents`, [Objective](Objective.md) `ObjectiveTracker.Begin`·`StepCompleted`·`RestartStep`·`ReachObjectiveData`, [Player](Player.md) `PlayerMotor.Teleport`·`PlayerController.Revive`, [Enemy](Enemy.md) `EnemySpawner.ResetEnemies`, [Combat](Combat.md) 플레이어 `Health.Died`, [Camera](Camera.md) `ThirdPersonCamera.SnapToTarget`.
+연동: [World](World.md) `AreaGate`·`LocationEvents`, [Objective](Objective.md) `ObjectiveTracker.Begin`·`StepCompleted`·`RestartStep`·`ReachObjectiveData`, [Player](Player.md) `PlayerController.Revive`, [Enemy](Enemy.md) `EnemySpawner.ResetEnemies`, [Combat](Combat.md) 플레이어 `Health.Died`, [Camera](Camera.md) `ThirdPersonCamera.SnapToTarget`, [Narration](Narration.md) `NarrationPlayer.Play`.
 
 ## 동작 흐름
 ```
@@ -25,15 +25,13 @@ GoToStage(N)  (시작·테스트 패널 다음 스테이지·장 선택 공용)
   → AreaGate.Close()
   → ObjectiveTracker.Begin(목록, N × ObjectivesPerStage)
   → PlayerController.Revive(PlayerSpawn) → ThirdPersonCamera.SnapToTarget()
+  → N번 intro가 있으면 NarrationPlayer.Play(intro)
 
 ObjectiveTracker.StepCompleted(목표)
   → 현재 스테이지의 clearObjective이고 마지막 스테이지가 아니면 AreaGate.Open()
 
 LocationEvents.Reached(장소)
-  → gateObjective.IsMatch(장소) && AreaGate.IsOpen 이면 MoveToNextStage
-     → PlayerMotor.Teleport(PlayerSpawn) → ThirdPersonCamera.SnapToTarget()
-     → AreaGate.Close()
-     → 현재 그룹 끔 → stageIndex++ → 다음 그룹 켬
+  → gateObjective.IsMatch(장소) && AreaGate.IsOpen 이면 GoToStage(현재 + 1)
 
 플레이어 Health.Died
   → (이미 대기 중이면 무시) → retryDelay 대기 → Retry
@@ -43,6 +41,8 @@ LocationEvents.Reached(장소)
 - 목표 순서는 스테이지 목록에서만 만든다 (순서표가 두 곳이면 어긋남).
 - 게이트 진입 알림은 반복(`triggerOnce` 끔)이므로 `IsOpen`으로 걸러 스테이지 건너뛰기를 막는다.
 - 이전 그룹을 끄면 그 그룹의 스포너도 멈춘다.
+- 스테이지 시작 경로는 `GoToStage` 하나다 (게임 시작·게이트 진입·테스트 패널·장 선택). 다음 스테이지로 넘어갈 때도 플레이어 체력이 가득 찬다.
+- 재시작(`Retry`)은 `GoToStage`를 거치지 않아 인트로가 다시 나오지 않는다.
 - 마지막(보스) 스테이지는 클리어해도 게이트를 열지 않는다 (엔딩에서 처리 예정).
 - 트래커 시작은 `Start`에서 한다. 모든 `OnEnable`(Presenter 구독)이 끝난 뒤라 첫 `Changed`를 놓치지 않는다.
 - 재시작 시 클리어 여부는 게이트 상태(`IsOpen`)로 판단한다. 이미 클리어한 스테이지는 적을 되살리지 않고 플레이어만 부활.
@@ -52,11 +52,11 @@ LocationEvents.Reached(장소)
 ## 데이터 파라미터
 | 대상 | 필드 | 의미 |
 |---|---|---|
-| StageDirector | stages (group / clearObjective) | 진행 순서대로: 적 그룹(스포너 + 구역) / 끝나면 게이트를 열 목표 |
+| StageDirector | stages (group / clearObjective / intro) | 진행 순서대로: 적 그룹(스포너 + 구역) / 끝나면 게이트를 열 목표 / 시작 내레이션 (비우면 없음) |
 | StageDirector | objectiveTracker / areaGate | 씬의 트래커 / 게이트 |
 | StageDirector | gateObjective | 게이트 이동 목표 `ReachGate` (진입 장소 판정에도 사용) |
 | StageDirector | playerSpawn | 순간이동 위치·방향 (Z축이 맵 안쪽) |
-| StageDirector | playerMotor / thirdPersonCamera | 순간이동 / 카메라 즉시 맞춤 |
+| StageDirector | thirdPersonCamera / narrationPlayer | 카메라 즉시 맞춤 / 인트로 내레이션 재생 |
 | StageDirector | playerController / health | 부활(`Revive`) / 플레이어 사망 감지 |
 | StageDirector | retryDelay | 쓰러진 뒤 재시작까지 대기 (2초, 사망 모션 표시) |
 
@@ -74,7 +74,7 @@ LocationEvents.Reached(장소)
 2. 처치 목표 에셋(`Kill_X_N`, 문구에 사용 무기) 생성, 게이트 이동 목표 `ReachGate`(장소 `LocationGate`) 하나
 3. 맵 안에 빈 오브젝트 `PlayerSpawn` (바닥에서 0.1 위, Z축이 맵 안쪽)
 4. 게이트 구성은 [World](World.md) 에디터 설정
-5. `StageDirector` 오브젝트 → Stages를 순서대로, 나머지 참조 연결
+5. `StageDirector` 오브젝트 → Stages를 순서대로 (Intro에 내레이션 에셋), 나머지 참조 연결
 
 ## 주의사항 / 확장 포인트
 - 스포너 Count와 목표 처치 수를 맞춘다 (리스폰을 끄므로 Count가 곧 처치 수).
@@ -89,3 +89,4 @@ LocationEvents.Reached(장소)
 | 2026-11-19 | 최초 작성: 스테이지 목록·목표 자동 생성, 클리어 시 게이트 개방, 게이트 진입 시 순간이동·그룹 교체, 5스테이지 배치 |
 | 2026-11-19 | 플레이어 사망 시 현재 스테이지 재시작 (미클리어면 적·목표 진행 초기화, 플레이어 부활) |
 | 2026-11-19 | `GoToStage(N)`: 지정 스테이지로 시작 (그룹·적·게이트·목표·플레이어 초기화), 현재 스테이지 조회 속성 공개 |
+| 2026-11-19 | 스테이지 인트로 내레이션(`Stage.intro`), 게이트 진입도 `GoToStage`로 통합 (`MoveToNextStage` 본문·`playerMotor`·`HasCurrentStage` 제거) |

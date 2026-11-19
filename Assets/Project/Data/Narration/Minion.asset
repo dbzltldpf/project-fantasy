@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a17b889b94208c41b725b25c8db726e, type: 3}
+  m_Name: Minion
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Narration.NarrationData
+  lines:
+  - "\uC7A0\uC5D0\uC11C \uAE6C \uAE30\uC0AC\uC5EC, \uAC80\uC744 \uB4E4\uC5B4\uB77C."
+  - "\uC800 \uAF2C\uB9F9\uC774\uB4E4\uC740 \uD55C\uC190\uAC80\uC774 \uC544\uB2C8\uBA74
+    \uAFC8\uCA4D\uB3C4 \uC548 \uD55C\uB2E4."

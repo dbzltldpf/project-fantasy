@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ProjectFantasy.CameraSystem;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Enemy;
+using ProjectFantasy.Narration;
 using ProjectFantasy.Objective;
 using ProjectFantasy.Player;
 using ProjectFantasy.World;
@@ -18,6 +19,7 @@ namespace ProjectFantasy.Stage
         {
             public GameObject group; // 이 스테이지의 적 묶음 (스포너 + 구역)
             public ObjectiveData clearObjective; // 끝나면 게이트를 열 목표
+            public NarrationData intro; // 스테이지 시작 시 내레이션 (비우면 없음)
         }
         private const int ObjectivesPerStage = 2;
         [SerializeField] private Stage[] stages;
@@ -25,14 +27,13 @@ namespace ProjectFantasy.Stage
         [SerializeField] private AreaGate areaGate;
         [SerializeField] private ReachObjectiveData gateObjective;
         [SerializeField] private Transform playerSpawn;
-        [SerializeField] private PlayerMotor playerMotor;
         [SerializeField] private ThirdPersonCamera thirdPersonCamera;
         [SerializeField] private PlayerController playerController;
         [SerializeField] private Health playerHealth;
+        [SerializeField] private NarrationPlayer narrationPlayer;
         [Tooltip("쓰러진 뒤 재시작까지 대기 시간 (사망 모션을 보여 줄 시간)")]
         [SerializeField, Min(0f)] private float retryDelay = 2f;
         private int stageIndex;
-        private bool HasCurrentStage => stageIndex < stages.Length;
         private WaitForSeconds retryWait;
         private Coroutine retryCoroutine;
         private List<ObjectiveData> objectives;
@@ -75,6 +76,7 @@ namespace ProjectFantasy.Stage
             objectiveTracker.Begin(objectives, stageIndex * ObjectivesPerStage);
             playerController.Revive(playerSpawn.position, playerSpawn.rotation);
             thirdPersonCamera.SnapToTarget();
+            if (stages[stageIndex].intro != null) narrationPlayer.Play(stages[stageIndex].intro);
         }
         private void OnEnable()
         {
@@ -91,26 +93,18 @@ namespace ProjectFantasy.Stage
         }
         private void HandleStepCompleted(ObjectiveData objectiveData)
         {
-            if (!HasCurrentStage) return;
             if (stages[stageIndex].clearObjective != objectiveData) return;
             if (IsLastStage) return;
             areaGate.Open();
         }
         private void HandleLocationReached(LocationData locationData)
         {
-            if (!HasCurrentStage) return;
             if (!gateObjective.IsMatch(locationData) || !areaGate.IsOpen) return;
             MoveToNextStage();
         }
         private void MoveToNextStage()
         {
-            playerMotor.Teleport(playerSpawn.position, playerSpawn.rotation);
-            thirdPersonCamera.SnapToTarget();
-            areaGate.Close();
-            stages[stageIndex].group.SetActive(false);
-            stageIndex++;
-            if (stageIndex >= stages.Length) return;
-            stages[stageIndex].group.SetActive(true);
+            GoToStage(stageIndex + 1);
         }
         private void HandlePlayerDied()
         {
