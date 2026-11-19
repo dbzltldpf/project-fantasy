@@ -237,6 +237,7 @@
 | ActionData | Cross Fade Duration | 전환 블렌드 | 0.1 |
 | HitWindowEvent | 구간 / Damage Multiplier / Hit Stop | 타격 프레임, 배율, 멈춤 | 타임라인 창의 빨간 면이 대상 위치를 지나는 구간 / 1~1.5 / 0.06 |
 | ComboWindowEvent | 구간 / Transition Frame | 입력 예약 구간, 다음 타로 넘어가는 프레임 | 타격 구간 이후 |
+| CancelWindowEvent | 구간 | 회피·이동으로 후딜레이를 끊을 수 있는 구간 (플레이어 액션만) | 타격 구간 끝 프레임 ~ Length Frames |
 | MoveEvent | 구간 / Speed | 앞으로 내딛기 | 제자리 클립은 0~2 |
 
 편집은 **ActionData 인스펙터 → 타임라인 열기**에서 드래그로 한다 ([Combat](Features/Combat.md)).

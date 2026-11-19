@@ -59,7 +59,7 @@ flowchart LR
 | Locomotion | 지상 이동, 줍기(E), 퀵슬롯(1~8) 장착·사용. 애니메이션은 수평 속도로 Idle/Walk/Run 자동 분기 |
 | PickUp / UseItem | 줍기 모션 후 가방에 추가 / 소모품 사용(느린 이동, 효과 시점에 소모) ([Inventory](Inventory.md)) |
 | Air | 점프·낙하. 공중 가속(airAcceleration)으로 제어, 코요테 타임 내 점프 허용 |
-| Attack | 입력 방향으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션 ([Combat](Combat.md)) |
+| Attack | 입력 방향으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션, 캔슬 구간에서 회피(최우선)·이동(다음 타가 없거나 콤보 창이 닫힌 뒤)으로 후딜레이 캔슬 ([Combat](Combat.md)) |
 | Dodge | 진입 시 입력 방향(없으면 뒤)으로 고정해 `dodgeSpeed`로 `dodgeDuration` 동안 이동. 몸 방향 기준 4방향 애니, 회피 내내 무적. 종료 시 우클릭 유지면 `TryStartSecondaryAction`(가드·조준), 아니면 Locomotion |
 | Guard | 방패 가드 홀드. 느린 이동(guardMoveSpeed), 막으면 Block_Hit + 넉백 경직, 가드 중 공격 가능 |
 | Aim / RangedFire / Reload | 활·석궁 조준·발사·장전 ([Ranged Combat](RangedCombat.md)) |
@@ -187,3 +187,4 @@ flowchart LR
 | 2026-11-17 | 달리기 모션 전환 속도를 걷기~달리기 속도 비율(`runThresholdBlend`)로 자동 계산(`runSpeedThreshold` 제거), 걷기·달리기 재생 속도를 이동 속도에 맞춤(`LocomotionSpeed`) |
 | 2026-11-18 | `PlayerLoadout`이 `IWeaponWielder` 구현 (적 무기 제한 판정) |
 | 2026-11-19 | `PlayerMotor.Teleport` (스테이지 이동, [Stage](Stage.md)) |
+| 2026-11-19 | 공격 후딜레이 캔슬: 캔슬 구간에서 회피·이동으로 공격 상태 종료 (`TryCancel`, `CanChainCombo`) |

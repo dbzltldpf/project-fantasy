@@ -18,9 +18,9 @@
 | [HitStop.cs](../../Assets/Project/Scripts/Combat/HitStop.cs) | 명중 순간 애니메이터 일시 정지 (공격자·피격자 공용), `IsActive`로 로직 정지 판단 |
 | [Action/ActionData.cs](../../Assets/Project/Scripts/Combat/Action/ActionData.cs) | 공격 한 동작: 클립, 길이(프레임), 재생 속도, 크로스페이드, 다형 이벤트 목록 (SO) |
 | [Action/ActionEvent.cs](../../Assets/Project/Scripts/Combat/Action/ActionEvent.cs) | 이벤트 베이스: `[startFrame, endFrame)` 구간, `OnBegin` / `OnTick` / `OnEnd`, 검증 |
-| [Action/Events/](../../Assets/Project/Scripts/Combat/Action/Events/) | `HitWindowEvent`(타격 구간), `ComboWindowEvent`(입력 예약·전이 프레임), `MoveEvent`(전진) |
+| [Action/Events/](../../Assets/Project/Scripts/Combat/Action/Events/) | `HitWindowEvent`(타격 구간), `ComboWindowEvent`(입력 예약·전이 프레임), `CancelWindowEvent`(회피·이동으로 후딜레이 캔슬), `MoveEvent`(전진) |
 | [Action/ActionPlayer.cs](../../Assets/Project/Scripts/Combat/Action/ActionPlayer.cs) | 프레임 시계 진행, 이벤트 진입·유지·종료 호출 (GC 없음, 프레임 드랍 시에도 구간 1회 실행 보장) |
-| [Action/IActionContext.cs](../../Assets/Project/Scripts/Combat/Action/IActionContext.cs) | 이벤트가 소유자에게 요청하는 동작 (판정, 콤보 창, 이동) – 플레이어는 `PlayerAttackState`가 구현 |
+| [Action/IActionContext.cs](../../Assets/Project/Scripts/Combat/Action/IActionContext.cs) | 이벤트가 소유자에게 요청하는 동작 (판정, 콤보 창, 캔슬 구간, 이동) – 플레이어는 `PlayerAttackState`, 적은 `EnemyAttackState`가 구현 (적은 캔슬 구간 빈 구현) |
 | [Action/Editor/ActionDataEditor.cs](../../Assets/Project/Scripts/Combat/Action/Editor/ActionDataEditor.cs) | ActionData 인스펙터: 타임라인 열기, 이벤트 추가·삭제, 검증 경고 표시 |
 | [Action/Editor/ActionTimelineWindow.cs](../../Assets/Project/Scripts/Combat/Action/Editor/ActionTimelineWindow.cs) | 타임라인 창: 대상·캐릭터·무기 선택, 재생 제어, 선택 이벤트 상세 |
 | [Action/Editor/ActionTimelineTrackView.cs](../../Assets/Project/Scripts/Combat/Action/Editor/ActionTimelineTrackView.cs) | 눈금자·트랙 그리기, 드래그 편집 (프레임 스냅, 드래그 1회 = Undo 1회) |
@@ -36,11 +36,13 @@ frame 0 ──── 6 ────── 10 ── 14 ────────�
              [HitWindow )
                     [ComboWindow ────────────)
                             ◆ transitionFrame: 예약 입력이 있으면 다음 액션
+                       [CancelWindow ─────────────]  타격 구간 끝 ~ lengthFrames
 ```
 - **시계**: `경과 프레임 = 경과 시간 × 재생 속도 × 클립 frameRate`. 애니메이터 상태 Speed도 `ActionSpeed` 파라미터로 같은 배율 → 모션과 판정이 어긋나지 않음
 - **이벤트 구간**: `[startFrame, endFrame)` 진입 시 `OnBegin`+`OnTick`, 유지 중 `OnTick`, 이탈 시 `OnEnd`. 한 프레임에 구간 전체를 건너뛰어도 1회 실행
 - **HitWindowEvent**: 구간마다 `BeginSwing` → 매 프레임 `TickHit` → `EndSwing`. 한 액션에 여러 개 두면 다단 히트(대상 목록은 구간마다 초기화)
 - **ComboWindowEvent**: 구간 안에서만 공격 입력을 예약, 예약되면 `transitionFrame`에 다음 액션 시작 → 히트·팔로스루가 잘리지 않음
+- **CancelWindowEvent**: 구간 안에서 회피 입력 → 즉시 회피, 이동 입력 → 남은 후딜레이를 버리고 Locomotion. 이동 캔슬은 예약 공격이 없고 이어 갈 다음 타의 콤보 창이 닫혔을 때만(`CanChainCombo`) → 방향키를 누른 채 연타해도 콤보가 끊기지 않음. 휘두르는 중(타격 구간)에는 캔슬 불가
 - **MoveEvent**: 구간 동안 정면으로 `speed` 전진 (재생 속도 배율 적용)
 - **종료**: 예약이 없으면 `lengthFrames`에서 Locomotion 복귀
 - 이벤트는 에셋 공유 데이터 → 런타임 상태는 `IActionContext` 구현체(플레이어는 `PlayerAttackState`)가 보관. 적 AI도 같은 인터페이스로 재사용
@@ -203,4 +205,5 @@ Length               ───────────────────�
 | 2026-11-05 | 맞은 콜라이더 전달(`HitColliderUtility`, 근접·범위는 가장 가까운 콜라이더), Health 피해 배율 단계(`IDamageMultiplier`, 방어력 계산 전) |
 | 2026-11-13 | `Health.SetInvincible` 강제 무적 플래그 (`IsInvincible`에 포함, `RestoreFull` 시 해제) |
 | 2026-11-17 | 피해 필터 단계(`IDamageFilter`, 무적 판정 다음·방어 전) + `Rejected` 이벤트 (적 진영 구역 밖 공격 무효) |
+| 2026-11-19 | `CancelWindowEvent`·`IActionContext.Open/CloseCancelWindow`: 공격 후딜레이를 회피·이동으로 캔슬, 플레이어 공격 액션 8개에 구간 추가 |
 | 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |
