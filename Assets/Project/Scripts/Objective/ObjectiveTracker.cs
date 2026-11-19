@@ -18,12 +18,12 @@ namespace ProjectFantasy.Objective
         public ObjectiveData CurrentObjective => objectives == null || isCompleted ? null : objectives[goalIndex];
         public int ProgressCount => progressCount;
         private bool IsRunning => objectives != null && !isCompleted;
-        public void Begin(IReadOnlyList<ObjectiveData> objectives)
+        public void Begin(IReadOnlyList<ObjectiveData> objectives, int startIndex = 0)
         {
             this.objectives = objectives;
-            goalIndex = 0;
+            goalIndex = startIndex;
             progressCount = 0;
-            isCompleted = objectives.Count == 0;
+            isCompleted = startIndex >= objectives.Count;
             Changed?.Invoke();
         }
         private void OnEnable()

@@ -19,7 +19,7 @@ namespace ProjectFantasy.Stage
             public GameObject group; // 이 스테이지의 적 묶음 (스포너 + 구역)
             public ObjectiveData clearObjective; // 끝나면 게이트를 열 목표
         }
-
+        private const int ObjectivesPerStage = 2;
         [SerializeField] private Stage[] stages;
         [SerializeField] private ObjectiveTracker objectiveTracker;
         [SerializeField] private AreaGate areaGate;
@@ -35,10 +35,10 @@ namespace ProjectFantasy.Stage
         private bool HasCurrentStage => stageIndex < stages.Length;
         private WaitForSeconds retryWait;
         private Coroutine retryCoroutine;
-
+        private List<ObjectiveData> objectives;
         private List<ObjectiveData> BuildObjectives()
         {
-            List<ObjectiveData> objectiveDatas = new List<ObjectiveData>(stages.Length * 2);
+            List<ObjectiveData> objectiveDatas = new List<ObjectiveData>(stages.Length * ObjectivesPerStage);
             for (int i = 0; i < stages.Length; i++)
             {
                 objectiveDatas.Add(stages[i].clearObjective);
@@ -47,17 +47,34 @@ namespace ProjectFantasy.Stage
             return objectiveDatas;
         }
         private bool IsLastStage => stageIndex == stages.Length - 1;
+
+        public int CurrentStageIndex => stageIndex;
+        public int StageCount => stages.Length;
+        public GameObject CurrentGroup => stages[stageIndex].group;
         private void Awake()
         {
             retryWait = new WaitForSeconds(retryDelay);
         }
         private void Start()
         {
-            objectiveTracker.Begin(BuildObjectives());
+            objectives = BuildObjectives();
+            GoToStage(0);
+        }
+        public void GoToStage(int index)
+        {
+            if (index < 0 || index >= stages.Length) return;
+            stageIndex = index;
+
             for (int i = 0; i < stages.Length; i++)
             {
                 stages[i].group.SetActive(i == stageIndex);
             }
+            ResetCurrentStageEnemies();
+            areaGate.Close();
+
+            objectiveTracker.Begin(objectives, stageIndex * ObjectivesPerStage);
+            playerController.Revive(playerSpawn.position, playerSpawn.rotation);
+            thirdPersonCamera.SnapToTarget();
         }
         private void OnEnable()
         {
@@ -106,15 +123,19 @@ namespace ProjectFantasy.Stage
             Retry();
             retryCoroutine = null;
         }
+        private void ResetCurrentStageEnemies()
+        {
+            EnemySpawner[] spawners = stages[stageIndex].group.GetComponentsInChildren<EnemySpawner>();
+            for (int i = 0; i < spawners.Length; i++)
+            {
+                spawners[i].ResetEnemies();
+            }
+        }
         private void Retry()
         {
             if (!areaGate.IsOpen)
             {
-                EnemySpawner[] spawners = stages[stageIndex].group.GetComponentsInChildren<EnemySpawner>();
-                for (int i = 0; i < spawners.Length; i++)
-                {
-                    spawners[i].ResetEnemies();
-                }
+                ResetCurrentStageEnemies();
                 objectiveTracker.RestartStep();
             }
             playerController.Revive(playerSpawn.position, playerSpawn.rotation);

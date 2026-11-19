@@ -21,6 +21,7 @@ namespace ProjectFantasy.Player
         private const string InventoryName = "Inventory";
         private const string MasteryName = "Mastery";
         private const string QuickSlotName = "QuickSlot";
+        private const string PauseName = "Pause";
 
         [Tooltip("InputSystem_Actions (Player 맵의 액션을 이름으로 사용)")]
         [SerializeField] private InputActionAsset actionAsset;
@@ -38,6 +39,7 @@ namespace ProjectFantasy.Player
         private InputAction inventoryAction;
         private InputAction masteryAction;
         private InputAction quickSlotAction;
+        private InputAction pauseAction;
 
         private float lastAttackPressedTime = float.NegativeInfinity;
         private float lastJumpPressedTime = float.NegativeInfinity;
@@ -54,6 +56,7 @@ namespace ProjectFantasy.Player
         // 메뉴 토글은 게임플레이 차단 중에도 동작
         public event Action InventoryPressed;
         public event Action MasteryPressed;
+        public event Action PausePressed;
 
         // 이름이 틀리면 throwIfNotFound로 즉시 원인 표시
         private void Awake()
@@ -69,6 +72,7 @@ namespace ProjectFantasy.Player
             inventoryAction = playerMap.FindAction(InventoryName, true);
             masteryAction = playerMap.FindAction(MasteryName, true);
             quickSlotAction = playerMap.FindAction(QuickSlotName, true);
+            pauseAction = playerMap.FindAction(PauseName, true);
         }
 
         private void OnEnable()
@@ -80,6 +84,7 @@ namespace ProjectFantasy.Player
             inventoryAction.performed += OnInventoryPerformed;
             masteryAction.performed += OnMasteryPerformed;
             quickSlotAction.performed += OnQuickSlotPerformed;
+            pauseAction.performed += OnPausePerformed;
             playerMap.Enable();
         }
 
@@ -92,6 +97,7 @@ namespace ProjectFantasy.Player
             inventoryAction.performed -= OnInventoryPerformed;
             masteryAction.performed -= OnMasteryPerformed;
             quickSlotAction.performed -= OnQuickSlotPerformed;
+            pauseAction.performed -= OnPausePerformed;
             ClearBuffers();
         }
 
@@ -168,5 +174,6 @@ namespace ProjectFantasy.Player
             int bindingIndex = context.action.GetBindingIndexForControl(context.control);
             if (bindingIndex >= 0) BufferQuickSlot(bindingIndex);
         }
+        private void OnPausePerformed(InputAction.CallbackContext _) => PausePressed?.Invoke();
     }
 }

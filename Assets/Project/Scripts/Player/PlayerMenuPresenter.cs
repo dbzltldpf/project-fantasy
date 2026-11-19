@@ -15,9 +15,10 @@ namespace ProjectFantasy.Player
         [SerializeField] private ThirdPersonCamera thirdPersonCamera;
         [Tooltip("인벤토리 창 UI")]
         [SerializeField] private InventoryWindow inventoryWindow;
-        [Tooltip("숙련도 창 UI (비우면 K 키 무시)")]
+        [Tooltip("숙련도 창 UI")]
         [SerializeField] private MasteryWindow masteryWindow;
-
+        [Tooltip("일시정지 중이면 Tab·K 무시")]
+        [SerializeField] private PausePresenter pausePresenter;
         private PlayerInputHandler inputHandler;
         private PlayerItemHandler itemHandler;
         private WeaponMastery mastery;
@@ -32,35 +33,42 @@ namespace ProjectFantasy.Player
 
         private void OnEnable()
         {
-            inputHandler.InventoryPressed += inventoryWindow.Toggle;
+            inputHandler.InventoryPressed += HandleInventoryPressed;
             inventoryWindow.OpenChanged += HandleOpenChanged;
-            if (masteryWindow == null) return;
-
-            inputHandler.MasteryPressed += masteryWindow.Toggle;
+            inputHandler.MasteryPressed += HandleMasteryPressed;
             masteryWindow.OpenChanged += HandleOpenChanged;
         }
 
         private void OnDisable()
         {
-            inputHandler.InventoryPressed -= inventoryWindow.Toggle;
+            inputHandler.InventoryPressed -= HandleInventoryPressed;
             inventoryWindow.OpenChanged -= HandleOpenChanged;
-            if (masteryWindow == null) return;
-
-            inputHandler.MasteryPressed -= masteryWindow.Toggle;
+            inputHandler.MasteryPressed -= HandleMasteryPressed;
             masteryWindow.OpenChanged -= HandleOpenChanged;
         }
 
         private void Start()
         {
             inventoryWindow.Bind(itemHandler.Inventory, itemHandler);
-            if (masteryWindow != null) masteryWindow.Bind(mastery);
+            masteryWindow.Bind(mastery);
         }
 
         private void HandleOpenChanged(bool _)
         {
-            bool isAnyOpen = inventoryWindow.IsOpen || (masteryWindow != null && masteryWindow.IsOpen);
+            bool isAnyOpen = inventoryWindow.IsOpen || masteryWindow.IsOpen;
             inputHandler.SetGameplayEnabled(!isAnyOpen);
             thirdPersonCamera.SetLookEnabled(!isAnyOpen);
         }
+        private void HandleInventoryPressed()
+        {
+            if (pausePresenter.IsPaused) return;
+            inventoryWindow.Toggle();
+        }
+        private void HandleMasteryPressed()
+        {
+            if (pausePresenter.IsPaused) return;
+            masteryWindow.Toggle();
+        }
+
     }
 }
