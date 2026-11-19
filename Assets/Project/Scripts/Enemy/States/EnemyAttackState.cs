@@ -124,5 +124,8 @@ namespace ProjectFantasy.Enemy
 
         void IActionContext.CloseComboWindow() => isComboWindowOpen = false;
         void IActionContext.SetMoveSpeed(float speed) => moveSpeed = speed;
+
+        void IActionContext.OpenCancelWindow() { }
+        void IActionContext.CloseCancelWindow() { }
     }
 }
