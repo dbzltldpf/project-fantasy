@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ProjectFantasy.Enemy;
 using ProjectFantasy.World;
 using UnityEngine;
@@ -7,15 +8,24 @@ namespace ProjectFantasy.Objective
     // 처치·도착 알림으로 현재 목표 진행도를 세고 단계 완료·변경을 알림
     public sealed class ObjectiveTracker : MonoBehaviour
     {
-        [SerializeField] private ObjectiveSequence goals;
+        private IReadOnlyList<ObjectiveData> objectives;
         private int progressCount = 0;
         private bool isCompleted = false;
         private int goalIndex = 0;
         public event Action Changed;
         public event Action<ObjectiveData> StepCompleted;
         public bool IsCompleted => isCompleted;
-        public ObjectiveData CurrentObjective => isCompleted ? null : goals.Objectives[goalIndex];
+        public ObjectiveData CurrentObjective => objectives == null || isCompleted ? null : objectives[goalIndex];
         public int ProgressCount => progressCount;
+        private bool IsRunning => objectives != null && !isCompleted;
+        public void Begin(IReadOnlyList<ObjectiveData> objectives)
+        {
+            this.objectives = objectives;
+            goalIndex = 0;
+            progressCount = 0;
+            isCompleted = objectives.Count == 0;
+            Changed?.Invoke();
+        }
         private void OnEnable()
         {
             EnemyEvents.EnemyKilled += HandleEnemyKilled;
@@ -38,7 +48,7 @@ namespace ProjectFantasy.Objective
                 isStepCompleted = true;
             }
 
-            if (goalIndex >= goals.Objectives.Count)
+            if (goalIndex >= objectives.Count)
             {
                 isCompleted = true;
             }
@@ -48,18 +58,18 @@ namespace ProjectFantasy.Objective
         }
         private void HandleEnemyKilled(EnemyData enemyData)
         {
-            if (isCompleted) return;
+            if (!IsRunning) return;
 
-            ObjectiveData currentObjectData = goals.Objectives[goalIndex];
+            ObjectiveData currentObjectData = objectives[goalIndex];
             if (!currentObjectData.IsMatch(enemyData)) return;
 
             AddProgress(currentObjectData);
         }
         private void HandleLocationReached(LocationData locationData)
         {
-            if (isCompleted) return;
+            if (!IsRunning) return;
 
-            ObjectiveData currentObjectData = goals.Objectives[goalIndex];
+            ObjectiveData currentObjectData = objectives[goalIndex];
             if (!currentObjectData.IsMatch(locationData)) return;
 
             AddProgress(currentObjectData);

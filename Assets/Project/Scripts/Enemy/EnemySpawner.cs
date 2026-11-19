@@ -21,7 +21,8 @@ namespace ProjectFantasy.Enemy
         [SerializeField] private EnemyTerritory territory;
         [Tooltip("선택 시 스폰 반경 Gizmo 색")]
         [SerializeField] private Color gizmoColor = new Color(1f, 0.3f, 0.3f, 0.5f);
-
+        [Tooltip("죽은 적을 다시 살림 (스테이지 캠프는 끔)")]
+        [SerializeField] private bool respawn = false;
         private readonly List<PendingRespawn> pendingRespawns = new List<PendingRespawn>();
 
         private readonly struct PendingRespawn
@@ -75,7 +76,11 @@ namespace ProjectFantasy.Enemy
             }
         }
 
-        private void HandleDespawned(EnemyController enemy) => pendingRespawns.Add(new PendingRespawn(enemy, Time.time + respawnDelay));
+        private void HandleDespawned(EnemyController enemy)
+        {
+            if (!respawn) return;
+            pendingRespawns.Add(new PendingRespawn(enemy, Time.time + respawnDelay));
+        }
 
         private void Respawn(EnemyController enemy)
         {

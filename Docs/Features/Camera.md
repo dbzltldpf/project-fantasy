@@ -6,7 +6,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [ThirdPersonCamera.cs](../../Assets/Project/Scripts/CameraSystem/ThirdPersonCamera.cs) | 회전·줌 입력, 타깃 추적, 충돌 거리 보정, 커서 잠금, 메뉴 중 시점 정지(`SetLookEnabled`) |
+| [ThirdPersonCamera.cs](../../Assets/Project/Scripts/CameraSystem/ThirdPersonCamera.cs) | 회전·줌 입력, 타깃 추적, 충돌 거리 보정, 커서 잠금, 메뉴 중 시점 정지(`SetLookEnabled`), 순간이동 직후 즉시 맞춤(`SnapToTarget`: 추적 관성 제거·등 뒤로 회전) |
 | [CameraData.cs](../../Assets/Project/Scripts/CameraSystem/Data/CameraData.cs) | 감도·피치·거리·충돌 튜닝 데이터 (SO) |
 
 ## 동작 흐름
@@ -67,3 +67,4 @@
 | 2026-09-30 | 최초 작성 (오빗 회전, SmoothDamp 추적, SphereCast 충돌) |
 | 2026-10-02 | 조준 프로필 블렌드(숄더뷰), `shoulderOffset`·`fieldOfView` 추가 |
 | 2026-10-06 | 마우스 휠 줌, 벽 충돌만 보간하도록 변경(조준 해제 복귀가 줌 거리와 무관), 메뉴 중 시점·줌 정지 |
+| 2026-11-19 | `SnapToTarget` (순간이동 직후 카메라가 날아오지 않게 즉시 맞춤) |

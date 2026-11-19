@@ -1,52 +1,57 @@
 # World
 
 ## 개요
-월드에서 일어나는 진행용 장치. 장소(`LocationData`)에 플레이어가 처음 들어오면 전역 알림을 보내고, 막고 있는 벽(`AreaGate`)을 열어 다음 구역으로 갈 수 있게 한다. 방 단위 진행(입장 → 목표 완료 → 출구 개방 → 다음 방 도착)을 콜라이더와 기본 도형만으로 구성한다.
+월드에서 일어나는 진행용 장치. 장소(`LocationData`)에 플레이어가 들어오면 전역 알림을 보내고, 게이트(`AreaGate`)는 막는 벽과 통과 가능한 반투명 문을 바꿔 켜서 열고 닫는다. 콜라이더와 기본 도형만으로 구성한다.
 
-World는 목표 시스템을 모른다. 목표가 장소 알림을 듣고([Objective](Objective.md) `ReachObjectiveData`), 목표 완료로 벽을 여는 연결도 Objective 쪽(`ObjectiveGateOpener`)이 맡는다.
+World는 목표·스테이지를 모른다. 목표가 장소 알림을 듣고([Objective](Objective.md) `ReachObjectiveData`), 게이트를 언제 열고 닫을지는 [Stage](Stage.md) `StageDirector`가 정한다.
 
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
 | [World/LocationData.cs](../../Assets/Project/Scripts/World/LocationData.cs) | 장소 하나 SO: 표시 이름 |
 | [World/LocationEvents.cs](../../Assets/Project/Scripts/World/LocationEvents.cs) | 장소 전역 알림 `Reached(LocationData)` (`EnemyEvents`와 같은 형태) |
-| [World/LocationTrigger.cs](../../Assets/Project/Scripts/World/LocationTrigger.cs) | 트리거 콜라이더에 대상 레이어가 처음 들어오면 `RaiseReached` (1회) |
-| [World/AreaGate.cs](../../Assets/Project/Scripts/World/AreaGate.cs) | `Open()` 시 막고 있는 벽(자식 오브젝트)을 끔 (1회) |
+| [World/LocationTrigger.cs](../../Assets/Project/Scripts/World/LocationTrigger.cs) | 트리거 콜라이더에 대상 레이어가 들어오면 `RaiseReached` (기본 1회, `triggerOnce` 끄면 매번) |
+| [World/AreaGate.cs](../../Assets/Project/Scripts/World/AreaGate.cs) | `Open()`/`Close()`/`IsOpen`: 닫힘 = 막는 벽(`blocker`) 켬, 열림 = 반투명 문(`openVisual`) 켬, 시작 시 닫힘으로 맞춤 |
 
 ## 동작 흐름
 ```
 LocationTrigger.OnTriggerEnter
-  → 이미 알렸으면 무시 → 레이어 비트 검사(targetLayers & (1 << layer))
+  → (triggerOnce면 이미 알렸을 때 무시) → 레이어 비트 검사(targetLayers & (1 << layer))
   → LocationEvents.RaiseReached(LocationData)
      → ObjectiveTracker: 현재 목표가 그 장소의 도착 목표면 진행 ([Objective](Objective.md))
+     → StageDirector: 게이트 장소이고 열려 있으면 다음 스테이지로 ([Stage](Stage.md))
 
-ObjectiveTracker.StepCompleted(끝난 목표)
-  → ObjectiveGateOpener: 지정한 목표와 같으면 AreaGate.Open() → Blocker 비활성화
+AreaGate.SetOpen(open): isOpen 갱신 → blocker.SetActive(!open) → openVisual.SetActive(open)
 ```
-- 트리거는 한 번만 알린다. 도착 목표가 오기 전에 밟히면 알림이 지나가므로, 트리거는 **벽 너머**에 배치해 순서를 레벨 구조로 보장한다.
-- 벽 오브젝트를 끄고 `AreaGate` 자체는 남겨 둔다 (이후 개방 이펙트·상태 복원용).
+- 머티리얼을 코드로 바꾸지 않고 상태별 오브젝트를 켜고 꺼서 콜라이더와 겉모습을 함께 바꾼다.
+- 게이트 트리거는 벽 바로 뒤에 둔다. 닫혀 있으면 벽에 막혀 닿지 않는다.
 
 ## 데이터 파라미터
 | 대상 | 필드 | 기본값 | 의미 |
 |---|---|---|---|
 | LocationData | displayName | — | 장소 표시 이름 |
-| LocationTrigger | locationData | — | 도착을 알릴 장소 |
-| LocationTrigger | targetLayers | — | 도착으로 인정할 레이어 (`Player`) |
-| AreaGate | blocker | — | 길을 막는 벽 오브젝트 |
+| LocationTrigger | locationData / targetLayers | — | 도착을 알릴 장소 / 도착으로 인정할 레이어 (`Player`) |
+| LocationTrigger | triggerOnce | true | 처음 한 번만 알림 (게이트 트리거는 끔) |
+| AreaGate | blocker | — | 닫혔을 때 길을 막는 벽 |
+| AreaGate | openVisual | — | 열렸을 때 보이는 통과 가능한 문 (콜라이더 없음) |
 
 ## 에디터 설정
-1. `Create → ProjectFantasy/World/Location Data`로 장소 에셋 생성 (`Data/World/`, 예: `LocationField`)
-2. 도착 트리거: 빈 오브젝트(예: `TriggerField`) + BoxCollider(**Is Trigger**) + `LocationTrigger` → 장소·Target Layers(`Player`) 연결, Layer `Ignore Raycast`
-3. 구역 문: 빈 오브젝트(예: `GateField`) + `AreaGate` + `ObjectiveGateOpener`, 자식 `Blocker`(Cube, BoxCollider 기본, 반투명 머티리얼 `Gate`, **Layer Default**, `NonStickSurface`)
-4. `ObjectiveGateOpener` → 씬의 ObjectiveTracker, 완료 시 열 목표 에셋, 같은 오브젝트의 AreaGate 연결
+1. `Create → ProjectFantasy/World/Location Data`로 장소 에셋 생성 (`Data/World/`, 예: `LocationGate`)
+2. 게이트 구성
+```
+GateField          ← AreaGate
+ ├ Blocker         ← Cube, BoxCollider, NonStickSurface, 머티리얼 Gate_Closed(불투명), Layer Default
+ ├ OpenVisual      ← Cube, 콜라이더 없음, 머티리얼 Gate(반투명)
+ └ TriggerGate     ← BoxCollider(Is Trigger) + LocationTrigger(LocationGate, Player, Trigger Once 끔), Layer Ignore Raycast
+```
 
 ## 주의사항 / 확장 포인트
-- Blocker를 `Ignore Raycast`에 두면 화살·마법탄·카메라 충돌·적 시야가 벽을 통과한다. 벽은 Default 레이어로 둔다.
+- Blocker를 `Ignore Raycast`에 두면 화살·마법탄·카메라 충돌·적 시야가 벽을 통과한다. 벽은 Default, 트리거는 Ignore Raycast로 레이어가 달라 오브젝트를 나눈다.
 - 트리거 이벤트는 둘 중 하나에 Rigidbody 또는 CharacterController가 있어야 발생한다 (플레이어는 CharacterController).
-- 목표를 이미 끝낸 상태에서 시작(장 선택·체크포인트)하면 `StepCompleted`가 다시 오지 않아 벽이 닫혀 있다. 체크포인트 단계에서 시작 시 상태 맞추기로 해결 예정.
-- 순간이동 포탈은 체크포인트·장 선택의 스폰 지점과 함께 추가한다.
+- 런타임 스크립트에 `using UnityEditor`가 있으면 빌드에서만 컴파일 에러가 난다.
 
 ## 변경 이력
 | 날짜 | 내용 |
 |---|---|
 | 2026-11-18 | 최초 작성: 장소 SO·도착 전역 알림·도착 트리거, 목표 완료 시 구역 개방(`AreaGate`) |
+| 2026-11-19 | 게이트 닫기·`IsOpen`, 열림 상태 반투명 문(`openVisual`), 트리거 반복 알림(`triggerOnce`), 게이트 개방을 `StageDirector`가 담당 |

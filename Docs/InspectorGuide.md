@@ -417,13 +417,17 @@
 | 필드 아이템 | WorldItem | Item / Count / Tier / Model Root | 아이템 / 수량 (장비는 1) / 티어 / 비움 |
 | 허수아비 | Health · TrainingDummy · DamageNumberEmitter · KillReward | Invincible Duration / Virtual Health / Experience | 0 / 100 / 30 |
 | 스폰 지점 | EnemySpawner | Enemy Prefab / Count / Spawn Radius / Respawn Delay | 적 프리팹 / 3 / 5 / 30 |
+| 스폰 지점 | EnemySpawner | Respawn | 끔 (스테이지 캠프, Count = 목표 처치 수) / 켬 (필드 사냥터) |
 | 스폰 지점 | EnemySpawner | Territory | 진영 구역 (비우면 Leash Range 원) |
 | 진영 구역 | EnemyTerritory + MeshCollider(ProBuilder Poly Shape) 또는 BoxCollider | **Areas** / Convex·Is Trigger / Layer | 구역 콜라이더들 / 둘 다 켬 / `Ignore Raycast`, MeshRenderer 끔 ([Enemy](Features/Enemy.md) 에디터 설정 9) |
 | NavMesh | NavMeshSurface | Use Geometry / Include Layers | Physics Colliders / 지면만 (지형 MeshCollider는 Convex 끔) |
 | Canvas / Status UI | StatusBarView | Warning Threshold / Blink Speed / Value Format | 0.3 / 2 / `{0} / {1}` (`Create Player Status UI`로 생성) |
-| ObjectiveTracker | ObjectiveTracker | **Goals** | 챕터 `ObjectiveSequence` (예: `Chapter1`, [Objective](Features/Objective.md)) |
+| ObjectiveTracker | ObjectiveTracker | — | 필드 없음, 목표 목록은 StageDirector가 넘김 ([Objective](Features/Objective.md)) |
+| StageDirector | StageDirector | **Stages** (Group / Clear Objective) / **Objective Tracker** / **Area Gate** / **Gate Objective** / **Player Spawn** / **Player Motor** / **Third Person Camera** | 캠프 그룹·처치 목표 순서대로 / 트래커 / GateField / `ReachGate` / PlayerSpawn / 플레이어 / Main Camera ([Stage](Features/Stage.md)) |
 | Canvas / 목표 패널 | ObjectiveView | Root / **Label** / **Progress Label** / Completed | 패널 / 문구 TMP / 진행도 TMP / `완료` |
 | ObjectivePresenter | ObjectivePresenter | **Objective Tracker** / **Objective View** | 씬의 트래커 / 목표 패널 |
-| 도착 트리거 (예: TriggerField) | LocationTrigger + BoxCollider | **Location Data** / **Target Layers** / Is Trigger / Layer | 장소 에셋 / `Player` / 켬 / `Ignore Raycast`, 구역 문 너머에 배치 ([World](Features/World.md)) |
-| 구역 문 (예: GateField) | AreaGate · ObjectiveGateOpener | **Blocker** / **Objective Tracker** / **Target Objective** / **Area Gate** | 자식 벽 / 씬의 트래커 / 완료 시 열 목표 / 같은 오브젝트 |
-| 구역 문 / Blocker | Cube(BoxCollider) · NonStickSurface | Material / Layer | `Gate`(반투명) / **Default** (Ignore Raycast면 화살·카메라·적 시야가 통과) |
+| 게이트 (GateField) | AreaGate | **Blocker** / **Open Visual** | 자식 벽 / 자식 반투명 문 ([World](Features/World.md)) |
+| GateField / Blocker | Cube(BoxCollider) · NonStickSurface | Material / Layer | `Gate_Closed`(불투명) / **Default** (Ignore Raycast면 화살·카메라·적 시야가 통과) |
+| GateField / OpenVisual | Cube (콜라이더 제거) | Material | `Gate`(반투명) |
+| GateField / TriggerGate | LocationTrigger + BoxCollider | **Location Data** / **Target Layers** / Trigger Once / Is Trigger / Layer | `LocationGate` / `Player` / 끔 / 켬 / `Ignore Raycast`, 벽 바로 뒤 |
+| PlayerSpawn | Transform | 위치 / 회전 | 바닥에서 0.1 위 / Z축이 맵 안쪽 |
