@@ -411,7 +411,11 @@
 |---|---|---|---|
 | Main Camera | ThirdPersonCamera | **Target** / **Camera Data** / Aim Camera Data / **Look Action** / **Zoom Action** | Rogue / `CameraData` / `AimCameraData` / Player/Look / Player/Zoom |
 | Main Camera | ThirdPersonCamera | Aim Blend Speed | 6 |
-| Canvas / UI Presenters | PlayerAimPresenter · PlayerMenuPresenter · PlayerHudPresenter | 플레이어·카메라·UI 참조 (Menu는 Inventory Window·**Mastery Window**) | `Create Inventory UI` → `Create Mastery UI`가 자동 연결 |
+| Canvas / UI Presenters | PlayerAimPresenter · PlayerMenuPresenter · PlayerHudPresenter | 플레이어·카메라·UI 참조 (Menu는 Inventory Window·**Mastery Window**(필수)·**Pause Presenter**) | `Create Inventory UI` → `Create Mastery UI`가 자동 연결, Pause Presenter는 직접 연결 |
+| PausePresenter | PausePresenter | **Input Handler** / **Third Person Camera** / **Pause Menu View** / **Inventory Window** / **Mastery Window** | 플레이어 / Main Camera / PauseMenuWindow / 인벤토리 창 / 숙련도 창 |
+| PauseMenuWindow | PauseMenuView | **Root** / **Dev Panel** / Show Dev Panel | 일시정지 패널 / DevPanel / 켬 (**제출 빌드 전 끔**) |
+| PauseMenuWindow / DevPanel | DevPanelView | **Next Stage** / **Toggle Invincible** / **Kill Stage Enemies** / **Kill Player** / **Cycle Game Speed** / **Speed Label** | 각 버튼 (OnClick 비움) / 배속 버튼 텍스트 (`배속 x1`) ([Dev](Features/Dev.md)) |
+| DevCommands | DevCommands | **Dev Panel View** / **Stage Director** / **Pause Presenter** / **Player Health** | DevPanel / Stage / PausePresenter / 플레이어 |
 | UI Presenters | PlayerHudPresenter | Experience / Level Up / Tier Unlock Format | 숙련 안내 문구, 기본값 (`{0}` 이름, `{1}` 값, `{2}` 티어) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Pool Root | 비움 (`Pools/DamageNumbers` 자동) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Immune Text / Immune Color | `무효` / 회색 (적 진영 구역 밖 공격) |

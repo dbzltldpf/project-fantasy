@@ -15,7 +15,8 @@
 | [PlayerMagicCaster.cs](../../Assets/Project/Scripts/Player/PlayerMagicCaster.cs) | 마법 쿨타임·데미지 ([Magic](Magic.md)) |
 | [PlayerAimPresenter.cs](../../Assets/Project/Scripts/Player/PlayerAimPresenter.cs) | 조준 뷰 → 카메라 숄더뷰·조준점 |
 | [PlayerItemHandler.cs](../../Assets/Project/Scripts/Player/PlayerItemHandler.cs) / [PlayerInteractor.cs](../../Assets/Project/Scripts/Player/PlayerInteractor.cs) | 아이템 장착·사용·버리기·줍기, 주변 아이템 탐색 ([Inventory](Inventory.md)) |
-| [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
+| [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단, 일시정지 중 Tab·K 무시), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
+| [PausePresenter.cs](../../Assets/Project/Scripts/Player/PausePresenter.cs) | ESC 일시정지·해제: `Time.timeScale` 0, 게임플레이 입력·시점 정지, 일시정지 메뉴 표시. 재개 시 `GameSpeed`(배속)로 복귀, 인벤토리·숙련도 창이 열려 있으면 ESC 무시 |
 | [PlayerMasteryRewarder.cs](../../Assets/Project/Scripts/Player/PlayerMasteryRewarder.cs) / [WeaponMastery.cs](../../Assets/Project/Scripts/Mastery/WeaponMastery.cs) | 처치 보상 → 장착 무기·보조 장비 숙련 경험치, 숙련 레벨·티어 장착 조건·보너스 ([Mastery](Mastery.md)) |
 | [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프/회피 튜닝 데이터 (SO) |
 | [PlayerAnimationData.cs](../../Assets/Project/Scripts/Player/Data/PlayerAnimationData.cs) | 애니메이터 상태 이름·파라미터·전환 시간·이동 모션 분기 비율·클립 속도 (SO) |
@@ -189,3 +190,4 @@ flowchart LR
 | 2026-11-19 | `PlayerMotor.Teleport` (스테이지 이동, [Stage](Stage.md)) |
 | 2026-11-19 | `PlayerController.Revive` (사망 후 스테이지 재시작, [Stage](Stage.md)) |
 | 2026-11-19 | 공격 후딜레이 캔슬: 캔슬 구간에서 회피·이동으로 공격 상태 종료 (`TryCancel`, `CanChainCombo`) |
+| 2026-11-19 | ESC 일시정지(`PausePresenter`, 입력 `Pause` 액션: Escape / Start), 일시정지 중 Tab·K 무시, 숙련도 창 연결 필수로 변경 |

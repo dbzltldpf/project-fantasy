@@ -13,6 +13,8 @@
 | [Inventory/](../../Assets/Project/Scripts/UI/Inventory/) | 인벤토리 창, 아이템 칸, 우클릭 메뉴, 드래그 고스트, 능력치 비교 문구 ([Inventory](Inventory.md)) |
 | [HUD/](../../Assets/Project/Scripts/UI/HUD/) | 상태바(`StatusBarView`: 체력·자원 공용, 수치, 낮으면 깜빡임), 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(여러 줄 동시 표시), 목표 표시(`ObjectiveView`, [Objective](Objective.md)) |
 | [Mastery/](../../Assets/Project/Scripts/UI/Mastery/) | 숙련도 창(K)·줄 ([Mastery](Mastery.md)) |
+| [Pause/PauseMenuView.cs](../../Assets/Project/Scripts/UI/Pause/PauseMenuView.cs) | 일시정지 패널 표시/숨김(`Show`·`Hide`·`IsOpen`), 테스트 패널 표시 여부(`showDevPanel`). 일시정지 로직은 `PausePresenter` ([Player](Player.md)) |
+| [Dev/DevPanelView.cs](../../Assets/Project/Scripts/UI/Dev/DevPanelView.cs) | 테스트 버튼 클릭 → `CommandChosen` 알림, 배속 글자 ([Dev](Dev.md)) |
 | [Enemy/EnemyHealthBarView.cs](../../Assets/Project/Scripts/UI/Enemy/EnemyHealthBarView.cs) | 적 머리 위 월드 공간 체력바 표시·빌보드 (표시 규칙은 `EnemyHealthBarPresenter`, [Enemy](Enemy.md)) |
 | [Common/BarFill.cs](../../Assets/Project/Scripts/UI/Common/BarFill.cs) | 3조각 바 채움: `SetRatio`(양 끝 유지, 숙련 경험치) / `SetMaskedRatio`(마스크로 잘림, 체력·자원) |
 | [Editor/InventoryUIBuilder.cs](../../Assets/Project/Scripts/UI/Editor/InventoryUIBuilder.cs) | 인벤토리 UI 계층 일괄 생성 메뉴 |
@@ -30,6 +32,8 @@
 피해: Health.Damaged → DamageNumberEmitter → DamageNumberSpawner.Spawn(피해량, 타격 지점) → DamageNumber (수명 후 풀 반환)
 무효: Health.Rejected → DamageNumberEmitter → DamageNumberSpawner.SpawnImmune(타격 지점) → DamageNumber.ShowText("무효")
 목표: ObjectiveTracker.StepCompleted·Changed → ObjectivePresenter → ObjectiveView (단계 완료 연출 후 다음 목표)
+일시정지: PlayerInputHandler.PausePressed → PausePresenter → PauseMenuView.Show / Hide
+테스트: DevPanelView.CommandChosen → DevCommands ([Dev](Dev.md))
 체력: Health.HealthChanged → PlayerHudPresenter → StatusBarView (플레이어) / EnemyHealthBarPresenter → EnemyHealthBarView (적)
 ```
 
@@ -65,3 +69,4 @@
 | 2026-11-11 | HUD 목표 표시(`ObjectiveView`: 문구·진행도, 단계 완료 색 연출, 전체 완료 문구) |
 | 2026-11-17 | 데미지 숫자 "무효" 글자 (`Health.Rejected`, 적 진영 구역 밖 공격) |
 | 2026-11-18 | 목표 진행도 표시 여부(`ObjectiveView.Show`·`PlayCompleted`의 `showProgress`, 도착 목표는 숫자 숨김) |
+| 2026-11-19 | 일시정지 메뉴(`PauseMenuView`, ESC로만 열고 닫음), 테스트 패널(`DevPanelView`) |

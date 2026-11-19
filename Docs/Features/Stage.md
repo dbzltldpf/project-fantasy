@@ -8,7 +8,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [Stage/StageDirector.cs](../../Assets/Project/Scripts/Stage/StageDirector.cs) | 스테이지 목록(적 그룹 + 클리어 목표), 목표 목록 생성·트래커 시작, 클리어 시 게이트 개방, 게이트 진입 시 순간이동·게이트 닫기·그룹 교체, 플레이어 사망 시 대기 후 현재 스테이지 재시작 |
+| [Stage/StageDirector.cs](../../Assets/Project/Scripts/Stage/StageDirector.cs) | 스테이지 목록(적 그룹 + 클리어 목표), 목표 목록 생성, 지정 스테이지로 시작(`GoToStage`), 클리어 시 게이트 개방, 게이트 진입 시 순간이동·게이트 닫기·그룹 교체, 플레이어 사망 시 대기 후 현재 스테이지 재시작 |
 
 연동: [World](World.md) `AreaGate`·`LocationEvents`, [Objective](Objective.md) `ObjectiveTracker.Begin`·`StepCompleted`·`RestartStep`·`ReachObjectiveData`, [Player](Player.md) `PlayerMotor.Teleport`·`PlayerController.Revive`, [Enemy](Enemy.md) `EnemySpawner.ResetEnemies`, [Combat](Combat.md) 플레이어 `Health.Died`, [Camera](Camera.md) `ThirdPersonCamera.SnapToTarget`.
 
@@ -17,8 +17,14 @@
 Start
   → BuildObjectives: 스테이지마다 clearObjective, 마지막을 뺀 각 스테이지 뒤에 gateObjective(ReachGate)
      예) Kill_Minion_2 → ReachGate → Kill_Rogue_2 → ReachGate → … → Kill_Boss_1
-  → ObjectiveTracker.Begin(목록)
-  → 현재 스테이지 그룹만 켜고 나머지는 끔
+  → GoToStage(0)
+
+GoToStage(N)  (시작·테스트 패널 다음 스테이지·장 선택 공용)
+  → 범위 밖이면 무시 → stageIndex = N
+  → N번 그룹만 켜고 나머지는 끔 → N번 스포너 전부 ResetEnemies
+  → AreaGate.Close()
+  → ObjectiveTracker.Begin(목록, N × ObjectivesPerStage)
+  → PlayerController.Revive(PlayerSpawn) → ThirdPersonCamera.SnapToTarget()
 
 ObjectiveTracker.StepCompleted(목표)
   → 현재 스테이지의 clearObjective이고 마지막 스테이지가 아니면 AreaGate.Open()
@@ -72,7 +78,9 @@ LocationEvents.Reached(장소)
 
 ## 주의사항 / 확장 포인트
 - 스포너 Count와 목표 처치 수를 맞춘다 (리스폰을 끄므로 Count가 곧 처치 수).
-- 장 선택은 `stageIndex`를 정해 시작하면 된다. 목표 목록도 같은 인덱스부터 시작하도록 맞춰야 한다 (장 선택 단계에서 추가).
+- 스테이지 하나당 목표가 2개(처치 + 게이트 이동)라 N번 스테이지 목표 위치는 `N × ObjectivesPerStage`다. 목표 구성을 바꾸면 이 상수도 맞춘다.
+- 장 선택은 `GoToStage(N)`을 그대로 호출하면 된다.
+- 외부 조회용: `CurrentStageIndex`, `StageCount`, `CurrentGroup` ([Dev](Dev.md) 테스트 패널이 사용).
 - 보스 처치 후 엔딩 연결은 아직 없다.
 
 ## 변경 이력
@@ -80,3 +88,4 @@ LocationEvents.Reached(장소)
 |---|---|
 | 2026-11-19 | 최초 작성: 스테이지 목록·목표 자동 생성, 클리어 시 게이트 개방, 게이트 진입 시 순간이동·그룹 교체, 5스테이지 배치 |
 | 2026-11-19 | 플레이어 사망 시 현재 스테이지 재시작 (미클리어면 적·목표 진행 초기화, 플레이어 부활) |
+| 2026-11-19 | `GoToStage(N)`: 지정 스테이지로 시작 (그룹·적·게이트·목표·플레이어 초기화), 현재 스테이지 조회 속성 공개 |
