@@ -424,7 +424,7 @@
 | NavMesh | NavMeshSurface | Use Geometry / Include Layers | Physics Colliders / 지면만 (지형 MeshCollider는 Convex 끔) |
 | Canvas / Status UI | StatusBarView | Warning Threshold / Blink Speed / Value Format | 0.3 / 2 / `{0} / {1}` (`Create Player Status UI`로 생성) |
 | ObjectiveTracker | ObjectiveTracker | — | 필드 없음, 목표 목록은 StageDirector가 넘김 ([Objective](Features/Objective.md)) |
-| StageDirector | StageDirector | **Stages** (Group / Clear Objective) / **Objective Tracker** / **Area Gate** / **Gate Objective** / **Player Spawn** / **Player Motor** / **Third Person Camera** | 캠프 그룹·처치 목표 순서대로 / 트래커 / GateField / `ReachGate` / PlayerSpawn / 플레이어 / Main Camera ([Stage](Features/Stage.md)) |
+| StageDirector | StageDirector | **Stages** (Group / Clear Objective) / **Objective Tracker** / **Area Gate** / **Gate Objective** / **Player Spawn** / **Player Motor** / **Third Person Camera** / **Player Controller** / **Health** / Retry Delay | 캠프 그룹·처치 목표 순서대로 / 트래커 / GateField / `ReachGate` / PlayerSpawn / 플레이어 / Main Camera / 플레이어 / 플레이어 / 2 ([Stage](Features/Stage.md)) |
 | Canvas / 목표 패널 | ObjectiveView | Root / **Label** / **Progress Label** / Completed | 패널 / 문구 TMP / 진행도 TMP / `완료` |
 | ObjectivePresenter | ObjectivePresenter | **Objective Tracker** / **Objective View** | 씬의 트래커 / 목표 패널 |
 | 게이트 (GateField) | AreaGate | **Blocker** / **Open Visual** | 자식 벽 / 자식 반투명 문 ([World](Features/World.md)) |

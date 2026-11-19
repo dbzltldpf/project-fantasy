@@ -18,7 +18,7 @@ KayKit Skeleton 기반 적 4종. 근접(Minion·Warrior), 사격(Rogue 석궁), 
 | [Enemy/EnemyAnimator.cs](../../Assets/Project/Scripts/Enemy/EnemyAnimator.cs) | 상태 재생(해시 캐싱·중복 방지), 액션 재생 속도, 걷기·달리기 전환 속도 계산·재생 속도를 실제 이동 속도에 맞춤(LocomotionSpeed), 자세 고정(`AnimatorPoseHold`), 클립 종료 확인, 누락 상태 검증 |
 | [Enemy/EnemyLoadout.cs](../../Assets/Project/Scripts/Enemy/EnemyLoadout.cs) | 무기·방패 모델, 근접 판정(칼날/몸 기준), 방패 방어력 |
 | [Enemy/EnemyLoot.cs](../../Assets/Project/Scripts/Enemy/EnemyLoot.cs) | 사망 시 드랍 표 → 주변에 `WorldItem` 생성 |
-| [Enemy/EnemySpawner.cs](../../Assets/Project/Scripts/Enemy/EnemySpawner.cs) | 반경 안 N마리 유지, 사라진 적은 대기 후 같은 인스턴스로 리스폰 (풀링), 생성한 적에 진영 구역 전달 |
+| [Enemy/EnemySpawner.cs](../../Assets/Project/Scripts/Enemy/EnemySpawner.cs) | 반경 안 N마리 유지, 사라진 적은 대기 후 같은 인스턴스로 리스폰 (풀링, `respawn` 끄면 안 함), 생성한 적에 진영 구역 전달, `ResetEnemies`(자식 적 전부 껐다 켜서 처음 상태로, 스테이지 재시작) |
 | [Enemy/EnemyTerritory.cs](../../Assets/Project/Scripts/Enemy/EnemyTerritory.cs) | 진영 구역: 콜라이더 여러 개(Convex)로 울타리 안쪽을 덮고 `Contains(point)`로 안/밖 판정 |
 | [Enemy/EnemyHealthBarPresenter.cs](../../Assets/Project/Scripts/Enemy/EnemyHealthBarPresenter.cs) | 머리 위 체력바 표시 규칙 |
 | [Enemy/PartBreak/](../../Assets/Project/Scripts/Enemy/PartBreak/) | 보스 부위 파괴 `BreakablePart` · `BreakablePartManager` · `BrokenPartOutline` ([Part Break](PartBreak.md)) |
@@ -232,5 +232,6 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-17 | 귀환 속도 분리(`returnSpeed`)·귀환 중 무적·즉시 가속, 달리기 모션 속도를 이동 속도에 맞춤(`LocomotionSpeed`), 배회·추격 속도를 플레이어 이동 데이터 기준으로 계산 |
 | 2026-11-17 | 달리기 모션 전환 속도를 배회~추격 속도 비율(`runThresholdBlend`)로 자동 계산, 걷기에도 재생 속도 맞춤(`walkAnimationSpeed`), 애니메이터 재생성 |
 | 2026-11-17 | 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·구역 이탈 시 귀환·구역 밖 공격 무효, 귀환 위치를 발견 지점으로·도착 후 원래 방향으로 돌아섬, 전투 종료 시 항상 귀환 |
+| 2026-11-19 | `EnemySpawner.ResetEnemies` (스테이지 재시작 시 적 초기화) |
 | 2026-11-19 | 스포너 리스폰 여부(`respawn`), Warrior 반격 확률 0·보스 0.3 (난이도 완화) |
 | 2026-11-18 | 무기 제한: `EnemyData.allowedWeapons`·`AllowsWeapon`, 허용되지 않은 무기 공격 무효(`IWeaponWielder`), 적 4종 무기 지정 |

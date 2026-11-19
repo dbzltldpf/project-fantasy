@@ -17,7 +17,7 @@
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
 | [Objective](Features/Objective.md) | 스토리 목표 진행, 처치·도착 목표(`IsMatch`), 진행도 집계, HUD 목표 표시·단계 완료 연출 |
 | [World](Features/World.md) | 장소 SO·도착 트리거·전역 알림, 열고 닫히는 게이트(불투명 벽 / 반투명 문) |
-| [Stage](Features/Stage.md) | 맵·게이트 재사용 5스테이지 진행: 스테이지 목록에서 목표 자동 생성, 클리어 시 게이트 개방, 진입 시 순간이동·다음 적 그룹 |
+| [Stage](Features/Stage.md) | 맵·게이트 재사용 5스테이지 진행: 스테이지 목록에서 목표 자동 생성, 클리어 시 게이트 개방, 진입 시 순간이동·다음 적 그룹, 사망 시 현재 스테이지 재시작 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라, 휠 줌, 조준 숄더뷰 |
 | [UI](Features/UI.md) | 조준점, 데미지 숫자, 인벤토리·숙련도 창, 퀵슬롯 바·플레이어 상태바·HUD, 적 체력바 |
 | [인스펙터 설정 가이드](InspectorGuide.md) | 에셋·컴포넌트별 필드 역할과 넣을 값, 새 무기 만들기 체크리스트 |
@@ -79,3 +79,4 @@ Assets/Project/Scripts/
 | 2026-11-18 | Enemy, Weapon, Player, Combat, Core, InspectorGuide | 적 무기 제한: 적마다 허용 무기(`allowedWeapons`, 비우면 모두), 다른 무기 공격 "무효"(`IWeaponWielder`), 적 4종 무기 지정, 목표 문구에 무기 표기 |
 | 2026-11-19 | Stage, World, Objective, Enemy, Player, Camera, InspectorGuide | 스테이지 진행: 맵·게이트 재사용 5스테이지(`StageDirector`), 목표 목록 자동 생성(`ObjectiveTracker.Begin`, `ObjectiveSequence` 제거), 게이트 닫기·반투명 열림 문·반복 진입 알림, 순간이동(`PlayerMotor.Teleport`·`SnapToTarget`), 스포너 리스폰 여부, Warrior 반격 제거·보스 반격 0.3 |
 | 2026-11-19 | Combat, Player, InspectorGuide | 공격 후딜레이 캔슬 구간(`CancelWindowEvent`): 회피 최우선·이동은 이어 갈 콤보가 없을 때, 방향키 유지 연타 시 콤보 유지, 플레이어 공격 액션 8개에 구간 추가 |
+| 2026-11-19 | Stage, Player, Enemy, Objective, InspectorGuide | 사망 시 스테이지 재시작: 대기 후 PlayerSpawn에서 부활(`PlayerController.Revive`), 미클리어 스테이지면 적 초기화(`EnemySpawner.ResetEnemies`)·목표 진행 초기화(`RestartStep`) |

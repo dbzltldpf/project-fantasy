@@ -9,7 +9,7 @@
 | [Objective/ObjectiveData.cs](../../Assets/Project/Scripts/Objective/ObjectiveData.cs) | 목표 한 단계 추상 SO: 화면 문구, 필요 횟수(`RequiredCount`), 알림 일치 여부(`IsMatch(EnemyData)`·`IsMatch(LocationData)`, 기본 false), 진행도 표시 여부(`ShowProgress`, 기본 true) |
 | [Objective/KillObjectiveData.cs](../../Assets/Project/Scripts/Objective/KillObjectiveData.cs) | 처치 목표: 대상 `EnemyData`, 필요 처치 수 |
 | [Objective/ReachObjectiveData.cs](../../Assets/Project/Scripts/Objective/ReachObjectiveData.cs) | 도착 목표: 대상 `LocationData`, 필요 횟수 1 고정, 진행도 숨김 |
-| [Objective/ObjectiveTracker.cs](../../Assets/Project/Scripts/Objective/ObjectiveTracker.cs) | `Begin(목록)`으로 시작, `EnemyEvents.EnemyKilled`·`LocationEvents.Reached` 구독, 현재 단계·진행 수·완료 여부 관리, `StepCompleted`·`Changed` 알림 |
+| [Objective/ObjectiveTracker.cs](../../Assets/Project/Scripts/Objective/ObjectiveTracker.cs) | `Begin(목록)`으로 시작, `RestartStep`(현재 단계 진행 수만 초기화), `EnemyEvents.EnemyKilled`·`LocationEvents.Reached` 구독, 현재 단계·진행 수·완료 여부 관리, `StepCompleted`·`Changed` 알림 |
 | [Objective/ObjectivePresenter.cs](../../Assets/Project/Scripts/Objective/ObjectivePresenter.cs) | 트래커 알림 → 뷰 갱신, 단계 완료 시 연출 코루틴 동안 갱신 보류 후 최신 상태로 다시 그림 |
 | [UI/HUD/ObjectiveView.cs](../../Assets/Project/Scripts/UI/HUD/ObjectiveView.cs) | 목표 문구·진행도(`SetText`) 표시, 진행도 표시 여부, 단계 완료 색 연출, 전체 완료 문구 (목표 시스템을 모르고 문자열·숫자·bool만 받음) |
 | [Enemy/EnemyEvents.cs](../../Assets/Project/Scripts/Enemy/EnemyEvents.cs) | 적 전역 알림 `EnemyKilled(EnemyData)` (`EnemyController` 사망 시 발생) |
@@ -63,3 +63,4 @@ EnemyEvents.EnemyKilled(EnemyData) / LocationEvents.Reached(LocationData)
 | 2026-11-11 | 최초 작성: 목표 단계·챕터 SO, 적 처치 알림(`EnemyEvents`), 트래커·프레젠터, HUD 목표 표시, 단계 완료 색 연출 후 다음 목표 |
 | 2026-11-18 | 목표 추상화(`ObjectiveData` → `KillObjectiveData`·`ReachObjectiveData`, `IsMatch`), 장소 도착 목표, 진행 수 `ProgressCount`로 변경, 목표별 진행도 표시 여부, 목표 완료 시 구역 개방(`ObjectiveGateOpener`) |
 | 2026-11-19 | 트래커가 목록을 받아 시작(`Begin`, `IsRunning`), `ObjectiveSequence`·`Chapter1`·`ObjectiveGateOpener` 제거 (목록 생성·게이트 개방은 `StageDirector`) |
+| 2026-11-19 | `RestartStep` (스테이지 재시작 시 현재 단계 진행 수 초기화) |

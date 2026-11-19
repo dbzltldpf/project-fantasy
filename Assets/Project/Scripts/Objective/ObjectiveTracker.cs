@@ -56,6 +56,13 @@ namespace ProjectFantasy.Objective
             if (isStepCompleted) StepCompleted?.Invoke(currentObjectData);
             Changed?.Invoke();
         }
+        // 현재 단계 진행 수만 초기화 (스테이지 재시작)
+        public void RestartStep()
+        {
+            if (!IsRunning) return;
+            progressCount = 0;
+            Changed?.Invoke();
+        }
         private void HandleEnemyKilled(EnemyData enemyData)
         {
             if (!IsRunning) return;

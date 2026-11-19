@@ -135,7 +135,13 @@ namespace ProjectFantasy.Player
         }
 
         public void ChangeState(PlayerStateBase nextState) => stateMachine.ChangeState(nextState);
-
+        // 체력 회복 후 지정 위치에서 이동 상태로 복귀 (스테이지 재시작)
+        public void Revive(Vector3 position, Quaternion rotation)
+        {
+            health.RestoreFull();
+            Motor.Teleport(position, rotation);
+            ChangeState(LocomotionState);
+        }
         public void StartPickUp(WorldItem target)
         {
             PickUpState.SetTarget(target);
