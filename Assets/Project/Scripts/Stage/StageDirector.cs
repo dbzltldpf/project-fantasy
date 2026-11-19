@@ -43,7 +43,7 @@ namespace ProjectFantasy.Stage
             for (int i = 0; i < stages.Length; i++)
             {
                 objectiveDatas.Add(stages[i].clearObjective);
-                if (i != stages.Length - 1) objectiveDatas.Add(gateObjective);
+                objectiveDatas.Add(gateObjective);
             }
             return objectiveDatas;
         }
@@ -52,14 +52,21 @@ namespace ProjectFantasy.Stage
         public int CurrentStageIndex => stageIndex;
         public int StageCount => stages.Length;
         public GameObject CurrentGroup => stages[stageIndex].group;
+        // 마지막 스테이지 클리어 후 게이트 진입 시 알림 (엔딩 진입)
+        public event Action AllStagesCleared;
+
         private void Awake()
         {
             retryWait = new WaitForSeconds(retryDelay);
         }
+        // 목표 목록만 준비하고 모든 그룹은 꺼 둠 (시작은 타이틀에서 GoToStage)
         private void Start()
         {
             objectives = BuildObjectives();
-            GoToStage(0);
+            for (int i = 0; i < stages.Length; i++)
+            {
+                stages[i].group.SetActive(false);
+            }
         }
         public void GoToStage(int index)
         {
@@ -94,12 +101,17 @@ namespace ProjectFantasy.Stage
         private void HandleStepCompleted(ObjectiveData objectiveData)
         {
             if (stages[stageIndex].clearObjective != objectiveData) return;
-            if (IsLastStage) return;
             areaGate.Open();
         }
         private void HandleLocationReached(LocationData locationData)
         {
             if (!gateObjective.IsMatch(locationData) || !areaGate.IsOpen) return;
+            if (IsLastStage)
+            {
+                areaGate.Close();
+                AllStagesCleared?.Invoke();
+                return;
+            }
             MoveToNextStage();
         }
         private void MoveToNextStage()
