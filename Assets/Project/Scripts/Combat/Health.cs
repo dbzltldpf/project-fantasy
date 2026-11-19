@@ -98,5 +98,13 @@ namespace ProjectFantasy.Combat
             HealthChanged?.Invoke(CurrentHealth, maxHealth);
         }
         public void SetInvincible(bool isInvincible) => isInvincibleForced = isInvincible;
+        // 막기·방어력·무적을 무시하고 즉시 사망 (테스트용)
+        public void Kill()
+        {
+            if (!IsAlive) return;
+            CurrentHealth = 0;
+            HealthChanged?.Invoke(CurrentHealth, maxHealth);
+            Died?.Invoke();
+        }
     }
 }

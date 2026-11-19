@@ -6,7 +6,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 강제 무적(`SetInvincible`, 회피 등 상태가 켜고 끔), 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Rejected`(피해 필터 거부) / `Died` 이벤트, `SetMaxHealth`(데이터 기반 최대 체력), `TakeDamage`가 결과(`DamageResult`) 반환 |
+| [Health.cs](../../Assets/Project/Scripts/Combat/Health.cs) | 체력, 피격 후 무적 시간, 강제 무적(`SetInvincible`, 회피 등 상태가 켜고 끔), 방어 판정 위임, `RestoreFull`(사망 포함 복구), `HealthChanged` / `Damaged` / `Blocked` / `Rejected`(피해 필터 거부) / `Died` 이벤트, `SetMaxHealth`(데이터 기반 최대 체력), `TakeDamage`가 결과(`DamageResult`) 반환, `Kill`(막기·방어력·무적 무시 즉시 사망, 테스트용) |
 | [TrainingDummy.cs](../../Assets/Project/Scripts/Combat/TrainingDummy.cs) | 훈련용 허수아비: 피격 직후 체력 복구로 죽지 않음, 가상 체력 처치 판정, 피해 로그(에디터/개발 빌드) |
 | [KillReward.cs](../../Assets/Project/Scripts/Combat/KillReward.cs) | 처치 보상: 피해를 준 공격자 기록 → 처치 시 각자에게 경험치 전액 (`IKillRewardReceiver`), `SetExperience`·`ClearContributors`(적 데이터·귀환/리스폰) |
 | [EffectPool.cs](../../Assets/Project/Scripts/Combat/Effects/EffectPool.cs) / [PooledEffect.cs](../../Assets/Project/Scripts/Combat/Effects/PooledEffect.cs) | 파티클 이펙트 풀링: 1회 재생(파티클 종료 시 반환) / 시간 지정 / 수동 종료 |
@@ -206,4 +206,5 @@ Length               ───────────────────�
 | 2026-11-13 | `Health.SetInvincible` 강제 무적 플래그 (`IsInvincible`에 포함, `RestoreFull` 시 해제) |
 | 2026-11-17 | 피해 필터 단계(`IDamageFilter`, 무적 판정 다음·방어 전) + `Rejected` 이벤트 (적 진영 구역 밖 공격 무효) |
 | 2026-11-19 | `CancelWindowEvent`·`IActionContext.Open/CloseCancelWindow`: 공격 후딜레이를 회피·이동으로 캔슬, 플레이어 공격 액션 8개에 구간 추가 |
+| 2026-11-19 | `Health.Kill`: 즉시 사망 (`HealthChanged` → `Died`, 테스트 패널 전멸·즉사용) |
 | 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |
