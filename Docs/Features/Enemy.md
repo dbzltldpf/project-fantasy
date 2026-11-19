@@ -154,7 +154,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | patrolRadius / idleTimeRange | 6 / 2~5 | 같음 | 같음 | 같음 | 배회 반경 / 대기 시간 (Min~Max) |
 | attackAngle / attackCooldownRange | 40 / 1.2~2 | 40 / 1.2~2 | 40 / 0~0 | 40 / 1~1.5 | 공격 시작 정면 각도 / 공격 후 쿨타임 (Min~Max) |
 | attackRange / maxComboActions | 1.8 / 2 | 1.8 / 3 | — | — | 근접 전용 |
-| guard (chance / reactive / duration / cooldown / counter) | — | 0.35 / 0.5 / 1.5 / 4 / 0.5 | — | — | 막기 (근접 + 방패) |
+| guard (chance / reactive / duration / cooldown / counter) | — | 0.35 / 0.5 / 1.5 / 4 / 0 (보스 0.3) | — | — | 막기 (근접 + 방패), 반격 확률 0 = 반격 안 함 |
 | staggerImmunity / spawnDuration / corpseDuration | 1 / 1.5 / 3 | 같음 | 같음 | 같음 | 근접 경직 횟수를 다 쓴 뒤 추가 면역 / 등장 모션 / 시체 유지 |
 
 ### 전투 방식 값
@@ -176,6 +176,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | EnemyPerception | targetLayers / obstacleLayers | — / Default | 감지 대상(Player) / 시야 가림(캐릭터 제외) |
 | EnemyPerception | eyeHeight / scanInterval | 1.5 / 0.2 | 가림 판정 높이 / 감지 간격 |
 | EnemySpawner | count / spawnRadius / respawnDelay | 3 / 5 / 30 | 유지 마리 수 / 반경 / 리스폰 대기 |
+| EnemySpawner | respawn | false | 죽은 적을 다시 살림 (스테이지 캠프는 끔, [Stage](Stage.md)) |
 | EnemySpawner · EnemyController | territory | (비움) | 진영 구역 (스포너가 생성한 적에 전달, 씬에 직접 둔 적은 컨트롤러에 연결, 비우면 leashRange 원) |
 | EnemyTerritory | areas | — | 구역을 이루는 콜라이더들 (Convex·Trigger) |
 | EnemyLoot | scatterRadius / dropHeight | 1 / 0.3 | 드랍 흩어짐 / 높이 |
@@ -231,4 +232,5 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-17 | 귀환 속도 분리(`returnSpeed`)·귀환 중 무적·즉시 가속, 달리기 모션 속도를 이동 속도에 맞춤(`LocomotionSpeed`), 배회·추격 속도를 플레이어 이동 데이터 기준으로 계산 |
 | 2026-11-17 | 달리기 모션 전환 속도를 배회~추격 속도 비율(`runThresholdBlend`)로 자동 계산, 걷기에도 재생 속도 맞춤(`walkAnimationSpeed`), 애니메이터 재생성 |
 | 2026-11-17 | 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·구역 이탈 시 귀환·구역 밖 공격 무효, 귀환 위치를 발견 지점으로·도착 후 원래 방향으로 돌아섬, 전투 종료 시 항상 귀환 |
+| 2026-11-19 | 스포너 리스폰 여부(`respawn`), Warrior 반격 확률 0·보스 0.3 (난이도 완화) |
 | 2026-11-18 | 무기 제한: `EnemyData.allowedWeapons`·`AllowsWeapon`, 허용되지 않은 무기 공격 무효(`IWeaponWielder`), 적 4종 무기 지정 |

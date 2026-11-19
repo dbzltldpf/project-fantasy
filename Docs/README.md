@@ -15,8 +15,9 @@
 | [Inventory](Features/Inventory.md) | 아이템·장비 개체, 가방·퀵슬롯, 줍기·버리기·사용, 실시간 인벤토리 창, 등급·랜덤 능력치 |
 | [Ranged Combat](Features/RangedCombat.md) | 활·석궁 조준·발사·장전, 화살 수량, 포물선 투사체·경로 미리보기 |
 | [Magic](Features/Magic.md) | Wand 직선 마법탄, Staff 지면 범위 마법, 쿨타임, 마법서 배율 |
-| [Objective](Features/Objective.md) | 스토리 목표 단계·챕터 SO, 처치·도착 목표(`IsMatch`), 진행도 집계, HUD 목표 표시·단계 완료 연출, 완료 시 구역 개방 |
-| [World](Features/World.md) | 장소 SO·도착 트리거·전역 알림, 목표 완료로 열리는 구역 문 |
+| [Objective](Features/Objective.md) | 스토리 목표 진행, 처치·도착 목표(`IsMatch`), 진행도 집계, HUD 목표 표시·단계 완료 연출 |
+| [World](Features/World.md) | 장소 SO·도착 트리거·전역 알림, 열고 닫히는 게이트(불투명 벽 / 반투명 문) |
+| [Stage](Features/Stage.md) | 맵·게이트 재사용 5스테이지 진행: 스테이지 목록에서 목표 자동 생성, 클리어 시 게이트 개방, 진입 시 순간이동·다음 적 그룹 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라, 휠 줌, 조준 숄더뷰 |
 | [UI](Features/UI.md) | 조준점, 데미지 숫자, 인벤토리·숙련도 창, 퀵슬롯 바·플레이어 상태바·HUD, 적 체력바 |
 | [인스펙터 설정 가이드](InspectorGuide.md) | 에셋·컴포넌트별 필드 역할과 넣을 값, 새 무기 만들기 체크리스트 |
@@ -36,15 +37,16 @@ Assets/Project/Scripts/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
 ├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/, Mastery/, Enemy/, Editor/
-├─ Objective/     ObjectiveData(Kill/Reach), ObjectiveSequence, ObjectiveTracker, ObjectivePresenter, ObjectiveGateOpener
+├─ Objective/     ObjectiveData(Kill/Reach), ObjectiveTracker, ObjectivePresenter
 ├─ World/         LocationData, LocationEvents, LocationTrigger, AreaGate
+├─ Stage/         StageDirector
 ├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, Territory, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
 셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Stage` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
 (에디터 전용: `CombatEditor` · `WeaponEditor` · `ItemsEditor` · `EnemyEditor` · `UIEditor` · `UtilsEditor`)
 
 ## 변경 이력
@@ -75,3 +77,4 @@ Assets/Project/Scripts/
 | 2026-11-17 | Enemy, Combat, Core, UI, InspectorGuide | 적 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·이탈 시 귀환·구역 밖 공격 무효(`IDamageFilter`, "무효" 표시), 발견 지점으로 귀환 후 원래 방향으로 돌아섬 |
 | 2026-11-18 | World, Objective, RangedCombat, UI, InspectorGuide | 트리거·이벤트: 장소 도착 알림(`LocationTrigger`·`LocationEvents`), 목표 추상화(처치·도착 목표, `IsMatch`), 목표 완료 시 구역 개방(`AreaGate`·`ObjectiveGateOpener`), 목표별 진행도 표시 여부, 박히지 않는 표면(`NonStickSurface`) |
 | 2026-11-18 | Enemy, Weapon, Player, Combat, Core, InspectorGuide | 적 무기 제한: 적마다 허용 무기(`allowedWeapons`, 비우면 모두), 다른 무기 공격 "무효"(`IWeaponWielder`), 적 4종 무기 지정, 목표 문구에 무기 표기 |
+| 2026-11-19 | Stage, World, Objective, Enemy, Player, Camera, InspectorGuide | 스테이지 진행: 맵·게이트 재사용 5스테이지(`StageDirector`), 목표 목록 자동 생성(`ObjectiveTracker.Begin`, `ObjectiveSequence` 제거), 게이트 닫기·반투명 열림 문·반복 진입 알림, 순간이동(`PlayerMotor.Teleport`·`SnapToTarget`), 스포너 리스폰 여부, Warrior 반격 제거·보스 반격 0.3 |
