@@ -48,7 +48,7 @@ StageDirector.GoToStage(N) → intro가 있으면 NarrationPlayer.Play(intro)
 6. `StageDirector` → Narration Player 연결, Stages마다 Intro 연결
 
 ## 주의사항 / 확장 포인트
-- 엔딩·보스 처치 문구도 `NarrationData`를 만들어 `Play`하면 된다.
+- 보스 처치·엔딩 문구도 `NarrationData`를 만들어 `Play`하면 된다.
 - 문구 길이에 따라 표시 시간을 바꾸려면 `NarrationPlayer`에서 줄 길이 기반으로 대기 시간을 계산한다 (지금은 고정).
 
 ## 변경 이력

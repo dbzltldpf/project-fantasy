@@ -13,6 +13,7 @@
 | [Inventory/](../../Assets/Project/Scripts/UI/Inventory/) | 인벤토리 창, 아이템 칸, 우클릭 메뉴, 드래그 고스트, 능력치 비교 문구 ([Inventory](Inventory.md)) |
 | [HUD/](../../Assets/Project/Scripts/UI/HUD/) | 상태바(`StatusBarView`: 체력·자원 공용, 수치, 낮으면 깜빡임), 퀵슬롯 바, 화살 수, 줍기 안내, 안내 문구(여러 줄 동시 표시), 목표 표시(`ObjectiveView`, [Objective](Objective.md)) |
 | [Mastery/](../../Assets/Project/Scripts/UI/Mastery/) | 숙련도 창(K)·줄 ([Mastery](Mastery.md)) |
+| [Title/TitleView.cs](../../Assets/Project/Scripts/UI/Title/TitleView.cs) / [Ending/EndingView.cs](../../Assets/Project/Scripts/UI/Ending/EndingView.cs) | 타이틀(시작·종료), 엔딩(플레이 시간·쓰러진 횟수·타이틀로) 패널 ([Flow](Flow.md)) |
 | [HUD/NarrationView.cs](../../Assets/Project/Scripts/UI/HUD/NarrationView.cs) | 내레이션 자막 표시·숨김 (재생 순서·시간은 `NarrationPlayer`, [Narration](Narration.md)) |
 | [Pause/PauseMenuView.cs](../../Assets/Project/Scripts/UI/Pause/PauseMenuView.cs) | 일시정지 패널 표시/숨김(`Show`·`Hide`·`IsOpen`), 테스트 패널 표시 여부(`showDevPanel`). 일시정지 로직은 `PausePresenter` ([Player](Player.md)) |
 | [Dev/DevPanelView.cs](../../Assets/Project/Scripts/UI/Dev/DevPanelView.cs) | 테스트 버튼 클릭 → `CommandChosen` 알림, 배속 글자 ([Dev](Dev.md)) |
@@ -33,6 +34,7 @@
 피해: Health.Damaged → DamageNumberEmitter → DamageNumberSpawner.Spawn(피해량, 타격 지점) → DamageNumber (수명 후 풀 반환)
 무효: Health.Rejected → DamageNumberEmitter → DamageNumberSpawner.SpawnImmune(타격 지점) → DamageNumber.ShowText("무효")
 목표: ObjectiveTracker.StepCompleted·Changed → ObjectivePresenter → ObjectiveView (단계 완료 연출 후 다음 목표)
+화면 전환: TitleView·EndingView 버튼 / StageDirector.AllStagesCleared → GameFlowPresenter ([Flow](Flow.md))
 내레이션: StageDirector.GoToStage → NarrationPlayer.Play → NarrationView.Show / Hide ([Narration](Narration.md))
 일시정지: PlayerInputHandler.PausePressed → PausePresenter → PauseMenuView.Show / Hide
 테스트: DevPanelView.CommandChosen → DevCommands ([Dev](Dev.md))
@@ -73,3 +75,4 @@
 | 2026-11-18 | 목표 진행도 표시 여부(`ObjectiveView.Show`·`PlayCompleted`의 `showProgress`, 도착 목표는 숫자 숨김) |
 | 2026-11-19 | 일시정지 메뉴(`PauseMenuView`, ESC로만 열고 닫음), 테스트 패널(`DevPanelView`) |
 | 2026-11-19 | 내레이션 자막(`NarrationView`, 상단 중앙, MaruBuri) |
+| 2026-11-19 | 타이틀(`TitleView`)·엔딩(`EndingView`) 패널 |

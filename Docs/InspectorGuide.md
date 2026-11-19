@@ -429,6 +429,10 @@
 | Canvas / Status UI | StatusBarView | Warning Threshold / Blink Speed / Value Format | 0.3 / 2 / `{0} / {1}` (`Create Player Status UI`로 생성) |
 | ObjectiveTracker | ObjectiveTracker | — | 필드 없음, 목표 목록은 StageDirector가 넘김 ([Objective](Features/Objective.md)) |
 | StageDirector | StageDirector | **Stages** (Group / Clear Objective / Intro) / **Objective Tracker** / **Area Gate** / **Gate Objective** / **Player Spawn** / **Third Person Camera** / **Player Controller** / **Health** / **Narration Player** / Retry Delay | 캠프 그룹·처치 목표·`Intro_X` 순서대로 / 트래커 / GateField / `ReachGate` / PlayerSpawn / Main Camera / 플레이어 / 플레이어 / NarrationPlayer / 2 ([Stage](Features/Stage.md)) |
+| GameFlow | GameFlowPresenter | **Input Handler** / **Third Person Camera** / **Stage Director** / **Title View** / **Play Record** / **Ending View** | 플레이어 / Main Camera / Stage / TitleWindow / GameFlow / EndingWindow ([Flow](Features/Flow.md)) |
+| GameFlow | PlayRecord | **Player Health** | 플레이어 |
+| Canvas / TitleWindow | TitleView | **Root** / **Start Button** / **Quit Button** | 타이틀 패널 / 시작 / 종료 |
+| Canvas / EndingWindow | EndingView | **Root** / **Play Time Label** / **Death Count Label** / **Title Button** | 엔딩 패널 / 플레이 시간 TMP / 쓰러진 횟수 TMP / 타이틀로 |
 | NarrationPlayer | NarrationPlayer | **Narration View** / Line Duration | NarrationWindow / 3 ([Narration](Features/Narration.md)) |
 | Canvas / NarrationWindow | NarrationView | **Root** / **Label** | 반투명 띠(상단 중앙) / 문구 TMP (`MaruBuri-Regular SDF`) |
 | Canvas / 목표 패널 | ObjectiveView | Root / **Label** / **Progress Label** / Completed | 패널 / 문구 TMP / 진행도 TMP / `완료` |
