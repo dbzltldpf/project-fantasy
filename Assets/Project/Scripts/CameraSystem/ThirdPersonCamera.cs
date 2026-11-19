@@ -173,5 +173,13 @@ namespace ProjectFantasy.CameraSystem
             Cursor.lockState = isLocked ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !isLocked;
         }
+        // 순간이동 직후: 대상 위치로 즉시 맞추고 등 뒤로 회전
+        public void SnapToTarget()
+        {
+            if (target == null) return;
+            focusPosition = GetTargetFocus();
+            focusVelocity = Vector3.zero;
+            yaw = target.eulerAngles.y;
+        }
     }
 }

@@ -36,6 +36,7 @@ namespace ProjectFantasy.Objective
             }
 
             ObjectiveData objectiveData = objectiveTracker.CurrentObjective;
+            if (objectiveData == null) return;
             objectiveView.Show(objectiveData.Description, objectiveTracker.ProgressCount, objectiveData.RequiredCount, objectiveData.ShowProgress);
         }
         private void Directing(ObjectiveData objectiveData)

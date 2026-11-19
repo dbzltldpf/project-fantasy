@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Warrior
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyData
   displayName: Warrior
-  maxHealth: 120
+  maxHealth: 90
   attackPower: 12
   experience: 60
   weapon: {fileID: 11400000, guid: 2fdcabf4103f29c4e95426848a5c4dd5, type: 2}
@@ -46,11 +46,11 @@ MonoBehaviour:
   maxComboActions: 3
   guard:
     guardChance: 0.35
-    reactiveGuardChance: 0.5
+    reactiveGuardChance: 0.2
     guardDuration: 1.5
     guardCooldown: 4
     guardMoveSpeed: 0.8
-    counterChance: 0.5
+    counterChance: 0
     counterAction: {fileID: 11400000, guid: d9172af63e5ca3847bce9c32e8c41c2e, type: 2}
   spawnDuration: 1.5
   corpseDuration: 3

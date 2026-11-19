@@ -108,5 +108,15 @@ namespace ProjectFantasy.Player
             rotation = Quaternion.LookRotation(direction);
             return true;
         }
+        // 순간이동: CharacterController를 끄고 옮긴 뒤 속도 초기화
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            characterController.enabled = false;
+            cachedTransform.SetPositionAndRotation(position, rotation);
+            characterController.enabled = true;
+            horizontalVelocity = Vector3.zero;
+            targetHorizontalVelocity = Vector3.zero;
+            verticalVelocity = 0f;
+        }
     }
 }
