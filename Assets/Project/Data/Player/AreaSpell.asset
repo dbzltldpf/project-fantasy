@@ -16,13 +16,13 @@ MonoBehaviour:
   castStateName: Ranged_Magic_Spellcasting
   releaseTime: 0.3
   castDuration: 0.8
-  cooldown: 3
+  cooldown: 2
   damageMultiplier: 1.5
   maxRange: 15
   targetingIdleStateName: Ranged_Magic_Raise
-  targetingHoldTime: 0.55
+  targetingHoldTime: 0.3
   indicatorPrefab: {fileID: 4858998234035974263, guid: 1238075c0376f9b4f9f179fc797e22c9, type: 3}
   indicatorScale: 1
-  radius: 3
-  activationDelay: 0.6
+  radius: 4
+  activationDelay: 0.3
   areaEffectPrefab: {fileID: 3707427028824197763, guid: cab9bb22eaf930649ab180f617abeaa1, type: 3}

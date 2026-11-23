@@ -20,6 +20,7 @@
 | [Stage](Features/Stage.md) | 맵·게이트 재사용 5스테이지 진행: 스테이지 목록에서 목표 자동 생성, 클리어 시 게이트 개방, 진입 시 순간이동·다음 적 그룹, 사망 시 현재 스테이지 재시작 |
 | [Flow](Features/Flow.md) | 한 씬 타이틀·엔딩 화면 전환, 플레이 기록(시간·쓰러진 횟수), 화면별 입력 차단 |
 | [Narration](Features/Narration.md) | 자막형 내레이션(화자 없음, 시간 정지 없음), 스테이지 인트로 |
+| [Settings](Features/Settings.md) | 플레이어 설정: 프레임 제한(모니터 주사율 기본, 일시정지 메뉴 드롭다운, PlayerPrefs 저장) |
 | [Dev](Features/Dev.md) | 테스트 패널(일시정지 메뉴 안): 다음 스테이지·무적·적 전멸·즉사·배속 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라, 휠 줌, 조준 숄더뷰 |
 | [UI](Features/UI.md) | 조준점, 데미지 숫자, 인벤토리·숙련도 창, 퀵슬롯 바·플레이어 상태바·HUD, 적 체력바, 일시정지 메뉴 |
@@ -39,20 +40,21 @@ Assets/Project/Scripts/
 ├─ Mastery/       MasteryType, MasteryMapping, WeaponMastery, Data/
 ├─ Magic/         SpellCaster, GroundTargeting, Data/
 ├─ CameraSystem/  ThirdPersonCamera, Data/
-├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/(Narration 포함), Mastery/, Enemy/, Pause/, Dev/, Title/, Ending/, Editor/
+├─ UI/            CrosshairView, Common/, DamageNumbers/, Inventory/, HUD/(Narration 포함), Mastery/, Enemy/, Pause/, Settings/, Dev/, Title/, Ending/, Editor/
 ├─ Objective/     ObjectiveData(Kill/Reach), ObjectiveTracker, ObjectivePresenter
 ├─ World/         LocationData, LocationEvents, LocationTrigger, AreaGate
 ├─ Stage/         StageDirector
 ├─ Dev/           DevCommand, DevCommands
 ├─ Narration/     NarrationPlayer, Data/
 ├─ Flow/          GameFlowPresenter, PlayRecord
+├─ Settings/      FrameRateSettings, Data/
 ├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, Territory, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
 셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Stage` · `ProjectFantasy.Dev` · `ProjectFantasy.Narration` · `ProjectFantasy.Flow` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Stage` · `ProjectFantasy.Dev` · `ProjectFantasy.Narration` · `ProjectFantasy.Flow` · `ProjectFantasy.Settings` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
 (에디터 전용: `CombatEditor` · `WeaponEditor` · `ItemsEditor` · `EnemyEditor` · `UIEditor` · `UtilsEditor`)
 
 ## 변경 이력
@@ -89,3 +91,4 @@ Assets/Project/Scripts/
 | 2026-11-19 | Dev, Stage, Player, UI, Combat, Objective, InspectorGuide | 테스트 도구: ESC 일시정지 메뉴(`PausePresenter`·`PauseMenuView`), 테스트 패널(`DevPanelView`·`DevCommands`: 다음 스테이지·무적·적 전멸·즉사·배속), `StageDirector.GoToStage`, `ObjectiveTracker.Begin` 시작 인덱스, `Health.Kill`, 일시정지 중 Tab·K 무시 |
 | 2026-11-19 | Narration, Stage, UI, InspectorGuide | 자막형 내레이션(`NarrationData`·`NarrationPlayer`·`NarrationView`), 스테이지 인트로 5종, 게이트 진입을 `GoToStage`로 통합 |
 | 2026-11-19 | Flow, Stage, UI, InspectorGuide | 타이틀·엔딩: 한 씬 화면 전환(`GameFlowPresenter`), 플레이 기록(`PlayRecord`), 자동 시작 제거, 보스 클리어 후 게이트 진입 시 엔딩(`AllStagesCleared`) |
+| 2026-11-23 | Settings, UI, Combat, Enemy, Magic, Narration, InspectorGuide | 빌드·통플레이 튜닝: 프레임 제한 설정(`FrameRateSettings`, 일시정지 메뉴 드롭다운), 양손검 가드 파괴(`ShieldGuard`), 적 드랍 제거·시작 화살 60, Warrior 방어력 10, Staff 범위 마법 빠르게, 인트로 문구 정리, 렌더링 Forward·PC VSync·라이트 베이크·빌드 씬 Main |

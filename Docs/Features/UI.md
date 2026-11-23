@@ -16,6 +16,7 @@
 | [Title/TitleView.cs](../../Assets/Project/Scripts/UI/Title/TitleView.cs) / [Ending/EndingView.cs](../../Assets/Project/Scripts/UI/Ending/EndingView.cs) | 타이틀(시작·종료), 엔딩(플레이 시간·쓰러진 횟수·타이틀로) 패널 ([Flow](Flow.md)) |
 | [HUD/NarrationView.cs](../../Assets/Project/Scripts/UI/HUD/NarrationView.cs) | 내레이션 자막 표시·숨김 (재생 순서·시간은 `NarrationPlayer`, [Narration](Narration.md)) |
 | [Pause/PauseMenuView.cs](../../Assets/Project/Scripts/UI/Pause/PauseMenuView.cs) | 일시정지 패널 표시/숨김(`Show`·`Hide`·`IsOpen`), 테스트 패널 표시 여부(`showDevPanel`). 일시정지 로직은 `PausePresenter` ([Player](Player.md)) |
+| [Settings/FrameRateDropdownView.cs](../../Assets/Project/Scripts/UI/Settings/FrameRateDropdownView.cs) | 일시정지 메뉴의 프레임 제한 드롭다운 표시·선택 알림 (적용·저장은 `FrameRateSettings`, [Settings](Settings.md)) |
 | [Dev/DevPanelView.cs](../../Assets/Project/Scripts/UI/Dev/DevPanelView.cs) | 테스트 버튼 클릭 → `CommandChosen` 알림, 배속 글자 ([Dev](Dev.md)) |
 | [Enemy/EnemyHealthBarView.cs](../../Assets/Project/Scripts/UI/Enemy/EnemyHealthBarView.cs) | 적 머리 위 월드 공간 체력바 표시·빌보드 (표시 규칙은 `EnemyHealthBarPresenter`, [Enemy](Enemy.md)) |
 | [Common/BarFill.cs](../../Assets/Project/Scripts/UI/Common/BarFill.cs) | 3조각 바 채움: `SetRatio`(양 끝 유지, 숙련 경험치) / `SetMaskedRatio`(마스크로 잘림, 체력·자원) |
@@ -38,6 +39,7 @@
 내레이션: StageDirector.GoToStage → NarrationPlayer.Play → NarrationView.Show / Hide ([Narration](Narration.md))
 일시정지: PlayerInputHandler.PausePressed → PausePresenter → PauseMenuView.Show / Hide
 테스트: DevPanelView.CommandChosen → DevCommands ([Dev](Dev.md))
+설정: FrameRateDropdownView.Selected → FrameRateSettings.Select ([Settings](Settings.md))
 체력: Health.HealthChanged → PlayerHudPresenter → StatusBarView (플레이어) / EnemyHealthBarPresenter → EnemyHealthBarView (적)
 ```
 
@@ -76,3 +78,4 @@
 | 2026-11-19 | 일시정지 메뉴(`PauseMenuView`, ESC로만 열고 닫음), 테스트 패널(`DevPanelView`) |
 | 2026-11-19 | 내레이션 자막(`NarrationView`, 상단 중앙, MaruBuri) |
 | 2026-11-19 | 타이틀(`TitleView`)·엔딩(`EndingView`) 패널 |
+| 2026-11-23 | 일시정지 메뉴에 프레임 제한 드롭다운(`FrameRateDropdownView`, DevPanel 밖) |

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Boss
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Narration.NarrationData
   lines:
-  - "\uC774\uC81C \uB9C8\uC9C0\uB9C9\uC774\uB2E4."
-  - "\uBC30\uC6B4 \uBB34\uAE30, \uBB34\uC5C7\uC774\uB4E0 \uC88B\uB2E4."
+  - "\uB4DC\uB514\uC5B4 \uB300\uC7A5\uC774\uB2E4."
+  - "\uBC30\uC6B4 \uBB34\uAE30 \uB2E4 \uAEBC\uB0B4\uB77C. \uC544\uB08C\uC5C6\uC774!"
