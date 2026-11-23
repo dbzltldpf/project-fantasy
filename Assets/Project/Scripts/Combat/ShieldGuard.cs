@@ -1,4 +1,5 @@
 using ProjectFantasy.Core;
+using ProjectFantasy.Weapon;
 using UnityEngine;
 
 namespace ProjectFantasy.Combat
@@ -41,11 +42,11 @@ namespace ProjectFantasy.Combat
         }
 
         public void SetGuarding(bool isGuarding) => IsGuarding = isGuarding && HasShield;
-
         public bool TryBlock(in DamageInfo damageInfo)
         {
             if (!IsGuarding) return false;
-
+            // 양손검 공격은 막을 수 없음 (가드 파괴)
+            if (damageInfo.Instigator != null && damageInfo.Instigator.TryGetComponent(out IWeaponWielder wielder) && wielder.CurrentWeaponType == WeaponType.TwoHanded) return false;
             // 가해자 방향 = 피격 방향의 반대
             Vector3 toAttacker = -damageInfo.Direction;
             toAttacker.y = 0f;

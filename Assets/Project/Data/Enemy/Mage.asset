@@ -54,7 +54,7 @@ MonoBehaviour:
     counterAction: {fileID: 0}
   spawnDuration: 1.5
   corpseDuration: 3
-  dropTable: {fileID: 11400000, guid: a4e80646fc366a5428ec1e59d0acfcf1, type: 2}
+  dropTable: {fileID: 0}
   animationData: {fileID: 11400000, guid: 5e02fbc499e42d34abe3746821056786, type: 2}
   allowedWeapons: 0400000003000000
   references:

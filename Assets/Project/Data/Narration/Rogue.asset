@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Rogue
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Narration.NarrationData
   lines:
-  - "\uB3C4\uC801\uB4E4\uC740 \uBA40\uB9AC\uC11C \uB178\uB9B0\uB2E4."
-  - "\uD65C\uC5D0\uB294 \uD65C\uB85C \uB2F5\uD574 \uC8FC\uC790."
+  - "\uC228\uC5B4\uC11C \uC3D8\uB294 \uB140\uC11D\uB4E4, \uCAD3\uC544\uAC00 \uBD24\uC790
+    \uD5DB\uC218\uACE0\uB2E4."
+  - "\uD65C\uC5D0\uB294 \uD65C. \uBA3C\uC800 \uB9DE\uD788\uB294 \uCABD\uC774 \uC774\uAE34\uB2E4!"

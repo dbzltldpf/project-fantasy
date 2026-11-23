@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4745c9d22c2599743a83c8af57692f9b, type: 3}
+  m_Name: FrameRateSettingsData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Settings.FrameRateSettingsData
+  options:
+  - label: "\uBAA8\uB2C8\uD130 \uC8FC\uC0AC\uC728"
+    useVSync: 1
+    targetFrameRate: -1
+  - label: 30
+    useVSync: 0
+    targetFrameRate: 30
+  - label: 60
+    useVSync: 0
+    targetFrameRate: 60
+  - label: 120
+    useVSync: 0
+    targetFrameRate: 120
+  - label: 144
+    useVSync: 0
+    targetFrameRate: 144
+  - label: "\uC81C\uD55C \uC5C6\uC74C"
+    useVSync: 0
+    targetFrameRate: -1
+  defaultIndex: 0
