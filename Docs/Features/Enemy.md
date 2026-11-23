@@ -145,7 +145,7 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | weapon | SkeletonAxe | SkeletonBlade (+ SkeletonShield) | SkeletonCrossBow2H | SkeletonStaff | 무기 (WeaponData·ShieldData 재사용) |
 | allowedWeapons | Unarmed, OneHanded | TwoHanded | Bow, Crossbow | Wand, Staff | 피해를 줄 수 있는 무기 종류 (비우면 모든 무기) |
 | combatStyle | Melee | Melee | Shooter | Caster | 전투 방식 |
-| defense / magicDefense | 0 / 0 | 20 / 5 | 0 / 0 | 0 / 0 | 방패 방어력 (적은 고정값) |
+| defense / magicDefense | 0 / 0 | 10 / 5 | 0 / 0 | 0 / 0 | 방패 방어력 (적은 고정값) |
 | sightRange / sightAngle | 10 / 360 | 같음 | 같음 | 같음 | 시야 거리 / 각도 |
 | loseRange / provokedDuration / leashRange | 18 / 5 / 25 | 같음 | 같음 | 같음 | 추적 포기 / 도발 시간 / 귀환 거리 |
 | playerSpeedReference | PlayerMovementData | 같음 | 같음 | 같음 | 속도 기준 (필수) |
@@ -234,4 +234,5 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-17 | 진영 구역(`EnemyTerritory`): 구역 안 대상만 감지·구역 이탈 시 귀환·구역 밖 공격 무효, 귀환 위치를 발견 지점으로·도착 후 원래 방향으로 돌아섬, 전투 종료 시 항상 귀환 |
 | 2026-11-19 | `EnemySpawner.ResetEnemies` (스테이지 재시작 시 적 초기화) |
 | 2026-11-19 | 스포너 리스폰 여부(`respawn`), Warrior 반격 확률 0·보스 0.3 (난이도 완화) |
+| 2026-11-23 | 튜닝: 적 4종·보스 드랍 표 비움(드랍 없음), Warrior 방어력 20 → 10 |
 | 2026-11-18 | 무기 제한: `EnemyData.allowedWeapons`·`AllowsWeapon`, 허용되지 않은 무기 공격 무효(`IWeaponWielder`), 적 4종 무기 지정 |

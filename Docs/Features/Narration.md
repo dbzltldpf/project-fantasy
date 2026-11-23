@@ -55,3 +55,4 @@ StageDirector.GoToStage(N) → intro가 있으면 NarrationPlayer.Play(intro)
 | 날짜 | 내용 |
 |---|---|
 | 2026-11-19 | 최초 작성: 자막형 내레이션(데이터·재생기·자막 UI), 스테이지 인트로 5종 |
+| 2026-11-23 | 인트로 문구 정리 (Warrior: 양손검으로 방패를 깰 수 있다는 안내) |

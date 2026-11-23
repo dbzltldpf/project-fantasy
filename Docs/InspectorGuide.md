@@ -155,13 +155,13 @@
 | 에셋 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|---|
 | 공통 | Cast State / Release Time / Cast Duration | 시전 모션, 발동 시점, 전체 시간 | `Ranged_Magic_Shoot` 0.3 / 0.8 |
-| 공통 | Cooldown | 재사용 대기 | Wand(ProjectileSpell) 1, Staff(AreaSpell) 3 |
+| 공통 | Cooldown | 재사용 대기 | Wand(ProjectileSpell) 1, Staff(AreaSpell) 2 |
 | 공통 | Damage Multiplier | 마법력 배율 | Wand 1, Staff 1.5 |
 | Projectile | Projectile Prefab / Speed / Lifetime / Impact Effect | 직선 마법탄 | 30 / 3 |
 | Area | Max Range | 마법진 사거리 | 15 |
-| Area | Targeting Idle State / Hold Time | 조준 자세, 고정 시점 | `Ranged_Magic_Raise` 0.4~0.6 |
+| Area | Targeting Idle State / Hold Time | 조준 자세, 고정 시점 | `Ranged_Magic_Raise` 0.3 (짧을수록 시전 각이 빨리 나옴) |
 | Area | Indicator Prefab / Scale | 바닥 마법진 | 반투명 이펙트 Variant |
-| Area | Radius / Activation Delay / Area Effect | 범위, 지연, 발동 이펙트 | 3 / 0.6 |
+| Area | Radius / Activation Delay / Area Effect | 범위, 지연, 발동 이펙트 | 4 / 0.3 |
 
 ## 소모품 (ConsumableData)
 | 필드 | 하는 일 | 넣을 값 |
@@ -224,7 +224,7 @@
 |---|---|---|
 | Capacity | 가방 칸 수 | 30 (시작 시 1회만 읽음) |
 | Quick Slot Count | 퀵슬롯 수 | 8 (키보드 1~8 바인딩 수와 맞출 것) |
-| Starting Items | 시작 아이템·수량·티어 | 장비는 수량만큼 개체 생성(최하 등급), 티어는 숙련 Lv 1로 낄 수 있는 1 권장, **맨손은 넣지 않음** |
+| Starting Items | 시작 아이템·수량·티어 | 장비는 수량만큼 개체 생성(최하 등급), 티어는 숙련 Lv 1로 낄 수 있는 1 권장, **맨손은 넣지 않음**. 스테이지 진행은 드랍이 없으므로 화살은 넉넉히 (현재 60씩) |
 | Starting Quick Slots | 퀵슬롯 순서 | 무기·소모품만 (같은 무기는 아직 등록 안 된 개체 순) |
 
 ## 액션·콤보
@@ -298,7 +298,7 @@
 | 묶음 | 필드 | 하는 일 | Minion / Warrior / Rogue / Mage |
 |---|---|---|---|
 | Info | Max Health / Attack Power / Experience | 체력 / 공격력(× 액션·마법 피해 배율) / 처치 경험치 | 60·8·30 / 120·12·60 / 50·10·40 / 42·12·45 |
-| Equipment | Weapon / Shield / Defense / Magic Defense | 무기·방패 데이터 재사용, 방어력은 고정값 | SkeletonAxe / SkeletonBlade + SkeletonShield·20·5 / SkeletonCrossBow2H / SkeletonStaff |
+| Equipment | Weapon / Shield / Defense / Magic Defense | 무기·방패 데이터 재사용, 방어력은 고정값 (방패 막기는 양손검에 깨짐) | SkeletonAxe / SkeletonBlade + SkeletonShield·10·5 / SkeletonCrossBow2H / SkeletonStaff |
 | Perception | Sight Range / Sight Angle | 감지 거리 / 각도 (360 = 등 뒤도 감지) | 10 / 360 |
 | Perception | Lose Range / Provoked Duration / Leash Range | 추적 포기 거리 / 맞은 뒤 거리 무관 추적 시간 / 스폰 지점 귀환 거리 (진영 구역이 없을 때만) | 18 / 5 / 25 |
 | Movement | **Player Speed Reference** | 적 속도의 기준 (비우면 에러) | `PlayerMovementData` |
@@ -309,7 +309,7 @@
 | Combat | Stagger Immunity / Hit Reaction | 근접 경직 횟수(무기 `Stagger Limit`)를 다 쓴 뒤 추가 면역 시간 (면역 = Stun Duration + 이 값) / 경직·넉백 | 1, `HitReactionData` |
 | Melee | Attack Range / Max Combo Actions | 근접 공격 거리 / 공격마다 1 ~ 이 값 중 무작위 타수 | 1.8 / 2 · 3 |
 | Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (근접 + 방패) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
-| Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 | 1.5 / 3 / 종류별 표 |
+| Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 (비우면 없음) | 1.5 / 3 / 스테이지 진행에서는 **None** (필드 사냥터용 표는 아래) |
 | Restriction | Allowed Weapons | 피해를 줄 수 있는 무기 종류, 다른 무기는 "무효" (비우면 모든 무기) | Unarmed·OneHanded / TwoHanded / Bow·Crossbow / Wand·Staff (보스는 비움) |
 
 ### 전투 방식 (Combat Style) 값
@@ -416,6 +416,8 @@
 | PauseMenuWindow | PauseMenuView | **Root** / **Dev Panel** / Show Dev Panel | 일시정지 패널 / DevPanel / 켬 (**제출 빌드 전 끔**) |
 | PauseMenuWindow / DevPanel | DevPanelView | **Next Stage** / **Toggle Invincible** / **Kill Stage Enemies** / **Kill Player** / **Cycle Game Speed** / **Speed Label** | 각 버튼 (OnClick 비움) / 배속 버튼 텍스트 (`배속 x1`) ([Dev](Features/Dev.md)) |
 | DevCommands | DevCommands | **Dev Panel View** / **Stage Director** / **Pause Presenter** / **Player Health** | DevPanel / Stage / PausePresenter / 플레이어 |
+| PauseMenuWindow / Root / FrameRateDropDownView | FrameRateDropdownView | **Dropdown** | 자기 TMP_Dropdown (DevPanel 밖, 제출 빌드에서도 표시) |
+| FrameSettings (항상 켜짐) | FrameRateSettings | **Settings Data** / **Dropdown View** | `Data/Settings/FrameRateSettingsData` / FrameRateDropDownView ([Settings](Features/Settings.md)) |
 | UI Presenters | PlayerHudPresenter | Experience / Level Up / Tier Unlock Format | 숙련 안내 문구, 기본값 (`{0}` 이름, `{1}` 값, `{2}` 티어) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Pool Root | 비움 (`Pools/DamageNumbers` 자동) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Immune Text / Immune Color | `무효` / 회색 (적 진영 구역 밖 공격) |

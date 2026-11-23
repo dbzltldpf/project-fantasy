@@ -69,6 +69,8 @@ PlayerCastState
 | indicatorPrefab / indicatorScale | — / 1 | 마법진 (Looping 켠 상태), 크기 배율 |
 | radius | 3 | 범위 피해 반경 |
 | activationDelay | 0.6 | 시전 후 발동까지 지연 |
+
+현재 `Data/Player/AreaSpell`: targetingHoldTime 0.3 · activationDelay 0.3 · radius 4 · cooldown 2 (시전 각을 빨리 잡도록 튜닝).
 | areaEffectPrefab | — | 발동 이펙트 (Looping 끈 Prefab Variant) |
 
 ### MagicWeaponData / 컴포넌트
@@ -104,3 +106,4 @@ PlayerCastState
 | 2026-10-06 | 피해 기준을 마법력(개체 굴림)으로 변경, 마법 피해 종류, Staff 범위 마법 배율 1.5·쿨타임 3 |
 | 2026-10-07 | 무기·마법서 숙련 보너스를 마법 피해에 반영, 마법 이펙트 풀 부모 폴더(`Pools/Effects`, `SpellCaster.effectRoot`) |
 | 2026-10-08 | 마법 에셋 위치 `Data/Player`, 적 전용 마법(마법탄·예고형 범위 마법) 분리 |
+| 2026-11-23 | 튜닝: Staff 범위 마법(`AreaSpell`) 조준 유지 0.3·발동 지연 0.3·반경 4·쿨타임 2 |

@@ -71,7 +71,7 @@ TakeDamage
  ├─ IDamageReducer.Reduce → 피해 × 100 / (100 + 방어력), 최소 1 (물리 = 방어력, 마법 = 마법 방어력)
  └─ 감소된 피해 적용 → 무적 시작 → HealthChanged → Damaged(감소 후 피해) → (체력 0) Died
 ```
-- `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어.
+- `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어. 가해자가 양손검(`IWeaponWielder.CurrentWeaponType == TwoHanded`)이면 막지 못한다 (가드 파괴, 가해자가 없으면 일반 판정).
 - 맞은 콜라이더(`DamageInfo.HitCollider`): 근접은 칼날 샘플 지점, 범위 마법은 범위 중심에 가장 가까운 대상의 콜라이더(`HitColliderUtility.FindNearest`), 투사체는 레이캐스트에 맞은 콜라이더 ([Part Break](PartBreak.md)).
 - 피해 종류(`DamageInfo.Type`): 근접·화살 = 물리, Wand·Staff 마법 = 마법. 방어력은 방패 개체에서 굴린 값 ([Inventory](Inventory.md)).
 
@@ -207,4 +207,5 @@ Length               ───────────────────�
 | 2026-11-17 | 피해 필터 단계(`IDamageFilter`, 무적 판정 다음·방어 전) + `Rejected` 이벤트 (적 진영 구역 밖 공격 무효) |
 | 2026-11-19 | `CancelWindowEvent`·`IActionContext.Open/CloseCancelWindow`: 공격 후딜레이를 회피·이동으로 캔슬, 플레이어 공격 액션 8개에 구간 추가 |
 | 2026-11-19 | `Health.Kill`: 즉시 사망 (`HealthChanged` → `Died`, 테스트 패널 전멸·즉사용) |
+| 2026-11-23 | `ShieldGuard.TryBlock`: 양손검 공격은 방어 불가 (Warrior 방패를 양손검으로 깨는 구도) |
 | 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |
