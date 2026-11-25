@@ -13,7 +13,9 @@
 | [PlayerLoadout.cs](../../Assets/Project/Scripts/Player/PlayerLoadout.cs) | 장착 무기·보조 장비 **개체** 적용, 무기와 맞지 않는 보조 장비 비활성, `IWeaponWielder` 구현(현재 무기 종류, 없으면 Unarmed) ([Weapon](Weapon.md), [Inventory](Inventory.md)) |
 | [PlayerRangedWeapon.cs](../../Assets/Project/Scripts/Player/PlayerRangedWeapon.cs) / [PlayerAmmoVisual.cs](../../Assets/Project/Scripts/Player/PlayerAmmoVisual.cs) | 원거리 발사·장전 규칙, 화살 표시 ([Ranged Combat](RangedCombat.md)) |
 | [PlayerMagicCaster.cs](../../Assets/Project/Scripts/Player/PlayerMagicCaster.cs) | 마법 쿨타임·데미지 ([Magic](Magic.md)) |
-| [PlayerAimPresenter.cs](../../Assets/Project/Scripts/Player/PlayerAimPresenter.cs) | 조준 뷰 → 카메라 숄더뷰·조준점 |
+| [PlayerAimPresenter.cs](../../Assets/Project/Scripts/Player/PlayerAimPresenter.cs) | 조준 뷰 → 카메라 숄더뷰·조준점, 조준 중 활 당김 게이지 |
+| [AimHeadFader.cs](../../Assets/Project/Scripts/Player/AimHeadFader.cs) | 조준 뷰 동안 머리 메시를 디더 반투명 머티리얼로 교체 (숄더뷰에서 화면 가림 방지) |
+| [RangedDraw.cs](../../Assets/Project/Scripts/Player/RangedDraw.cs) | 활 당김 비율 (`PlayerController.Draw`, [Ranged Combat](RangedCombat.md)) |
 | [PlayerItemHandler.cs](../../Assets/Project/Scripts/Player/PlayerItemHandler.cs) / [PlayerInteractor.cs](../../Assets/Project/Scripts/Player/PlayerInteractor.cs) | 아이템 장착·사용·버리기·줍기, 주변 아이템 탐색 ([Inventory](Inventory.md)) |
 | [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단, 일시정지 중 Tab·K 무시), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
 | [PausePresenter.cs](../../Assets/Project/Scripts/Player/PausePresenter.cs) | ESC 일시정지·해제: `Time.timeScale` 0, 게임플레이 입력·시점 정지, 일시정지 메뉴 표시. 재개 시 `GameSpeed`(배속)로 복귀, 인벤토리·숙련도 창이 열려 있으면 ESC 무시 |
@@ -46,6 +48,8 @@ flowchart LR
     Locomotion -->|"회피 입력 + 쿨 완료"| Dodge
     Guard -->|"회피 입력 + 쿨 완료"| Dodge
     Aim -->|"회피 입력 + 쿨 완료"| Dodge
+    Reload -->|"회피 입력 + 쿨 완료"| Dodge
+    RangedFire -->|"발사 후 회피"| Dodge
     Dodge -->|"종료 + 우클릭 유지"| Guard
     Dodge -->|"종료 + 우클릭 유지"| Aim
     Dodge -->|"종료"| Locomotion
@@ -57,10 +61,10 @@ flowchart LR
 
 | 상태 | 역할 |
 |---|---|
-| Locomotion | 지상 이동, 줍기(E), 퀵슬롯(1~8) 장착·사용. 애니메이션은 수평 속도로 Idle/Walk/Run 자동 분기 |
+| Locomotion | 지상 이동, 줍기(E), 퀵슬롯(1~8) 장착·사용, 미장전 석궁이면 멈춰 있을 때만 자동 장전. 애니메이션은 수평 속도로 Idle/Walk/Run 자동 분기 |
 | PickUp / UseItem | 줍기 모션 후 가방에 추가 / 소모품 사용(느린 이동, 효과 시점에 소모) ([Inventory](Inventory.md)) |
 | Air | 점프·낙하. 공중 가속(airAcceleration)으로 제어, 코요테 타임 내 점프 허용 |
-| Attack | 입력 방향으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션, 캔슬 구간에서 회피(최우선)·이동(다음 타가 없거나 콤보 창이 닫힌 뒤)으로 후딜레이 캔슬 ([Combat](Combat.md)) |
+| Attack | 조준점 방향(카메라 기준, `GetAimFacingDirection`)으로 즉시 회전 → `ActionPlayer`로 액션 타임라인 재생(`IActionContext` 구현: 타격 구간·콤보 창·전진) → 예약 입력 시 전이 프레임에 다음 액션, 캔슬 구간에서 회피(최우선)·이동(다음 타가 없거나 콤보 창이 닫힌 뒤)으로 후딜레이 캔슬 ([Combat](Combat.md)) |
 | Dodge | 진입 시 입력 방향(없으면 뒤)으로 고정해 `dodgeSpeed`로 `dodgeDuration` 동안 이동. 몸 방향 기준 4방향 애니, 회피 내내 무적. 종료 시 우클릭 유지면 `TryStartSecondaryAction`(가드·조준), 아니면 Locomotion |
 | Guard | 방패 가드 홀드. 느린 이동(guardMoveSpeed), 막으면 Block_Hit + 넉백 경직, 가드 중 공격 가능 |
 | Aim / RangedFire / Reload | 활·석궁 조준·발사·장전 ([Ranged Combat](RangedCombat.md)) |
@@ -158,7 +162,9 @@ flowchart LR
 2. **Rogue 프리팹** – `PlayerController` 추가 시 필요한 컴포넌트 자동 추가 (Input, Motor, Animator, MeleeAttacker, Health, PlayerLoadout, ShieldGuard, PlayerRangedWeapon, RangedAttacker, PlayerAmmoVisual, PlayerMagicCaster, SpellCaster, HitStop, CharacterController). 이미 있는 오브젝트는 RequireComponent가 자동 추가되지 않으므로 수동 추가.
    - CharacterController Height/Center를 캐릭터 크기에 맞춤
    - InputHandler **Action Asset**에 `InputSystem_Actions` 1개 연결 (Player 맵의 액션을 이름으로 탐색, 이름이 다르면 시작 시 에러), PlayerAnimator **Data**에 `PlayerAnimationData` 연결
-   - Movement / HitReaction 데이터 연결 (콤보는 무기 데이터에서 가져옴), Layer를 **Player**로 지정
+   - Movement / HitReaction(`PlayerHitReactionData`) 데이터 연결 (콤보는 무기 데이터에서 가져옴), Layer를 **Player**로 지정
+
+3. **조준 머리 페이드** – Rogue에 `AimHeadFader` → Head Renderers(머리·모자 메시), Fade Material(`RogueAimFade`, `AimFade` Shader Graph: Lit·Opaque·Alpha Clipping·Dither). 반투명(Transparent)은 머리 안쪽 면이 비쳐 보여 디더로 처리.
 
 ## 주의사항 / 확장 포인트
 - 애니메이터 상태 이름은 **정확히 일치**해야 한다. 누락 시 시작할 때 콘솔에 `[PlayerAnimator] 애니메이터에 'XXX' 상태가 없습니다.` 에러 (에디터/개발 빌드 전용 `[Conditional]` 검증, 보유 무기의 콤보·대기 상태 포함).
@@ -168,6 +174,10 @@ flowchart LR
 - 가드 중 이동은 전신 가드 모션이라 발이 미끄러져 보임 → 상체 레이어(Avatar Mask) 도입 시 개선.
 - 회피 무적은 `Health.SetInvincible`(강제 무적 플래그)로 켜고 `Exit`에서 끈다 → 피격·사망으로 끊겨도 무적이 남지 않음. 쿨타임도 `Exit`에서 기록.
 - 이동 중에는 몸이 입력 방향을 보므로 항상 앞 회피 애니가 나온다. 좌·우·후방은 몸 방향이 고정된 가드·조준 중이나 입력 없이(뒤로) 회피할 때 나온다.
+- `PlayerStateBase.HasMoveInput`: 이동 입력 판단 공용 (공격 후딜 캔슬·장전 취소·자동 장전). `TryHandleQuickSlot`: 퀵슬롯 처리 공용 (Locomotion·Reload).
+- `PlayerController.CanUseItems`: 장비 변경·아이템 사용 가능 상태 = Locomotion·Reload (그 외 상태에서는 "지금은 사용할 수 없습니다"). 상태 비교는 `IsCurrentState`.
+- 피격 경직은 플레이어 `PlayerHitReactionData`(0.45초), 적 `EnemyHitReactionData`(0.7초)로 분리 ([Combat](Combat.md)).
+- `AimHeadFader`는 `sharedMaterial`만 교체 → 인스턴스 머티리얼이 생기지 않고, 비활성화 시 원래 머티리얼로 복구.
 - 회피 진입은 `PlayerStateBase.TryStartDodge`(쿨 확인 후 입력 소비 → 쿨 중 입력은 버퍼에 남음). 공격 중 회피 캔슬은 지원하지 않는다.
 - 예정: 주목(락온), 저스트 회피, 스태미나, 점프 시작/착지 애니메이션.
 
@@ -191,3 +201,4 @@ flowchart LR
 | 2026-11-19 | `PlayerController.Revive` (사망 후 스테이지 재시작, [Stage](Stage.md)) |
 | 2026-11-19 | 공격 후딜레이 캔슬: 캔슬 구간에서 회피·이동으로 공격 상태 종료 (`TryCancel`, `CanChainCombo`) |
 | 2026-11-19 | ESC 일시정지(`PausePresenter`, 입력 `Pause` 액션: Escape / Start), 일시정지 중 Tab·K 무시, 숙련도 창 연결 필수로 변경 |
+| 2026-11-25 | 근접 공격을 조준점(카메라) 방향으로, 조준 머리 페이드(`AimHeadFader`), 석궁 장전 중 회피·이동·무기 교체, 발사 후 회피 캔슬, `HasMoveInput`·`TryHandleQuickSlot`·`CanUseItems` 공용화, 활 당김(`Draw`), 플레이어 피격 경직 0.45초(전용 에셋) |

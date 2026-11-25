@@ -33,6 +33,7 @@ MonoBehaviour:
   comboData: {fileID: 0}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  staggerLimit: 3
   bladeBase: {x: 0, y: 0, z: 0}
   bladeTip: {x: 0, y: 0, z: 0}
   bladeRadius: 0.1
@@ -41,9 +42,13 @@ MonoBehaviour:
   canAim: 1
   requiresReload: 0
   muzzleOffset: {x: 0.2, y: 1.2, z: 0.8}
-  launchSpeed: 40
+  launchSpeed: 50
+  drawDuration: 1
+  minDrawSpeedMultiplier: 0.3
+  minDrawDamageMultiplier: 0.5
+  maxDrawDamageMultiplier: 1.5
   windupStateName: Ranged_Bow_Draw
-  windupDuration: 1
+  windupDuration: 0.15
   fireStateName: Ranged_Bow_Release
   releaseTime: 0.05
   fireDuration: 0.6

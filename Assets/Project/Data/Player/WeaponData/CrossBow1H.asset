@@ -28,11 +28,12 @@ MonoBehaviour:
   occupiesOffHand: 0
   allowsShield: 1
   attackPowerRange:
-    min: 14
-    max: 18
+    min: 20
+    max: 26
   comboData: {fileID: 0}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  staggerLimit: 3
   bladeBase: {x: 0, y: 0, z: 0}
   bladeTip: {x: 0, y: 0, z: 0}
   bladeRadius: 0.1

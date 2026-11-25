@@ -24,7 +24,7 @@
 7. 인스펙터 상단 요약 줄과 경고가 없는지 확인 → 시작 아이템 또는 필드 `WorldItem`으로 배치
 
 ### 새 활·석궁
-- Weapon Type: Bow(Grip Hand **Left**) / Crossbow. 원거리 섹션: Ammo, Can Aim(한손 석궁 ✖), Requires Reload(석궁 ✔), Launch Speed, 모션 이름·시간
+- Weapon Type: Bow(Grip Hand **Left**) / Crossbow. 원거리 섹션: Ammo, Can Aim(한손 석궁 ✖), Requires Reload(석궁 ✔), Launch Speed, Draw(활만, 석궁은 Draw Duration 0), 모션 이름·시간
 
 ### 새 Wand·Staff
 - `Create → ProjectFantasy → Magic → Magic Weapon Data`, Staff는 Allows Shield ✖ (마법서만), Spell 지정, Magic Power Range 입력
@@ -71,9 +71,9 @@
 | 맨손 | 5~5 (등급 없음) | 5 | 콤보 1.7초 | ≈6 | 최소 대응 |
 | 한손검 | 10~14 | 12 / 막타 18 | 콤보 2.3초 | ≈18 | 기준, 빠름, 방패 |
 | 양손검 | 18~24 | 21 / 막타 31 | 콤보 4.7초 | ≈16 | 큰 한 방, 회전 베기 다수 타격 |
-| 활 | 10~14 | 12 | 비조준 1.6초 / 조준 0.6초 | ≈8 / ≈20 | 거리 유지, 화살 소모 |
-| 한손 석궁 | 14~18 | 16 | 발사+장전 1.65초 | ≈10 | 방패와 함께 원거리 |
-| 양손 석궁 | 26~34 | 30 | 발사+장전 2.6초 | ≈12 | 한 발 저격 |
+| 활 | 10~14 | 비조준 ≈8 / 가득 당김 18 (당김 배율 0.5~1.5) | 비조준 0.75초 / 가득 당김 1.6초 | ≈10 / ≈11 | 거리 유지, 화살 소모, 당길수록 멀리 |
+| 한손 석궁 | 20~26 | 23 | 발사+장전 1.65초 | ≈14 | 방패와 함께 원거리 (장전 부담만큼 상향) |
+| 양손 석궁 | 36~46 | 41 | 발사+장전 2.6초 | ≈16 | 한 발 저격 (장전 부담만큼 상향) |
 | Wand | 마법력 10~14 | 12 | 쿨타임 1초 | ≈12 (마법서 ≈14) | 직선 단일 마법 |
 | Staff | 마법력 14~18 | 24 (AreaSpell 배율 1.5) | 쿨타임 3초 | ≈8 × 대상 수 | 범위 공격 |
 
@@ -97,9 +97,12 @@
 | Can Aim | 우클릭 조준 모드 | 한손 석궁 ✖ (우클릭 = 방패 가드) |
 | Requires Reload | 발사 후 장전 | 석궁 ✔ |
 | Muzzle Offset | 발사 지점 (캐릭터 로컬) | 조준 모드 경로선 시작점으로 확인 |
-| Launch Speed | 발사 속도 | 활 40, 석궁 50 |
-| Windup State / Duration | 비조준 발사 전 당기기 | 활 `Ranged_Bow_Draw` 0.5, 석궁은 비움 |
-| Fire State / Release Time / Fire Duration | 발사 모션, 화살이 나가는 시점, 전체 시간 | 활 `Ranged_Bow_Release` 0.05 / 0.5 |
+| Launch Speed | 발사 속도 | 활·석궁 50 |
+| Draw Duration | 가득 당기는 시간 (0 = 당기기 없음) | 활 1, 석궁 0 |
+| Min Draw Speed Multiplier | 덜 당겼을 때 화살 속도 배율 (낮을수록 사거리 차이 큼) | 활 0.3 |
+| Min / Max Draw Damage Multiplier | 덜 당김 / 가득 당김 데미지 배율 | 0.5 / 1.5 |
+| Windup State / Duration | 비조준 발사 전 당기기, 조준 후 발사 가능까지 시간 | 활 `Ranged_Bow_Draw` 0.15, 석궁은 비움 |
+| Fire State / Release Time / Fire Duration | 발사 모션, 화살이 나가는 시점, 전체 시간 | 활 `Ranged_Bow_Release` 0.05 / 0.6 |
 | Aim Idle State / Aim Hold Time | 조준 대기 자세, 자세 고정 시점(정규화) | 마지막 프레임이 조준 자세면 1, 올렸다 내리는 클립은 0.4~0.6 |
 | Reload State / Duration | 장전 모션 (Requires Reload일 때만 보임) | 석궁 장전 클립 길이 |
 | Loaded Ammo Position / Rotation | 장전된 볼트 위치 (석궁 모델 로컬) | 플레이 중 볼트가 홈에 맞게 |
@@ -146,7 +149,7 @@
 | Max Stack | 한 칸 최대 수 | 99 |
 | Model Prefab | 시위에 건 화살·장전 볼트·필드 모델 | `arrow_bow` / `arrow_crossbow` |
 | Projectile Prefab | 날아가는 화살 | `Prefabs/Combat/Player` 화살 |
-| Gravity | 낙하 (클수록 빨리 떨어짐) | 9.81 |
+| Gravity | 낙하 (클수록 빨리 떨어짐) | 활 화살 10 / 석궁 볼트 4 |
 | Lifetime | 최대 비행 시간 | 5 |
 | Stick Duration | 박힌 뒤 사라지는 시간 | 10 |
 | Impact Effect Prefab | 명중 이펙트 | Looping 끈 Prefab Variant |
@@ -285,10 +288,10 @@
 ## 피격 반응 (HitReactionData)
 | 필드 | 하는 일 | 기본값 |
 |---|---|---|
-| Stun Duration | 피격 경직 (피격 모션 길이에 맞춤) | 0.7 |
+| Stun Duration | 피격 경직 | 플레이어 0.45 / 적 0.7 (피격 모션 길이) |
 | Knockback Speed / Deceleration | 넉백 속도·감속, 밀리는 거리 = 속도² ÷ (2 × 감속) | 2 / 12 (약 0.17m) |
 
-플레이어와 적 5종이 같은 에셋을 쓴다. 값을 바꾸면 양쪽 모두 바뀐다.
+플레이어는 `PlayerHitReactionData`, 적 5종은 `EnemyHitReactionData`를 쓴다. 적 값은 무기별 경직 면역 구간에도 쓰이므로 바꿀 때 함께 확인한다.
 
 ---
 
@@ -306,7 +309,7 @@
 | Movement | Return Speed / Turn Speed, Patrol Radius, Idle Time Range | 귀환 질주 속도 / 회전, 배회 | 16 / 540, 6, 2~5 |
 | Combat | **Combat Style** | 전투 방식 드롭다운 (비우면 근접) | Melee / Melee / Shooter / Caster |
 | Combat | Attack Angle / Attack Cooldown Range | 공격 시작 정면 각도 / 공격 후 쿨타임 | 40 / 1.2~2 · 1.2~2 · 0~0 · 1~1.5 |
-| Combat | Stagger Immunity / Hit Reaction | 근접 경직 횟수(무기 `Stagger Limit`)를 다 쓴 뒤 추가 면역 시간 (면역 = Stun Duration + 이 값) / 경직·넉백 | 1, `HitReactionData` |
+| Combat | Stagger Immunity / Hit Reaction | 근접 경직 횟수(무기 `Stagger Limit`)를 다 쓴 뒤 추가 면역 시간 (면역 = Stun Duration + 이 값) / 경직·넉백 | 1, `EnemyHitReactionData` |
 | Melee | Attack Range / Max Combo Actions | 근접 공격 거리 / 공격마다 1 ~ 이 값 중 무작위 타수 | 1.8 / 2 · 3 |
 | Guard | Guard / Reactive Chance, Duration, Cooldown, Move Speed, Counter Chance / Action | 방패 막기·반격 (근접 + 방패) | Warrior: 0.35·0.5, 1.5, 4, 0.8, 0.5 / `CounterAction` |
 | Spawn & Death | Spawn Duration / Corpse Duration / Drop Table | 등장 모션 / 시체 유지 / 드랍 (비우면 없음) | 1.5 / 3 / 스테이지 진행에서는 **None** (필드 사냥터용 표는 아래) |
@@ -345,7 +348,7 @@
 | 컴포넌트 | 필드 | 하는 일 | 넣을 값 |
 |---|---|---|---|
 | PlayerController | Camera Transform | 이동·조준 기준 | 비우면 Main Camera |
-| PlayerController | **Hit Reaction Data** | 피격 경직·넉백 | `HitReactionData` |
+| PlayerController | **Hit Reaction Data** | 피격 경직·넉백 | `PlayerHitReactionData` |
 | PlayerController | Min Aim Facing Distance | 조준점이 이보다 가까우면 카메라 정면을 봄 | 1.5 |
 | PlayerController | Trajectory Preview | 조준 경로선 | 씬의 LineRenderer (선택) |
 | PlayerInputHandler | **Action Asset** | 입력 액션 (이름으로 탐색) | `InputSystem_Actions` |
@@ -371,6 +374,7 @@
 | WeaponMastery | **Data** | 숙련 규칙 | `MasteryData` |
 | WeaponMastery | Is Test Mode / Test Experience Multiplier / Start At Max Level | 테스트용 (에디터·개발 빌드만) | 끔 / 200 / 끔 |
 | ShieldGuard | Facing Transform | 가드 정면 | 자신 |
+| AimHeadFader | **Head Renderers** / **Fade Material** | 조준 중 디더 반투명으로 바꿀 머리 메시 | 머리·모자 렌더러 / `RogueAimFade` |
 | HitStop | Animator | 멈출 애니메이터 | 자동 |
 | EquipmentVisual | Right / Left Hand Slot | 손 소켓 | 자동 (`handslot.r/l`) |
 | PlayerAmmoVisual · PlayerRangedWeapon · PlayerMagicCaster · PlayerMasteryRewarder · QuickSlots | — | 설정 없음 | — |
@@ -392,6 +396,7 @@
 | DamageNumberEmitter · EnemyLoot (직접 추가) | World Item Prefab (Loot) | 데미지 숫자 / 드랍 | `Prefabs/WorldItem` |
 | 자식: Skeleton 모델 | Animator Controller | 상태 재생 | `Create Enemy Animator` 결과 |
 | 자식: EnemyHealthBar | Hide Delay | 전투 종료 후 체력바 유지 | 4 |
+| ProjectileStickBones (직접 추가) | Skinned Mesh | 화살이 박힐 뼈 탐색 (사망 모션을 따라감) | 비움 (자식 자동) |
 | BreakablePartManager (보스, 직접 추가) | Breakable Parts | 부위별 이름·히트박스·렌더러·내구도 비율·배율 | 히트박스 = 뼈 아래 콜라이더, 렌더러 = 부위 메시, 비율 합계는 1보다 충분히 낮게 ([Part Break](Features/PartBreak.md)) |
 | PartBreakGroggy (보스, 직접 추가) | Groggy Duration | 부위 파괴 시 그로기 시간 | 3 |
 | BrokenPartOutline (보스, 직접 추가) | Outline Material / Flash Duration / Flash · Idle Color | 파괴 부위 아웃라인 번쩍임 → 약하게 유지 | `PartBreakOutline` / 짧게 / 밝은 HDR 빨강 · 어두운 빨강 |
@@ -414,10 +419,13 @@
 | Canvas / UI Presenters | PlayerAimPresenter · PlayerMenuPresenter · PlayerHudPresenter | 플레이어·카메라·UI 참조 (Menu는 Inventory Window·**Mastery Window**(필수)·**Pause Presenter**) | `Create Inventory UI` → `Create Mastery UI`가 자동 연결, Pause Presenter는 직접 연결 |
 | PausePresenter | PausePresenter | **Input Handler** / **Third Person Camera** / **Pause Menu View** / **Inventory Window** / **Mastery Window** | 플레이어 / Main Camera / PauseMenuWindow / 인벤토리 창 / 숙련도 창 |
 | PauseMenuWindow | PauseMenuView | **Root** / **Dev Panel** / Show Dev Panel | 일시정지 패널 / DevPanel / 켬 (**제출 빌드 전 끔**) |
-| PauseMenuWindow / DevPanel | DevPanelView | **Next Stage** / **Toggle Invincible** / **Kill Stage Enemies** / **Kill Player** / **Cycle Game Speed** / **Speed Label** | 각 버튼 (OnClick 비움) / 배속 버튼 텍스트 (`배속 x1`) ([Dev](Features/Dev.md)) |
-| DevCommands | DevCommands | **Dev Panel View** / **Stage Director** / **Pause Presenter** / **Player Health** | DevPanel / Stage / PausePresenter / 플레이어 |
-| PauseMenuWindow / Root / FrameRateDropDownView | FrameRateDropdownView | **Dropdown** | 자기 TMP_Dropdown (DevPanel 밖, 제출 빌드에서도 표시) |
-| FrameSettings (항상 켜짐) | FrameRateSettings | **Settings Data** / **Dropdown View** | `Data/Settings/FrameRateSettingsData` / FrameRateDropDownView ([Settings](Features/Settings.md)) |
+| PauseMenuWindow / DevPanel | DevPanelView | **Previous Stage** / **Next Stage** / **Toggle Invincible** / **Kill Stage Enemies** / **Kill Player** / **Cycle Game Speed** / **Speed Label** / **Exit** | 각 버튼 (OnClick 비움) / 배속 버튼 텍스트 (`배속 x1`) ([Dev](Features/Dev.md)) |
+| DevCommands | DevCommands | **Dev Panel View** / **Stage Director** / **Pause Presenter** / **Player Health** / **Game Flow Presenter** | DevPanel / Stage / PausePresenter / 플레이어 / GameFlow |
+| PauseMenuWindow / Root / Frame · Window | SettingsDropdownView | **Dropdown** | 각자 자기 TMP_Dropdown (DevPanel 밖, 제출 빌드에서도 표시) |
+| FrameSettings (항상 켜짐) | FrameRateSettings | **Settings Data** / **Dropdown View** | `Data/Settings/FrameRateSettingsData` / Frame ([Settings](Features/Settings.md)) |
+| FrameSettings (항상 켜짐) | DisplayModeSettings | **Settings Data** / **Dropdown View** | `Data/Settings/DisplayModeSettingsData` / Window |
+| Canvas / Crosshair | CrosshairView | **Aim Root** / **Default Root** / **Draw Gauge** / Drawing · Full Color | 조준점 / 작은 점 / Filled Radial Image / 연노랑 · 노랑 |
+| 플레이어 / TrajectoryPreview | TrajectoryPreview | Max Points / **Impact Marker** / View Camera / Surface Offset / Screen Size | 64 / 자식 Quad / 비움(Main Camera) / 0.2 / 0.02 ([Ranged Combat](Features/RangedCombat.md)) |
 | UI Presenters | PlayerHudPresenter | Experience / Level Up / Tier Unlock Format | 숙련 안내 문구, 기본값 (`{0}` 이름, `{1}` 값, `{2}` 티어) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Pool Root | 비움 (`Pools/DamageNumbers` 자동) |
 | 데미지 숫자 스포너 | DamageNumberSpawner | Immune Text / Immune Color | `무효` / 회색 (적 진영 구역 밖 공격) |

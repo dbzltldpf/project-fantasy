@@ -31,7 +31,8 @@ namespace ProjectFantasy.Player
 
             if (TryStartSecondaryAction()) return;
 
-            if (RangedWeapon.NeedsReload)
+            // 멈춰 있을 때만 자동 장전 (이동 중엔 장전 안 함)
+            if (RangedWeapon.NeedsReload && !HasMoveInput)
             {
                 Controller.ChangeState(Controller.ReloadState);
                 return;
@@ -40,12 +41,7 @@ namespace ProjectFantasy.Player
             if (InputHandler.ConsumeInteract() && ItemHandler.TryStartPickUp()) return;
 
             // 무기는 즉시 장착, 소모품은 사용 상태로 전이
-            int quickSlot = InputHandler.ConsumeQuickSlot();
-            if (quickSlot != PlayerInputHandler.NoQuickSlot)
-            {
-                ItemHandler.TryActivateQuickSlot(quickSlot);
-                if (!Controller.IsInLocomotion) return;
-            }
+            if (TryHandleQuickSlot() && !Controller.IsInLocomotion) return;
 
             ApplyMoveInput(MovementData.Acceleration, MovementData.Deceleration, deltaTime);
             PlayerAnimator.PlayLocomotion(Motor.HorizontalSpeed);

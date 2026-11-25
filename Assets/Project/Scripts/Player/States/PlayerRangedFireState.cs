@@ -8,11 +8,13 @@ namespace ProjectFantasy.Player
     // 원거리 발사: (비조준 시 windup) → fire 모션, release 시점에 화살 소모 후 발사
     public sealed class PlayerRangedFireState : PlayerStateBase
     {
+        private const float FullDraw = 1f;
         private RangedWeaponData weapon;
         private float elapsedTime;
         private bool isWindingUp;
         private bool hasReleased;
         private bool isAimedShot;
+        private float drawRatio;
 
         public override bool UsesAimView => isAimedShot;
 
@@ -27,6 +29,8 @@ namespace ProjectFantasy.Player
             Motor.SnapRotation(Controller.GetAimFacingDirection());
             Controller.AmmoVisual.SetNocked(true);
 
+            drawRatio = !weapon.HasDraw ? FullDraw : isAimedShot ? Controller.Draw.Ratio : weapon.WindupDrawRatio;
+            Controller.Draw.Reset();
             // 조준 중이면 이미 당긴 상태라 windup 생략
             if (!isAimedShot && weapon.HasWindup) StartWindup();
             else StartFire();
@@ -50,6 +54,11 @@ namespace ProjectFantasy.Player
             }
 
             if (!hasReleased && elapsedTime >= weapon.ReleaseTime) Release();
+            if (hasReleased && TryStartDodge())
+            {
+                Controller.ChangeState(Controller.DodgeState);
+                return;
+            }
             if (elapsedTime >= weapon.FireDuration) Finish();
         }
 
@@ -72,10 +81,9 @@ namespace ProjectFantasy.Player
             hasReleased = true;
             Controller.AmmoVisual.SetNocked(false);
 
-            if (!Controller.TryResolveLaunch(out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile)) return;
+            if (!Controller.TryResolveLaunch(weapon.GetDrawSpeedMultiplier(drawRatio), out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile)) return;
             if (!RangedWeapon.TryConsumeShot()) return;
-
-            Controller.RangedAttacker.Fire(origin, launchVelocity, profile, Mathf.RoundToInt(Loadout.AttackPower), DamageType.Physical);
+            Controller.RangedAttacker.Fire(origin, launchVelocity, profile, Mathf.RoundToInt(Loadout.AttackPower * weapon.GetDrawDamageMultiplier(drawRatio)), DamageType.Physical);
         }
 
         private void Finish()

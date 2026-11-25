@@ -75,7 +75,7 @@
 ### 데미지
 `근접 피해 = 장착 개체 공격력 × HitWindowEvent.damageMultiplier` (반올림)
 - 같은 종류 무기는 콤보 에셋 하나를 공유하고 능력치 범위만 다르게 설정.
-- 활·석궁은 화살 피해 = 공격력 ([Ranged Combat](RangedCombat.md)), Wand·Staff는 `마법력 × 마법 배율 × 활성 마법서 배율` ([Magic](Magic.md)).
+- 활·석궁은 화살 피해 = 공격력 (활은 × 당김 데미지 배율, [Ranged Combat](RangedCombat.md)), Wand·Staff는 `마법력 × 마법 배율 × 활성 마법서 배율` ([Magic](Magic.md)).
 - 받는 쪽 방패(활성)는 `피해 × 100 / (100 + 방어력)` (마법은 마법 방어력), 최소 1 ([Combat](Combat.md)).
 
 ## 데이터 파라미터
@@ -155,3 +155,4 @@
 | 2026-10-07 | 티어를 0부터로 변경 (T0~T4, 데이터·화면 표시 동일) |
 | 2026-11-10 | 근접 무기 `staggerLimit`(무기별 경직 횟수) 추가, 한손검 `bladeRadius` 0.3 |
 | 2026-11-18 | `IWeaponWielder` 추가 (현재 무기 종류 조회, 적 무기 제한) |
+| 2026-11-25 | `RangedWeaponData` 당기기 필드(`drawDuration`·속도·데미지 배율), 석궁 공격력 상향 |

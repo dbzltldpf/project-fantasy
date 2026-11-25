@@ -97,7 +97,7 @@ namespace ProjectFantasy.Combat
 
             bool canStick = !hit.collider.TryGetComponent(out NonStickSurface _);
             // 방패나 박히지 않는 표면이면 튕겨 나감 (풀 반환)
-            if (profile.StickOnHit && result != DamageResult.Blocked && canStick) StickTo(hit.collider.transform, hit.point, Quaternion.LookRotation(velocity));
+            if (profile.StickOnHit && result != DamageResult.Blocked && canStick) StickTo(ResolveStickTarget(hit), hit.point, Quaternion.LookRotation(velocity));
             else Release();
         }
 
@@ -110,6 +110,12 @@ namespace ProjectFantasy.Combat
             elapsedTime = 0f;
 
             cachedTransform.SetPositionAndRotation(position, rotation);
+        }
+        private Transform ResolveStickTarget(in RaycastHit hit)
+        {
+            ProjectileStickBones stickBones = hit.collider.GetComponentInParent<ProjectileStickBones>();
+            Transform bone = stickBones != null ? stickBones.FindNearest(hit.point) : null;
+            return bone != null ? bone : hit.collider.transform;
         }
 
         private bool IsInstigator(Collider hitCollider) => shot.Instigator != null && hitCollider.transform.IsChildOf(shot.Instigator.transform);

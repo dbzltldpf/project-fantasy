@@ -11,7 +11,7 @@ namespace ProjectFantasy.Settings
         private const int VSyncOff = 0;
         private const int VSyncEveryFrame = 1;
         private const int UnlimitedFrameRate = -1;
-        [SerializeField] private FrameRateDropdownView dropdownView;
+        [SerializeField] private SettingsDropdownView dropdownView;
         [SerializeField] private FrameRateSettingsData settingsData;
         public int CurrentIndex { get; private set; }
         private void Awake()

@@ -7,8 +7,6 @@ namespace ProjectFantasy.Player
     public sealed class PlayerAttackState : PlayerStateBase, IActionContext
     {
         private const int FirstComboIndex = 0;
-        private const float MoveCancelThreshold = 0.01f;
-
         private readonly ActionPlayer actionPlayer;
         private Vector3 moveDirection;
         private float moveSpeed;
@@ -53,7 +51,7 @@ namespace ProjectFantasy.Player
                 return true;
             }
             if (hasQueuedAttack || CanChainCombo) return false;
-            if (Controller.GetCameraRelativeMove().sqrMagnitude > MoveCancelThreshold)
+            if (HasMoveInput)
             {
                 Controller.ChangeState(Controller.LocomotionState);
                 return true;
@@ -89,8 +87,8 @@ namespace ProjectFantasy.Player
             hasQueuedAttack = false;
             ActionData action = ComboData.GetAction(index);
 
-            // 입력 방향으로 즉시 회전 후 공격
-            Motor.SnapRotation(Controller.GetCameraRelativeMove());
+            // 조준점 방향(카메라 기준)으로 즉시 회전 후 공격
+            Motor.SnapRotation(Controller.GetAimFacingDirection());
             moveDirection = Controller.transform.forward;
 
             PlayerAnimator.PlayAction(action.StateHash, action.CrossFadeDuration, action.PlaybackSpeed);

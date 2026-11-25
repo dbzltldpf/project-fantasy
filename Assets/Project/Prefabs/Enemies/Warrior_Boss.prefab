@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 4961042121239729274}
   - component: {fileID: 7022007504373310120}
   - component: {fileID: 2520733362312511176}
+  - component: {fileID: 9099077257921385173}
   m_Layer: 8
   m_Name: Warrior_Boss
   m_TagString: Untagged
@@ -226,6 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyController
   data: {fileID: 11400000, guid: ce1f7703554c3ec45b08bfec1474654e, type: 2}
+  territory: {fileID: 0}
 --- !u!114 &5995462777874025709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +347,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.PartBreakGroggy
   groggyDuration: 3
+--- !u!114 &9099077257921385173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fb5f25d77181f479d7b295ba4de9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.ProjectileStickBones
+  skinnedMesh: {fileID: 654467629694292819}
 --- !u!1001 &5915890007787152090
 PrefabInstance:
   m_ObjectHideFlags: 0

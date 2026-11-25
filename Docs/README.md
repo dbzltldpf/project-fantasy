@@ -92,3 +92,4 @@ Assets/Project/Scripts/
 | 2026-11-19 | Narration, Stage, UI, InspectorGuide | 자막형 내레이션(`NarrationData`·`NarrationPlayer`·`NarrationView`), 스테이지 인트로 5종, 게이트 진입을 `GoToStage`로 통합 |
 | 2026-11-19 | Flow, Stage, UI, InspectorGuide | 타이틀·엔딩: 한 씬 화면 전환(`GameFlowPresenter`), 플레이 기록(`PlayRecord`), 자동 시작 제거, 보스 클리어 후 게이트 진입 시 엔딩(`AllStagesCleared`) |
 | 2026-11-23 | Settings, UI, Combat, Enemy, Magic, Narration, InspectorGuide | 빌드·통플레이 튜닝: 프레임 제한 설정(`FrameRateSettings`, 일시정지 메뉴 드롭다운), 양손검 가드 파괴(`ShieldGuard`), 적 드랍 제거·시작 화살 60, Warrior 방어력 10, Staff 범위 마법 빠르게, 인트로 문구 정리, 렌더링 Forward·PC VSync·라이트 베이크·빌드 씬 Main |
+| 2026-11-25 | Settings, UI, Dev, Flow, RangedCombat, Player, Combat, Weapon, InspectorGuide | 빌드 전 다듬기: 화면 모드 설정(창모드 1280x720·Alt+Enter 차단·Canvas Scaler), 기본 조준점, 근접 공격 카메라 방향, 석궁 장전 취소(이동·회피·무기 교체)·데미지 상향, 활 당기기(게이지·속도·데미지), 착탄 마커, 조준 머리 디더 페이드, 화살 뼈 박힘, 플레이어 피격 경직 0.45, 테스트 패널 이전 스테이지·타이틀로(씬 다시 로드) |

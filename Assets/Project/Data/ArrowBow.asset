@@ -20,8 +20,11 @@ MonoBehaviour:
   modelPrefab: {fileID: 5553235356068071823, guid: e11817c401a75124f9d96139f2a43f4f, type: 3}
   gripPosition: {x: 0.044, y: 0.473, z: -0.014}
   gripRotation: {x: 270, y: 0, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 0}
+  gradeTable: {fileID: 0}
   projectilePrefab: {fileID: 784438188430472171, guid: a0daa2f88f4a6934cbcba53c37ac15ae, type: 3}
-  gravity: 6
+  gravity: 10
   lifetime: 5
   stickDuration: 10
   impactEffectPrefab: {fileID: 0}

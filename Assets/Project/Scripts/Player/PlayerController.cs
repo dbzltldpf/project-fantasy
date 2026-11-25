@@ -51,14 +51,15 @@ namespace ProjectFantasy.Player
         public PlayerItemHandler ItemHandler { get; private set; }
         public HitReactionData HitReactionData => hitReactionData;
         public TrajectoryPreview TrajectoryPreview => trajectoryPreview;
-
         public AttackComboData AttackComboData => Loadout.CurrentWeapon != null ? Loadout.CurrentWeapon.ComboData : null;
         public bool CanAttack => AttackComboData != null && AttackComboData.ActionCount > 0;
         public bool IsAimViewActive { get; private set; }
-
+        public RangedDraw Draw { get; } = new RangedDraw();
+        public bool IsCurrentState(PlayerStateBase stateBase) => stateMachine.CurrentState == stateBase;
         // 장비 변경·아이템 사용 가능 여부
         public bool IsInLocomotion => stateMachine.CurrentState == LocomotionState;
-
+        // 장비 변경·아이템 사용 가능 여부 (평상시, 석궁 장전 중)
+        public bool CanUseItems => IsInLocomotion || IsCurrentState(ReloadState);
         public PlayerLocomotionState LocomotionState { get; private set; }
         public PlayerAirState AirState { get; private set; }
         public PlayerAttackState AttackState { get; private set; }
@@ -204,12 +205,13 @@ namespace ProjectFantasy.Player
         public Vector3 GetMuzzlePosition() => transform.TransformPoint(RangedWeapon.Current.MuzzleOffset);
 
         // 조준점에 맞는 발사 속도 계산 (미리보기·발사 공용)
-        public bool TryResolveLaunch(out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile)
+        public bool TryResolveLaunch(float speedScale, out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile)
         {
             origin = default;
             launchVelocity = default;
             if (!RangedWeapon.TryGetProjectileProfile(out profile)) return false;
 
+            profile = profile.WithSpeedScale(speedScale);
             origin = GetMuzzlePosition();
             launchVelocity = RangedAttacker.ResolveLaunchVelocity(origin, GetAimPoint(), profile);
             return true;

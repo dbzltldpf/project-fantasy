@@ -110,7 +110,8 @@ TakeDamage
 | knockbackDeceleration | 12 | 넉백 감속 |
 
 - 밀리는 거리 = `knockbackSpeed² ÷ (2 × knockbackDeceleration)` → 현재 약 0.17m (근접 사거리를 벗어나지 않도록)
-- 에셋 하나를 플레이어·적 5종이 공유 → 값을 바꾸면 양쪽 모두 바뀜
+- 플레이어 `PlayerHitReactionData`(경직 0.45), 적 5종 `EnemyHitReactionData`(경직 0.7, 기존 `HitReactionData` 이름 변경으로 GUID 유지) → 따로 조절
+- 적 경직 시간은 무기별 경직 면역 구간(`stunDuration + staggerImmunity`)에도 쓰이므로 바꿀 때 함께 확인
 
 ### 컴포넌트 인스펙터 값
 | 컴포넌트 | 필드 | 기본값 | 의미 |
@@ -208,4 +209,5 @@ Length               ───────────────────�
 | 2026-11-19 | `CancelWindowEvent`·`IActionContext.Open/CloseCancelWindow`: 공격 후딜레이를 회피·이동으로 캔슬, 플레이어 공격 액션 8개에 구간 추가 |
 | 2026-11-19 | `Health.Kill`: 즉시 사망 (`HealthChanged` → `Died`, 테스트 패널 전멸·즉사용) |
 | 2026-11-23 | `ShieldGuard.TryBlock`: 양손검 공격은 방어 불가 (Warrior 방패를 양손검으로 깨는 구도) |
+| 2026-11-25 | 피격 반응 에셋을 플레이어(`PlayerHitReactionData`, 경직 0.45)·적(`EnemyHitReactionData`)으로 분리, 화살이 가장 가까운 뼈에 박힘(`ProjectileStickBones`, [Ranged Combat](RangedCombat.md)) |
 | 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |
