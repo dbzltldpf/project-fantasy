@@ -39,7 +39,7 @@
 |---|---|---|
 | Display Name | 게임 내 이름 | 비우면 에셋 이름 |
 | Icon | 슬롯 아이콘 | 없으면 슬롯에 이름 표시 |
-| Description | 상세 패널 설명 | 자유 |
+| Description | 상세 패널 설명 | 하는 일 + 쓰는 법 두 줄 이내 (예: 방패 "우클릭으로 막는다") |
 | World Model Prefab | 필드에 놓였을 때 모델 | 비우면 Model Prefab 사용 |
 
 ### 장착
@@ -421,6 +421,7 @@
 | PauseMenuWindow | PauseMenuView | **Root** / **Dev Panel** / Show Dev Panel | 일시정지 패널 / DevPanel / 켬 (**제출 빌드 전 끔**) |
 | PauseMenuWindow / DevPanel | DevPanelView | **Previous Stage** / **Next Stage** / **Toggle Invincible** / **Kill Stage Enemies** / **Kill Player** / **Cycle Game Speed** / **Speed Label** / **Exit** | 각 버튼 (OnClick 비움) / 배속 버튼 텍스트 (`배속 x1`) ([Dev](Features/Dev.md)) |
 | DevCommands | DevCommands | **Dev Panel View** / **Stage Director** / **Pause Presenter** / **Player Health** / **Game Flow Presenter** | DevPanel / Stage / PausePresenter / 플레이어 / GameFlow |
+| PauseMenuWindow / Root / ControlsPanel | Image · Vertical Layout Group · Content Size Fitter | Fit (가로·세로) / Pivot·Anchor / Pos | Preferred Size / 오른쪽 위 (1, 1) / (-40, -40), 줄은 `Row` + 키·동작 TMP ([UI](Features/UI.md)) |
 | PauseMenuWindow / Root / Frame · Window | SettingsDropdownView | **Dropdown** | 각자 자기 TMP_Dropdown (DevPanel 밖, 제출 빌드에서도 표시) |
 | FrameSettings (항상 켜짐) | FrameRateSettings | **Settings Data** / **Dropdown View** | `Data/Settings/FrameRateSettingsData` / Frame ([Settings](Features/Settings.md)) |
 | FrameSettings (항상 켜짐) | DisplayModeSettings | **Settings Data** / **Dropdown View** | `Data/Settings/DisplayModeSettingsData` / Window |
