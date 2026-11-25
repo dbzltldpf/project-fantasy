@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectFantasy.Weapon
 {
-    // 마법서 (한손 마법 무기와만 장착, 마법 위력 보정)
+    // 마법서 (맨손·한손 마법 무기와 장착, 마법 위력 보정은 마법 무기일 때만)
     [CreateAssetMenu(fileName = "SpellbookData", menuName = "ProjectFantasy/Weapon/Spellbook Data")]
     public sealed class SpellbookData : OffHandData
     {
@@ -22,6 +22,7 @@ namespace ProjectFantasy.Weapon
             return NoGradeMultiplier + (magicPowerMultiplier - NoGradeMultiplier) * gradeMultiplier;
         }
 
-        public override bool CanEquipWith(WeaponData weapon) => weapon.IsMagic && !weapon.OccupiesOffHand;
+        public override bool CanEquipWith(WeaponData weapon) =>
+            !weapon.OccupiesOffHand && (weapon.IsMagic || weapon.WeaponType == WeaponType.Unarmed);
     }
 }

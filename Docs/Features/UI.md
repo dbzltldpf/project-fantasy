@@ -15,7 +15,7 @@
 | [Mastery/](../../Assets/Project/Scripts/UI/Mastery/) | 숙련도 창(K)·줄 ([Mastery](Mastery.md)) |
 | [Title/TitleView.cs](../../Assets/Project/Scripts/UI/Title/TitleView.cs) / [Ending/EndingView.cs](../../Assets/Project/Scripts/UI/Ending/EndingView.cs) | 타이틀(시작·종료), 엔딩(플레이 시간·쓰러진 횟수·타이틀로) 패널 ([Flow](Flow.md)) |
 | [HUD/NarrationView.cs](../../Assets/Project/Scripts/UI/HUD/NarrationView.cs) | 내레이션 자막 표시·숨김 (재생 순서·시간은 `NarrationPlayer`, [Narration](Narration.md)) |
-| [Pause/PauseMenuView.cs](../../Assets/Project/Scripts/UI/Pause/PauseMenuView.cs) | 일시정지 패널 표시/숨김(`Show`·`Hide`·`IsOpen`), 테스트 패널 표시 여부(`showDevPanel`). 일시정지 로직은 `PausePresenter` ([Player](Player.md)) |
+| [Pause/PauseMenuView.cs](../../Assets/Project/Scripts/UI/Pause/PauseMenuView.cs) | 일시정지 패널 표시/숨김(`Show`·`Hide`·`IsOpen`), 테스트 패널 표시 여부(`showDevPanel`). 일시정지 로직은 `PausePresenter` ([Player](Player.md)). 조작표(`ControlsPanel`)는 Root 아래 UI만 (코드 없음) |
 | [Settings/SettingsDropdownView.cs](../../Assets/Project/Scripts/UI/Settings/SettingsDropdownView.cs) | 일시정지 메뉴의 설정 드롭다운(프레임 제한·화면 모드) 표시·선택 알림 (적용·저장은 `FrameRateSettings`·`DisplayModeSettings`, [Settings](Settings.md)) |
 | [Dev/DevPanelView.cs](../../Assets/Project/Scripts/UI/Dev/DevPanelView.cs) | 테스트 버튼 클릭 → `CommandChosen` 알림, 배속 글자 ([Dev](Dev.md)) |
 | [Enemy/EnemyHealthBarView.cs](../../Assets/Project/Scripts/UI/Enemy/EnemyHealthBarView.cs) | 적 머리 위 월드 공간 체력바 표시·빌보드 (표시 규칙은 `EnemyHealthBarPresenter`, [Enemy](Enemy.md)) |
@@ -66,7 +66,8 @@
 4. **피격 대상**: `Health` 오브젝트에 `DamageNumberEmitter` 추가 (허수아비는 [Combat](Combat.md)의 `TrainingDummy` 참고)
 5. **플레이어 상태바**: Create Inventory UI 이후 `Tools → ProjectFantasy → Create Player Status UI` (다시 만들어도 Presenter 연결 유지)
 6. **적 체력바**: `Tools → ProjectFantasy → Create Enemy Health Bar Prefab` → 적 프리팹 자식으로 배치
-7. **Canvas Scaler**: Scale With Screen Size, Reference 1920 x 1080, Match 0.5 (창모드 1280x720에서도 하단 HUD가 잘리지 않음)
+7. **조작표**: `PauseMenuWindow / Root` 아래 `ControlsPanel`(Image + Vertical Layout Group + Content Size Fitter 가로·세로 Preferred, 오른쪽 위 앵커) → 줄마다 `Row`(Horizontal Layout Group) + 키·동작 TMP(Layout Element Preferred Width 250). Root 밖에 두면 플레이 중에도 보인다.
+8. **Canvas Scaler**: Scale With Screen Size, Reference 1920 x 1080, Match 0.5 (창모드 1280x720에서도 하단 HUD가 잘리지 않음)
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -82,4 +83,5 @@
 | 2026-11-19 | 내레이션 자막(`NarrationView`, 상단 중앙, MaruBuri) |
 | 2026-11-19 | 타이틀(`TitleView`)·엔딩(`EndingView`) 패널 |
 | 2026-11-23 | 일시정지 메뉴에 프레임 제한 드롭다운(`FrameRateDropdownView`, DevPanel 밖) |
+| 2026-11-25 | 일시정지 메뉴 조작표(`ControlsPanel`, 레이아웃만), Pretendard-Regular 아틀라스 2048 (두 번째 아틀라스·SubMesh 방지) |
 | 2026-11-25 | 기본 조준점(평소 점·조준 모드 조준점), 활 당김 게이지(`CrosshairView.SetDraw`), 설정 드롭다운 공용 View(`SettingsDropdownView`, 화면 모드 추가), Canvas Scaler 1920x1080 |

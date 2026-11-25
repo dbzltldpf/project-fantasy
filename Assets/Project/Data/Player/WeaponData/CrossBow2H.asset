@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
   displayName: "\uC591\uC190\uC11D\uAD81"
   icon: {fileID: 0}
-  description: 
+  description: "\uD55C \uBC1C\uB9C8\uB2E4 \uC624\uB798 \uC7A5\uC804\uD558\uC9C0\uB9CC
+    \uAC00\uC7A5 \uAC15\uD55C \uD55C \uBC1C\uC744 \uC3DC\uB2E4.\n\uC6B0\uD074\uB9AD\uC73C\uB85C
+    \uC870\uC900."
   maxStack: 1
   worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 3989796310135439970, guid: 7f53053c209a3eb4faf863b6291cc00c, type: 3}
@@ -43,6 +45,10 @@ MonoBehaviour:
   requiresReload: 1
   muzzleOffset: {x: 0.2, y: 1.4, z: 0.6}
   launchSpeed: 50
+  drawDuration: 0
+  minDrawSpeedMultiplier: 0.5
+  minDrawDamageMultiplier: 0.5
+  maxDrawDamageMultiplier: 1.5
   windupStateName: 
   windupDuration: 0
   fireStateName: Ranged_2H_Shoot

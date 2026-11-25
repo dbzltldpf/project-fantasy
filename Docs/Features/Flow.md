@@ -29,7 +29,7 @@ StageDirector.AllStagesCleared (보스 클리어 후 게이트 진입)
 엔딩 "타이틀로" / 테스트 패널 종료 → RestartToTitle
   → Time.timeScale = 1 → 현재 씬 다시 로드 → Start에서 ShowTitle (처음 실행한 상태)
 ```
-- 입력 끄기(`SetInputEnabled`)는 `PlayerInputHandler` 컴포넌트를 통째로 끈다. `OnDisable`에서 모든 키 구독이 풀려 ESC·Tab·K까지 막히므로 일시정지·메뉴 쪽 코드를 고치지 않는다. 시점은 `SetLookEnabled`로 멈추고 커서도 함께 풀린다.
+- 입력 끄기(`SetInputEnabled`)는 `PlayerInputHandler` 컴포넌트를 통째로 끈다. `OnDisable`에서 모든 키 구독이 풀려 ESC·I·K까지 막히므로 일시정지·메뉴 쪽 코드를 고치지 않는다. 시점은 `SetLookEnabled`로 멈추고 커서도 함께 풀린다.
 - 플레이 시간은 `Time.deltaTime` 누적이라 일시정지(timeScale 0) 시간은 빠진다. 테스트 배속에서는 배속만큼 쌓인다.
 - 사망 횟수는 기록 중일 때만 센다.
 - 타이틀 복귀는 씬을 다시 로드해 스테이지·적·인벤토리·숙련·기록을 모두 처음으로 되돌린다. 설정(PlayerPrefs)만 유지된다.

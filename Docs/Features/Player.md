@@ -17,7 +17,7 @@
 | [AimHeadFader.cs](../../Assets/Project/Scripts/Player/AimHeadFader.cs) | 조준 뷰 동안 머리 메시를 디더 반투명 머티리얼로 교체 (숄더뷰에서 화면 가림 방지) |
 | [RangedDraw.cs](../../Assets/Project/Scripts/Player/RangedDraw.cs) | 활 당김 비율 (`PlayerController.Draw`, [Ranged Combat](RangedCombat.md)) |
 | [PlayerItemHandler.cs](../../Assets/Project/Scripts/Player/PlayerItemHandler.cs) / [PlayerInteractor.cs](../../Assets/Project/Scripts/Player/PlayerInteractor.cs) | 아이템 장착·사용·버리기·줍기, 주변 아이템 탐색 ([Inventory](Inventory.md)) |
-| [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단, 일시정지 중 Tab·K 무시), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
+| [PlayerMenuPresenter.cs](../../Assets/Project/Scripts/Player/PlayerMenuPresenter.cs) / [PlayerHudPresenter.cs](../../Assets/Project/Scripts/Player/PlayerHudPresenter.cs) | 인벤토리·숙련도 창 ↔ 입력·카메라 (하나라도 열리면 차단, 일시정지 중 I·K 무시), HUD(체력 상태바·퀵슬롯·화살·안내) 연결 |
 | [PausePresenter.cs](../../Assets/Project/Scripts/Player/PausePresenter.cs) | ESC 일시정지·해제: `Time.timeScale` 0, 게임플레이 입력·시점 정지, 일시정지 메뉴 표시. 재개 시 `GameSpeed`(배속)로 복귀, 인벤토리·숙련도 창이 열려 있으면 ESC 무시 |
 | [PlayerMasteryRewarder.cs](../../Assets/Project/Scripts/Player/PlayerMasteryRewarder.cs) / [WeaponMastery.cs](../../Assets/Project/Scripts/Mastery/WeaponMastery.cs) | 처치 보상 → 장착 무기·보조 장비 숙련 경험치, 숙련 레벨·티어 장착 조건·보너스 ([Mastery](Mastery.md)) |
 | [PlayerMovementData.cs](../../Assets/Project/Scripts/Player/Data/PlayerMovementData.cs) | 이동/점프/회피 튜닝 데이터 (SO) |
@@ -100,7 +100,7 @@ flowchart LR
 | Sprint | Left Shift | 왼쪽 스틱 누름 | 홀드 |
 | Secondary (구 Guard) | 마우스 오른쪽 | 왼쪽 트리거 | 홀드 (무기에 따라 가드/조준) |
 | Interact | E | North | 선입력 버퍼 (줍기) |
-| Inventory | Tab | Start | 인벤토리 창 토글 (메뉴 중에도 동작) |
+| Inventory | I | Start | 인벤토리 창 토글 (메뉴 중에도 동작) |
 | Mastery | K | — | 숙련도 창 토글 (메뉴 중에도 동작) |
 | QuickSlot | 1~8 | — | 선입력 버퍼 (바인딩 순서 = 슬롯 번호) |
 | Zoom | 마우스 휠 | — | 카메라 줌 ([Camera](Camera.md)) |
@@ -201,4 +201,5 @@ flowchart LR
 | 2026-11-19 | `PlayerController.Revive` (사망 후 스테이지 재시작, [Stage](Stage.md)) |
 | 2026-11-19 | 공격 후딜레이 캔슬: 캔슬 구간에서 회피·이동으로 공격 상태 종료 (`TryCancel`, `CanChainCombo`) |
 | 2026-11-19 | ESC 일시정지(`PausePresenter`, 입력 `Pause` 액션: Escape / Start), 일시정지 중 Tab·K 무시, 숙련도 창 연결 필수로 변경 |
+| 2026-11-25 | 인벤토리 키 Tab → I (조작표와 일치) |
 | 2026-11-25 | 근접 공격을 조준점(카메라) 방향으로, 조준 머리 페이드(`AimHeadFader`), 석궁 장전 중 회피·이동·무기 교체, 발사 후 회피 캔슬, `HasMoveInput`·`TryHandleQuickSlot`·`CanUseItems` 공용화, 활 당김(`Draw`), 플레이어 피격 경직 0.45초(전용 에셋) |

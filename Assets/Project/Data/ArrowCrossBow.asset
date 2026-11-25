@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.AmmoData
   displayName: "\uBCFC\uD2B8"
   icon: {fileID: 0}
-  description: 
+  description: "\uC11D\uAD81\uC5D0 \uC4F0\uB294 \uBCFC\uD2B8."
   maxStack: 99
   worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 8800920720849335844, guid: c015ff56b20ddfd41bf21bbe8b06d332, type: 3}
   gripPosition: {x: 0, y: 0.197, z: 0.586}
   gripRotation: {x: 0, y: 0, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 0}
+  gradeTable: {fileID: 0}
   projectilePrefab: {fileID: 959464207319341826, guid: a023347602a61064abe6dcd94d99cf76, type: 3}
   gravity: 4
   lifetime: 5

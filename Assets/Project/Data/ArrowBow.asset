@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.AmmoData
   displayName: "\uD654\uC0B4"
   icon: {fileID: 0}
-  description: 
+  description: "\uD65C\uC5D0 \uC4F0\uB294 \uD654\uC0B4."
   maxStack: 99
   worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 5553235356068071823, guid: e11817c401a75124f9d96139f2a43f4f, type: 3}

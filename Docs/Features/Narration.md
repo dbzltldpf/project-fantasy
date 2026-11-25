@@ -33,10 +33,10 @@ StageDirector.GoToStage(N) → intro가 있으면 NarrationPlayer.Play(intro)
 현재 인트로 (`Data/Narration`):
 | 에셋 | 스테이지 |
 |---|---|
-| Intro_Minion | 1 Minion (한손검) |
+| Intro_Minion | 1 Minion (한손검, 우클릭 방패 막기 안내) |
 | Intro_Rogue | 2 Rogue (활) |
 | Intro_Warrior | 3 Warrior (양손검) |
-| Intro_Mage | 4 Mage (지팡이) |
+| Intro_Mage | 4 Mage (지팡이, 마법책 강화 안내) |
 | Intro_Boss | 5 Boss (전부) |
 
 ## 에디터 설정
@@ -56,3 +56,4 @@ StageDirector.GoToStage(N) → intro가 있으면 NarrationPlayer.Play(intro)
 |---|---|
 | 2026-11-19 | 최초 작성: 자막형 내레이션(데이터·재생기·자막 UI), 스테이지 인트로 5종 |
 | 2026-11-23 | 인트로 문구 정리 (Warrior: 양손검으로 방패를 깰 수 있다는 안내) |
+| 2026-11-25 | Minion 인트로에 방패 막기, Mage 인트로에 마법책 강화 안내 한 줄씩 |
