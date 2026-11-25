@@ -43,7 +43,7 @@ namespace ProjectFantasy.Player
         public ItemInstance EquippedOffHand => loadout.OffHandInstance;
         public bool IsOffHandActive => loadout.IsOffHandActive;
 
-        private bool CanAct => controller.IsInLocomotion;
+        private bool CanAct => controller.CanUseItems;
 
         public event Action<ItemNotice> Noticed;
         public event Action EquipmentChanged;

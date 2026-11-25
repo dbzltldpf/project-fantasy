@@ -6,6 +6,7 @@ namespace ProjectFantasy.Weapon
     [CreateAssetMenu(fileName = "RangedWeaponData", menuName = "ProjectFantasy/Weapon/Ranged Weapon Data")]
     public sealed class RangedWeaponData : WeaponData
     {
+        private const float FullMultiplier = 1f;
         [Tooltip("소모하는 화살·볼트 (가방 수량으로 발사 가능 여부 판단)")]
         [SerializeField] private AmmoData ammo;
         [Tooltip("우클릭 조준 모드(숄더뷰·경로선) 사용 (한손 석궁은 끔 → 우클릭은 방패 가드)")]
@@ -16,6 +17,16 @@ namespace ProjectFantasy.Weapon
         [SerializeField] private Vector3 muzzleOffset = new Vector3(0f, 1.4f, 0.5f);
         [Tooltip("발사 속도 (m/s), 클수록 직선에 가깝게 멀리 날아감 (활 40, 석궁 50 권장)")]
         [SerializeField, Min(0f)] private float launchSpeed = 40f;
+
+        [Header("Draw")]
+        [Tooltip("가득 당기는 시간 (초, 0 = 당기기 없음·항상 최대)")]
+        [SerializeField, Min(0f)] private float drawDuration = 0f;
+        [Tooltip("덜 당겼을 때 화살 속도 배율 (낮을수록 사거리 짧음)")]
+        [SerializeField, Range(0f, 1f)] private float minDrawSpeedMultiplier = 0.5f;
+        [Tooltip("덜 당겼을 때 데미지 배율")]
+        [SerializeField, Min(0f)] private float minDrawDamageMultiplier = 0.5f;
+        [Tooltip("가득 당겼을 때 데미지 배율")]
+        [SerializeField, Min(0f)] private float maxDrawDamageMultiplier = 1.5f;
 
         [Tooltip("비조준 발사 시 먼저 재생 (활 당기기), 비우면 생략")]
         [SerializeField] private string windupStateName = "Ranged_Bow_Draw";
@@ -52,7 +63,12 @@ namespace ProjectFantasy.Weapon
         public bool ShowsNockedAmmo => !requiresReload;
         public Vector3 MuzzleOffset => muzzleOffset;
         public float LaunchSpeed => launchSpeed;
-
+        public float DrawDuration => drawDuration;
+        public bool HasDraw => drawDuration > 0f;
+        public float GetDrawSpeedMultiplier(float ratio) => Mathf.Lerp(minDrawSpeedMultiplier, FullMultiplier, ratio);
+        public float GetDrawDamageMultiplier(float ratio) => HasDraw ? Mathf.Lerp(minDrawDamageMultiplier, maxDrawDamageMultiplier, ratio) : FullMultiplier;
+        // 비조준 발사의 당김 비율 (windup 시간만큼 당긴 것으로 처리)
+        public float WindupDrawRatio => HasDraw ? Mathf.Clamp01(windupDuration / drawDuration) : FullMultiplier;
         public bool HasWindup => !string.IsNullOrEmpty(windupStateName);
         public string WindupStateName => windupStateName;
         public int WindupStateHash => windupStateHash;

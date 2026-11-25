@@ -24,5 +24,6 @@ namespace ProjectFantasy.Combat
             StickDuration = stickDuration;
             ImpactEffectPrefab = impactEffectPrefab;
         }
+        public ProjectileProfile WithSpeedScale(float scale) => new ProjectileProfile(Prefab, Speed * scale, Gravity, Lifetime, StickOnHit, StickDuration, ImpactEffectPrefab);
     }
 }

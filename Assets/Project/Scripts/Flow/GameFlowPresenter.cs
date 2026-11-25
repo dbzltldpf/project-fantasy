@@ -3,11 +3,13 @@ using ProjectFantasy.Player;
 using ProjectFantasy.Stage;
 using ProjectFantasy.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 namespace ProjectFantasy.Flow
 {
     // 타이틀 → 플레이 → 엔딩 화면 전환, 화면에 따라 플레이어 입력·시점 켜고 끔
     public sealed class GameFlowPresenter : MonoBehaviour
     {
+        private const float DefaultTimeScale = 1f;
         [SerializeField] private PlayerInputHandler inputHandler;
         [SerializeField] private ThirdPersonCamera thirdPersonCamera;
         [SerializeField] private StageDirector stageDirector;
@@ -30,14 +32,14 @@ namespace ProjectFantasy.Flow
             titleView.StartClicked += StartGame;
             titleView.QuitClicked += QuitGame;
             stageDirector.AllStagesCleared += HandleAllStagesCleared;
-            endingView.TitleClicked += ShowTitle;
+            endingView.TitleClicked += RestartToTitle;
         }
         private void OnDisable()
         {
             titleView.StartClicked -= StartGame;
             titleView.QuitClicked -= QuitGame;
             stageDirector.AllStagesCleared -= HandleAllStagesCleared;
-            endingView.TitleClicked -= ShowTitle;
+            endingView.TitleClicked -= RestartToTitle;
         }
         private void StartGame()
         {
@@ -62,6 +64,12 @@ namespace ProjectFantasy.Flow
             inputHandler.enabled = isEnabled;
             inputHandler.SetGameplayEnabled(isEnabled);
             thirdPersonCamera.SetLookEnabled(isEnabled);
+        }
+        // 씬을 다시 불러와 처음 실행 상태(타이틀)로 복귀
+        public void RestartToTitle()
+        {
+            Time.timeScale = DefaultTimeScale;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

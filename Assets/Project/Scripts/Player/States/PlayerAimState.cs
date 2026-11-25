@@ -6,6 +6,8 @@ namespace ProjectFantasy.Player
     // 우클릭 조준 (숄더뷰, 카메라 방향 고정, 느린 스트레이프 이동)
     public sealed class PlayerAimState : PlayerStateBase
     {
+        // 활은 windup 시간만큼 조준해야 발사 가능 (비조준 발사와 템포 일치), 석궁은 즉시
+        private bool CanRelease => !RangedWeapon.Current.HasDraw || Controller.Draw.Elapsed >= RangedWeapon.Current.WindupDuration;
         public override bool UsesAimView => true;
 
         public PlayerAimState(PlayerController controller) : base(controller) { }
@@ -13,6 +15,7 @@ namespace ProjectFantasy.Player
         public override void Enter()
         {
             Controller.AmmoVisual.SetNocked(true);
+            Controller.Draw.Begin(RangedWeapon.Current.DrawDuration);
         }
 
         public override void Exit()
@@ -34,13 +37,13 @@ namespace ProjectFantasy.Player
                 Controller.ChangeState(Controller.AirState);
                 return;
             }
-
-            if (TryStartPrimaryAction()) return;
+            if (CanRelease && TryStartPrimaryAction()) return;
             if (TryStartDodge())
             {
                 Controller.ChangeState(Controller.DodgeState);
                 return;
             }
+            Controller.Draw.Tick(deltaTime);
             ApplyMoveInput(MovementData.AimMoveSpeed, MovementData.Acceleration, MovementData.Deceleration, deltaTime, false);
             FaceAim(deltaTime);
 
@@ -56,7 +59,7 @@ namespace ProjectFantasy.Player
             TrajectoryPreview preview = Controller.TrajectoryPreview;
             if (preview == null) return;
 
-            if (!Controller.TryResolveLaunch(out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile))
+            if (!Controller.TryResolveLaunch(RangedWeapon.Current.GetDrawSpeedMultiplier(Controller.Draw.Ratio), out Vector3 origin, out Vector3 launchVelocity, out ProjectileProfile profile))
             {
                 preview.Hide();
                 return;

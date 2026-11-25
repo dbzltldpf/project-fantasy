@@ -7,6 +7,7 @@ namespace ProjectFantasy.Player
     // 플레이어 상태 공통 베이스 (컴포넌트 참조 캐싱, 공통 입력 분기)
     public abstract class PlayerStateBase : IState
     {
+        private const float MoveInputThreshold = 0.01f;
         protected readonly PlayerController Controller;
         protected readonly PlayerInputHandler InputHandler;
         protected readonly PlayerMotor Motor;
@@ -21,6 +22,8 @@ namespace ProjectFantasy.Player
 
         // 숄더뷰/조준점 사용 여부 (상태 전이 시 PlayerController가 반영)
         public virtual bool UsesAimView => false;
+        // 이동 입력이 있는지 (캔슬·장전 판단용)
+        protected bool HasMoveInput => Controller.GetCameraRelativeMove().sqrMagnitude > MoveInputThreshold;
 
         protected PlayerStateBase(PlayerController controller)
         {
@@ -116,6 +119,13 @@ namespace ProjectFantasy.Player
         protected bool TryStartDodge()
         {
             return Controller.DodgeState.IsReady && InputHandler.ConsumeDodge();
+        }
+        protected bool TryHandleQuickSlot()
+        {
+            int quickSlot = InputHandler.ConsumeQuickSlot();
+            if (quickSlot == PlayerInputHandler.NoQuickSlot) return false;
+            ItemHandler.TryActivateQuickSlot(quickSlot);
+            return true;
         }
     }
 }

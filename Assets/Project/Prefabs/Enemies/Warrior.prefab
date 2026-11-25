@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 807409596920081937}
   - component: {fileID: 5995462777874025709}
   - component: {fileID: 4298864222136715897}
+  - component: {fileID: 6424520185704878638}
   m_Layer: 8
   m_Name: Warrior
   m_TagString: Untagged
@@ -224,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Enemy.EnemyController
   data: {fileID: 11400000, guid: d4a66637d65761d46bea93a5918e7f23, type: 2}
+  territory: {fileID: 0}
 --- !u!136 &807409596920081937
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -275,6 +277,19 @@ MonoBehaviour:
   worldItemPrefab: {fileID: 5925447551333588511, guid: 5aab03f9aaa7cd14186a1a2024e191e3, type: 3}
   scatterRadius: 1
   dropHeight: 0.3
+--- !u!114 &6424520185704878638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fb5f25d77181f479d7b295ba4de9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.ProjectileStickBones
+  skinnedMesh: {fileID: 6144141203623818688}
 --- !u!1001 &266613097006756205
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -336,6 +351,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a5872baf5f105e4bb32cc5335c25a4d, type: 3}
+--- !u!137 &6144141203623818688 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6266597175302243501, guid: 1a5872baf5f105e4bb32cc5335c25a4d, type: 3}
+  m_PrefabInstance: {fileID: 266613097006756205}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6872473158498526397 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6695971791178552784, guid: 1a5872baf5f105e4bb32cc5335c25a4d, type: 3}
