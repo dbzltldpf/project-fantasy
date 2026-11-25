@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.RangedWeaponData
   displayName: "\uD65C"
   icon: {fileID: 0}
-  description: 
+  description: "\uC6B0\uD074\uB9AD\uC73C\uB85C \uC870\uC900, \uC624\uB798 \uB2F9\uAE38\uC218\uB85D
+    \uBA40\uB9AC \uB0A0\uC544\uAC00\uACE0 \uAC15\uD574\uC9C4\uB2E4.\n\uD654\uC0B4\uC744
+    \uC18C\uBAA8\uD55C\uB2E4."
   maxStack: 1
   worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 4185748966335835586, guid: 6be720861463ce34b831a8b870a941ba, type: 3}

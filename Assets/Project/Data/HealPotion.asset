@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Items.ConsumableData
   displayName: "\uD68C\uBCF5\uC57D"
   icon: {fileID: 0}
-  description: 
+  description: "\uCCB4\uB825\uC744 30 \uD68C\uBCF5\uD55C\uB2E4. \uD035\uC2AC\uB86F\uC5D0
+    \uB123\uC5B4 \uC22B\uC790 \uD0A4\uB85C \uC0AC\uC6A9."
   maxStack: 20
   worldModelPrefab: {fileID: 0}
   useStateName: Use_Item

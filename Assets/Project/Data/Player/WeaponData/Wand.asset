@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Magic.MagicWeaponData
   displayName: "\uC644\uB4DC"
   icon: {fileID: 0}
-  description: 
+  description: "\uACE7\uAC8C \uB0A0\uC544\uAC00\uB294 \uB9C8\uBC95\uD0C4\uC744 \uC3DC\uB2E4.\n\uBC29\uD328\uB098
+    \uB9C8\uBC95\uCC45\uACFC \uD568\uAED8 \uB4E4 \uC218 \uC788\uB2E4."
   maxStack: 1
   worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 779034006452432518, guid: 24757642841ab1f4798da69f7096d2b1, type: 3}
@@ -33,6 +34,7 @@ MonoBehaviour:
   comboData: {fileID: 0}
   hitOffset: {x: 0, y: 1, z: 1}
   hitRadius: 0.8
+  staggerLimit: 3
   bladeBase: {x: 0, y: 0, z: 0}
   bladeTip: {x: 0, y: 0, z: 0}
   bladeRadius: 0.1

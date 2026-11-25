@@ -14,12 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Weapon.ShieldData
   displayName: "\uCCA0 \uBC29\uD328"
   icon: {fileID: 0}
-  description: 
+  description: "\uC6B0\uD074\uB9AD\uC744 \uB204\uB974\uACE0 \uC788\uC73C\uBA74 \uC815\uBA74
+    \uACF5\uACA9\uC744 \uB9C9\uB294\uB2E4.\n\uC591\uC190\uAC80 \uACF5\uACA9\uC740
+    \uB9C9\uC744 \uC218 \uC5C6\uB2E4.\n\uB4E4\uACE0 \uC788\uAE30\uB9CC \uD574\uB3C4
+    \uBC1B\uB294 \uD53C\uD574\uAC00 \uC904\uC5B4\uB4E0\uB2E4."
   maxStack: 1
   worldModelPrefab: {fileID: 0}
   modelPrefab: {fileID: 7695284558064108283, guid: 1081e7cec2b6bf94e857927f4de17c85, type: 3}
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
+  tierMaterials: []
+  tierTable: {fileID: 0}
   gradeTable: {fileID: 11400000, guid: f34139abb58986d4593b6e2bb8a02cd1, type: 2}
   guardAngle: 120
   blockKnockbackSpeed: 2
