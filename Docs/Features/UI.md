@@ -6,7 +6,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [CrosshairView.cs](../../Assets/Project/Scripts/UI/CrosshairView.cs) | 화면 중앙 조준점 표시/숨김 (기본 숨김, 조준 모드에서 표시) |
+| [CrosshairView.cs](../../Assets/Project/Scripts/UI/CrosshairView.cs) | 화면 중앙 조준점: 평소엔 점(`defaultRoot`), 조준 모드엔 조준점(`aimRoot`) 전환(`SetAiming`), 활 당김 게이지(`SetDraw`: 채움 비율, 가득 차면 색 변경) |
 | [DamageNumberEmitter.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberEmitter.cs) | `Health.Damaged`·`Rejected` 구독 → 스포너에 숫자·무효 표시 요청 (허수아비·적 공용) |
 | [DamageNumberSpawner.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumberSpawner.cs) | 씬 단위 데미지 숫자 생성·풀링, 겹침 방지 랜덤 오프셋, 무효 글자(`SpawnImmune`) |
 | [DamageNumber.cs](../../Assets/Project/Scripts/UI/DamageNumbers/DamageNumber.cs) | 떠오르며 사라지는 TextMeshPro 숫자·글자(`ShowText`), 카메라 방향 빌보드, `SetText`로 GC 없음 |
@@ -16,7 +16,7 @@
 | [Title/TitleView.cs](../../Assets/Project/Scripts/UI/Title/TitleView.cs) / [Ending/EndingView.cs](../../Assets/Project/Scripts/UI/Ending/EndingView.cs) | 타이틀(시작·종료), 엔딩(플레이 시간·쓰러진 횟수·타이틀로) 패널 ([Flow](Flow.md)) |
 | [HUD/NarrationView.cs](../../Assets/Project/Scripts/UI/HUD/NarrationView.cs) | 내레이션 자막 표시·숨김 (재생 순서·시간은 `NarrationPlayer`, [Narration](Narration.md)) |
 | [Pause/PauseMenuView.cs](../../Assets/Project/Scripts/UI/Pause/PauseMenuView.cs) | 일시정지 패널 표시/숨김(`Show`·`Hide`·`IsOpen`), 테스트 패널 표시 여부(`showDevPanel`). 일시정지 로직은 `PausePresenter` ([Player](Player.md)) |
-| [Settings/FrameRateDropdownView.cs](../../Assets/Project/Scripts/UI/Settings/FrameRateDropdownView.cs) | 일시정지 메뉴의 프레임 제한 드롭다운 표시·선택 알림 (적용·저장은 `FrameRateSettings`, [Settings](Settings.md)) |
+| [Settings/SettingsDropdownView.cs](../../Assets/Project/Scripts/UI/Settings/SettingsDropdownView.cs) | 일시정지 메뉴의 설정 드롭다운(프레임 제한·화면 모드) 표시·선택 알림 (적용·저장은 `FrameRateSettings`·`DisplayModeSettings`, [Settings](Settings.md)) |
 | [Dev/DevPanelView.cs](../../Assets/Project/Scripts/UI/Dev/DevPanelView.cs) | 테스트 버튼 클릭 → `CommandChosen` 알림, 배속 글자 ([Dev](Dev.md)) |
 | [Enemy/EnemyHealthBarView.cs](../../Assets/Project/Scripts/UI/Enemy/EnemyHealthBarView.cs) | 적 머리 위 월드 공간 체력바 표시·빌보드 (표시 규칙은 `EnemyHealthBarPresenter`, [Enemy](Enemy.md)) |
 | [Common/BarFill.cs](../../Assets/Project/Scripts/UI/Common/BarFill.cs) | 3조각 바 채움: `SetRatio`(양 끝 유지, 숙련 경험치) / `SetMaskedRatio`(마스크로 잘림, 체력·자원) |
@@ -29,7 +29,8 @@
 
 ## 동작 흐름
 ```
-조준: PlayerController.AimViewChanged → PlayerAimPresenter → CrosshairView.SetVisible / ThirdPersonCamera.SetAiming
+조준: PlayerController.AimViewChanged → PlayerAimPresenter → CrosshairView.SetAiming / ThirdPersonCamera.SetAiming
+당김: PlayerAimPresenter.LateUpdate (조준 중만) → CrosshairView.SetDraw(PlayerController.Draw 비율), 조준 해제 시 숨김
 아이템: Inventory·QuickSlots·IItemActions 변경 → PlayerMenuPresenter / PlayerHudPresenter → InventoryWindow · QuickSlotBarView · AmmoCounterView · NoticeView
 숙련: WeaponMastery.ExperienceGained·LevelChanged → MasteryWindow(해당 줄만) · PlayerHudPresenter → NoticeView
 피해: Health.Damaged → DamageNumberEmitter → DamageNumberSpawner.Spawn(피해량, 타격 지점) → DamageNumber (수명 후 풀 반환)
@@ -39,7 +40,7 @@
 내레이션: StageDirector.GoToStage → NarrationPlayer.Play → NarrationView.Show / Hide ([Narration](Narration.md))
 일시정지: PlayerInputHandler.PausePressed → PausePresenter → PauseMenuView.Show / Hide
 테스트: DevPanelView.CommandChosen → DevCommands ([Dev](Dev.md))
-설정: FrameRateDropdownView.Selected → FrameRateSettings.Select ([Settings](Settings.md))
+설정: SettingsDropdownView.Selected → FrameRateSettings / DisplayModeSettings (드롭다운별) ([Settings](Settings.md))
 체력: Health.HealthChanged → PlayerHudPresenter → StatusBarView (플레이어) / EnemyHealthBarPresenter → EnemyHealthBarView (적)
 ```
 
@@ -56,14 +57,16 @@
 | StatusBarView | valueFormat | `{0} / {1}` | 수치 문구 |
 | EnemyHealthBarPresenter | hideDelay | 4 | 전투 종료 후 유지 시간 |
 | DamageNumberEmitter | spawner | 자동 탐색 | 비우면 씬에서 최초 1회 탐색 |
+| CrosshairView | drawingColor / fullColor | 연노랑 / 노랑 | 당기는 중 / 가득 당김 게이지 색 |
 
 ## 에디터 설정
 1. `Window → TextMeshPro → Import TMP Essential Resources` (최초 1회)
 2. **데미지 숫자 프리팹**: TextMeshPro(3D, UI 아님) + `DamageNumber` → 씬 오브젝트 `DamageNumberSpawner`에 연결
-3. **조준점**: Canvas(Screen Space Overlay) 중앙 Image + `CrosshairView` → `PlayerAimPresenter`에 연결
+3. **조준점**: Canvas(Screen Space Overlay) 중앙 `CrosshairView` → 자식 Default Root(작은 점)·Aim Root(조준점)·Draw Gauge(Image Type Filled, Radial 360) 연결 → `PlayerAimPresenter`에 연결
 4. **피격 대상**: `Health` 오브젝트에 `DamageNumberEmitter` 추가 (허수아비는 [Combat](Combat.md)의 `TrainingDummy` 참고)
 5. **플레이어 상태바**: Create Inventory UI 이후 `Tools → ProjectFantasy → Create Player Status UI` (다시 만들어도 Presenter 연결 유지)
 6. **적 체력바**: `Tools → ProjectFantasy → Create Enemy Health Bar Prefab` → 적 프리팹 자식으로 배치
+7. **Canvas Scaler**: Scale With Screen Size, Reference 1920 x 1080, Match 0.5 (창모드 1280x720에서도 하단 HUD가 잘리지 않음)
 
 ## 변경 이력
 | 날짜 | 내용 |
@@ -79,3 +82,4 @@
 | 2026-11-19 | 내레이션 자막(`NarrationView`, 상단 중앙, MaruBuri) |
 | 2026-11-19 | 타이틀(`TitleView`)·엔딩(`EndingView`) 패널 |
 | 2026-11-23 | 일시정지 메뉴에 프레임 제한 드롭다운(`FrameRateDropdownView`, DevPanel 밖) |
+| 2026-11-25 | 기본 조준점(평소 점·조준 모드 조준점), 활 당김 게이지(`CrosshairView.SetDraw`), 설정 드롭다운 공용 View(`SettingsDropdownView`, 화면 모드 추가), Canvas Scaler 1920x1080 |

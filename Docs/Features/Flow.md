@@ -8,7 +8,7 @@
 ## 구성 스크립트
 | 파일 | 책임 |
 |---|---|
-| [Flow/GameFlowPresenter.cs](../../Assets/Project/Scripts/Flow/GameFlowPresenter.cs) | 화면 전환(타이틀·플레이·엔딩), 화면에 따라 플레이어 입력·시점 켜고 끔, 시작 시 기록 시작·`GoToStage(0)`, 전체 클리어 시 기록 정지·엔딩 표시, 종료 |
+| [Flow/GameFlowPresenter.cs](../../Assets/Project/Scripts/Flow/GameFlowPresenter.cs) | 화면 전환(타이틀·플레이·엔딩), 화면에 따라 플레이어 입력·시점 켜고 끔, 시작 시 기록 시작·`GoToStage(0)`, 전체 클리어 시 기록 정지·엔딩 표시, 타이틀 복귀(`RestartToTitle`: 씬 다시 로드), 종료 |
 | [Flow/PlayRecord.cs](../../Assets/Project/Scripts/Flow/PlayRecord.cs) | `Begin`~`End` 사이 플레이 시간(일시정지 제외)·사망 횟수 집계 |
 | [UI/Title/TitleView.cs](../../Assets/Project/Scripts/UI/Title/TitleView.cs) | 타이틀 패널 표시/숨김, 시작·종료 버튼 클릭 알림 |
 | [UI/Ending/EndingView.cs](../../Assets/Project/Scripts/UI/Ending/EndingView.cs) | 엔딩 패널 표시(플레이 시간 `mm:ss`, 쓰러진 횟수), 타이틀로 버튼 클릭 알림 |
@@ -26,11 +26,15 @@ Start → ShowTitle: 엔딩 숨김 → 입력 끔 → 타이틀 표시
 
 StageDirector.AllStagesCleared (보스 클리어 후 게이트 진입)
   → PlayRecord.End → 입력 끔 → EndingView.Show(플레이 시간, 쓰러진 횟수)
-엔딩 "타이틀로" → ShowTitle (다시 시작하면 GoToStage가 적·게이트·목표·플레이어를 모두 초기화)
+엔딩 "타이틀로" / 테스트 패널 종료 → RestartToTitle
+  → Time.timeScale = 1 → 현재 씬 다시 로드 → Start에서 ShowTitle (처음 실행한 상태)
 ```
 - 입력 끄기(`SetInputEnabled`)는 `PlayerInputHandler` 컴포넌트를 통째로 끈다. `OnDisable`에서 모든 키 구독이 풀려 ESC·Tab·K까지 막히므로 일시정지·메뉴 쪽 코드를 고치지 않는다. 시점은 `SetLookEnabled`로 멈추고 커서도 함께 풀린다.
 - 플레이 시간은 `Time.deltaTime` 누적이라 일시정지(timeScale 0) 시간은 빠진다. 테스트 배속에서는 배속만큼 쌓인다.
 - 사망 횟수는 기록 중일 때만 센다.
+- 타이틀 복귀는 씬을 다시 로드해 스테이지·적·인벤토리·숙련·기록을 모두 처음으로 되돌린다. 설정(PlayerPrefs)만 유지된다.
+- `Time.timeScale`은 씬을 넘어 유지되므로 로드 전에 1로 되돌린다 (일시정지 0·테스트 배속이 남지 않게).
+- `DontDestroyOnLoad` 오브젝트가 없고 static 이벤트(`EnemyEvents`·`LocationEvents`)는 `OnDisable`에서 해제하므로 다시 로드해도 중복 구독이 없다.
 
 ## 데이터 파라미터
 | 대상 | 필드 | 의미 |
@@ -58,3 +62,4 @@ StageDirector.AllStagesCleared (보스 클리어 후 게이트 진입)
 | 날짜 | 내용 |
 |---|---|
 | 2026-11-19 | 최초 작성: 한 씬 타이틀(시작·종료), 엔딩(플레이 시간·쓰러진 횟수, 타이틀로), 플레이 기록, 화면별 입력 차단 |
+| 2026-11-25 | 타이틀 복귀를 씬 다시 로드로 변경(`RestartToTitle`, 엔딩·테스트 패널 종료 공용) |
