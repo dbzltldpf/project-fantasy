@@ -203,3 +203,4 @@ flowchart LR
 | 2026-11-19 | ESC 일시정지(`PausePresenter`, 입력 `Pause` 액션: Escape / Start), 일시정지 중 Tab·K 무시, 숙련도 창 연결 필수로 변경 |
 | 2026-11-25 | 인벤토리 키 Tab → I (조작표와 일치) |
 | 2026-11-25 | 근접 공격을 조준점(카메라) 방향으로, 조준 머리 페이드(`AimHeadFader`), 석궁 장전 중 회피·이동·무기 교체, 발사 후 회피 캔슬, `HasMoveInput`·`TryHandleQuickSlot`·`CanUseItems` 공용화, 활 당김(`Draw`), 플레이어 피격 경직 0.45초(전용 에셋) |
+| 2026-11-27 | 소리 알림: `PlayerItemHandler.Equipped`(직접 바꿀 때만)·`PickedUp`, `RangedDraw.Started`, `PlayerSpellTargetState.Enter`·`PlayerCastState`에서 시전 시작 알림, `PlayerAttackState`의 `IActionContext.PlaySound` ([Audio](Audio.md)) |

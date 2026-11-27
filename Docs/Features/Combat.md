@@ -18,7 +18,8 @@
 | [HitStop.cs](../../Assets/Project/Scripts/Combat/HitStop.cs) | 명중 순간 애니메이터 일시 정지 (공격자·피격자 공용), `IsActive`로 로직 정지 판단 |
 | [Action/ActionData.cs](../../Assets/Project/Scripts/Combat/Action/ActionData.cs) | 공격 한 동작: 클립, 길이(프레임), 재생 속도, 크로스페이드, 다형 이벤트 목록 (SO) |
 | [Action/ActionEvent.cs](../../Assets/Project/Scripts/Combat/Action/ActionEvent.cs) | 이벤트 베이스: `[startFrame, endFrame)` 구간, `OnBegin` / `OnTick` / `OnEnd`, 검증 |
-| [Action/Events/](../../Assets/Project/Scripts/Combat/Action/Events/) | `HitWindowEvent`(타격 구간), `ComboWindowEvent`(입력 예약·전이 프레임), `CancelWindowEvent`(회피·이동으로 후딜레이 캔슬), `MoveEvent`(전진) |
+| [Action/Events/](../../Assets/Project/Scripts/Combat/Action/Events/) | `HitWindowEvent`(타격 구간), `ComboWindowEvent`(입력 예약·전이 프레임), `CancelWindowEvent`(회피·이동으로 후딜레이 캔슬), `MoveEvent`(전진), `SoundEvent`(지정 프레임 소리 신호 → `MeleeAttacker.SoundCued`, [Audio](Audio.md)) |
+| [DamageInfoExtensions.cs](../../Assets/Project/Scripts/Combat/DamageInfoExtensions.cs) | `IsFromWeapon(WeaponType)`: 가해자 무기 종류 확인 (가드 파괴·무거운 타격음 공용) |
 | [Action/ActionPlayer.cs](../../Assets/Project/Scripts/Combat/Action/ActionPlayer.cs) | 프레임 시계 진행, 이벤트 진입·유지·종료 호출 (GC 없음, 프레임 드랍 시에도 구간 1회 실행 보장) |
 | [Action/IActionContext.cs](../../Assets/Project/Scripts/Combat/Action/IActionContext.cs) | 이벤트가 소유자에게 요청하는 동작 (판정, 콤보 창, 캔슬 구간, 이동) – 플레이어는 `PlayerAttackState`, 적은 `EnemyAttackState`가 구현 (적은 캔슬 구간 빈 구현) |
 | [Action/Editor/ActionDataEditor.cs](../../Assets/Project/Scripts/Combat/Action/Editor/ActionDataEditor.cs) | ActionData 인스펙터: 타임라인 열기, 이벤트 추가·삭제, 검증 경고 표시 |
@@ -71,7 +72,7 @@ TakeDamage
  ├─ IDamageReducer.Reduce → 피해 × 100 / (100 + 방어력), 최소 1 (물리 = 방어력, 마법 = 마법 방어력)
  └─ 감소된 피해 적용 → 무적 시작 → HealthChanged → Damaged(감소 후 피해) → (체력 0) Died
 ```
-- `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어. 가해자가 양손검(`IWeaponWielder.CurrentWeaponType == TwoHanded`)이면 막지 못한다 (가드 파괴, 가해자가 없으면 일반 판정).
+- `ShieldGuard.TryBlock`: 가드 중이고 가해자 방향이 정면 `guardAngle/2` 이내면 방어. 가해자가 양손검(`IWeaponWielder.CurrentWeaponType == TwoHanded`)이면 막지 못한다 (가드 파괴, 가해자가 없으면 일반 판정). 이때 `GuardBroken` 이벤트를 알린다 (소리·연출용).
 - 맞은 콜라이더(`DamageInfo.HitCollider`): 근접은 칼날 샘플 지점, 범위 마법은 범위 중심에 가장 가까운 대상의 콜라이더(`HitColliderUtility.FindNearest`), 투사체는 레이캐스트에 맞은 콜라이더 ([Part Break](PartBreak.md)).
 - 피해 종류(`DamageInfo.Type`): 근접·화살 = 물리, Wand·Staff 마법 = 마법. 방어력은 방패 개체에서 굴린 값 ([Inventory](Inventory.md)).
 
@@ -211,3 +212,4 @@ Length               ───────────────────�
 | 2026-11-23 | `ShieldGuard.TryBlock`: 양손검 공격은 방어 불가 (Warrior 방패를 양손검으로 깨는 구도) |
 | 2026-11-25 | 피격 반응 에셋을 플레이어(`PlayerHitReactionData`, 경직 0.45)·적(`EnemyHitReactionData`)으로 분리, 화살이 가장 가까운 뼈에 박힘(`ProjectileStickBones`, [Ranged Combat](RangedCombat.md)) |
 | 2026-11-10 | `MeleeAttacker.SetStaggerLimit`(무기별 경직 횟수 전달), `WeaponTrace` 양 끝 샘플을 반지름만큼 당겨 두께만 늘어나게, `HitReactionData` 경직 0.7·넉백 2 |
+| 2026-11-27 | 소리 알림: `ShieldGuard.GuardBroken`, `MeleeAttacker.SoundCued`·`CueSound`, `IActionContext.PlaySound`, `SoundEvent`(타임라인 노란색), `RangedAttacker.ShotFired(shot, profile)`·`Impacted`, `DamageInfoExtensions.IsFromWeapon` ([Audio](Audio.md)) |

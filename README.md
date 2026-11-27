@@ -18,3 +18,9 @@
 | 에셋 | 제작자 | 라이선스 | 출처 |
 |---|---|---|---|
 | UI pack: RPG extension | Kenney Vleugels | [CC0](Assets/ThirdParty/Kenney/UIPack/license.txt) (크레딧 권장) | https://www.kenney.nl |
+
+### 오디오
+| 에셋 | 용도 | 제작자 | 라이선스 | 출처 |
+|---|---|---|---|---|
+| Impact Sounds / RPG Audio / Sci-Fi Sounds | 효과음 | Kenney Vleugels | CC0 (`Assets/ThirdParty/Kenney/Sounds/` 각 팩의 License.txt) | https://www.kenney.nl |
+| The Bard's Tale (Chiptune, Loop) | BGM | RandomMind | [CC0](Assets/ThirdParty/Music/RandomMind/License.txt) | https://opengameart.org/content/chiptune-medieval-the-bards-tale |

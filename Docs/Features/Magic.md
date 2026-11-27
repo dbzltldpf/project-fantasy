@@ -107,3 +107,4 @@ PlayerCastState
 | 2026-10-07 | 무기·마법서 숙련 보너스를 마법 피해에 반영, 마법 이펙트 풀 부모 폴더(`Pools/Effects`, `SpellCaster.effectRoot`) |
 | 2026-10-08 | 마법 에셋 위치 `Data/Player`, 적 전용 마법(마법탄·예고형 범위 마법) 분리 |
 | 2026-11-23 | 튜닝: Staff 범위 마법(`AreaSpell`) 조준 유지 0.3·발동 지연 0.3·반경 4·쿨타임 2 |
+| 2026-11-27 | 시전·명중 소리: `SpellData.castSound·impactSound`, 시전 시작 알림(`SpellCaster.CastStarted`·`NotifyCastStarted`: 조준 범위 마법은 조준 시작, 그 외 시전 모션 시작), `AreaCast`·`AreaActivated` 이벤트, 투사체 마법 발사음은 비움. 적 범위 마법 쿨타임 3 → 5 ([Audio](Audio.md)) |
