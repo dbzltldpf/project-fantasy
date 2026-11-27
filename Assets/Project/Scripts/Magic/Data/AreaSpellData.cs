@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using UnityEngine;
 
 namespace ProjectFantasy.Magic
@@ -39,7 +40,6 @@ namespace ProjectFantasy.Magic
         public float Radius => radius;
         public float ActivationDelay => activationDelay;
         public GameObject AreaEffectPrefab => areaEffectPrefab;
-
         protected override void CacheStateHashes()
         {
             base.CacheStateHashes();

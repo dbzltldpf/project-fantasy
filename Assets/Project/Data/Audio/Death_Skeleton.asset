@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faac2498a54a88c46af1702e7a43e33d, type: 3}
+  m_Name: Death_Skeleton
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.SoundData
+  clips:
+  - {fileID: 8300000, guid: d06ac38ca0719c441bd8cbda84eaeb71, type: 3}
+  - {fileID: 8300000, guid: d75be0da2c3c19045accd193763a9c35, type: 3}
+  volume: 0.5
+  minPitch: 0.95
+  maxPitch: 1.05
+  spatialBlend: 1

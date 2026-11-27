@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using ProjectFantasy.Audio;
 using ProjectFantasy.Core;
 using UnityEngine;
 
@@ -37,7 +39,9 @@ namespace ProjectFantasy.Combat
 
         public bool IsSwinging { get; private set; }
         private int staggerLimit;
-
+        // 액션 타임라인 소리 신호 (재생은 AttackSoundEmitter)
+        public event Action<SoundData> SoundCued;
+        public void CueSound(SoundData sound) => SoundCued?.Invoke(sound);
         private void Awake()
         {
             owner = GetComponent<IDamageable>();

@@ -25,7 +25,8 @@ namespace ProjectFantasy.Combat
         private readonly PrefabPool<Projectile> projectilePool = new PrefabPool<Projectile>();
         private readonly EffectPool effectPool = new EffectPool();
 
-        public event Action<RangedShot> ShotFired;
+        public event Action<RangedShot, ProjectileProfile> ShotFired;
+        public event Action<ProjectileProfile, Vector3> Impacted;
 
         private void Awake()
         {
@@ -62,7 +63,7 @@ namespace ProjectFantasy.Combat
                 projectile.Launch(this, profile.Prefab, shot, profile, projectileHitLayers);
             }
 
-            ShotFired?.Invoke(shot);
+            ShotFired?.Invoke(shot, profile);
         }
 
         public void ReturnProjectile(Projectile prefab, Projectile projectile) => projectilePool.Return(prefab, projectile);
@@ -70,6 +71,7 @@ namespace ProjectFantasy.Combat
         public void PlayImpactEffect(in ProjectileProfile profile, Vector3 position, Vector3 normal)
         {
             effectPool.Spawn(profile.ImpactEffectPrefab, position, Quaternion.LookRotation(normal), EffectPool.OneShot);
+            Impacted?.Invoke(profile, position);
         }
     }
 }

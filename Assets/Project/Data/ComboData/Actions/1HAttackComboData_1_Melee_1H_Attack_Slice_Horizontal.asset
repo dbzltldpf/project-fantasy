@@ -21,6 +21,7 @@ MonoBehaviour:
   - rid: 1646186660429561940
   - rid: 1646186660429561941
   - rid: 1056537649960190031
+  - rid: 1056537832464580702
   references:
     version: 2
     RefIds:
@@ -29,6 +30,12 @@ MonoBehaviour:
       data:
         startFrame: 10
         endFrame: 30
+    - rid: 1056537832464580702
+      type: {class: SoundEvent, ns: ProjectFantasy.Audio, asm: Assembly-CSharp}
+      data:
+        startFrame: 6
+        endFrame: 10
+        sound: {fileID: 11400000, guid: a6d17936e3440914584a13a69995e287, type: 2}
     - rid: 1646186660429561940
       type: {class: HitWindowEvent, ns: ProjectFantasy.Combat, asm: Assembly-CSharp}
       data:

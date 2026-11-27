@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using UnityEngine;
 
 namespace ProjectFantasy.Magic
@@ -21,7 +22,8 @@ namespace ProjectFantasy.Magic
         [Header("Damage")]
         [Tooltip("피해 = 마법력 × 배율 × 마법서 배율")]
         [SerializeField, Min(0f)] private float damageMultiplier = 1f;
-
+        [SerializeField] private SoundData castSound;
+        [SerializeField] private SoundData impactSound;
         private int castStateHash;
 
         public string DisplayName => displayName;
@@ -31,7 +33,8 @@ namespace ProjectFantasy.Magic
         public float CastDuration => castDuration;
         public float Cooldown => cooldown;
         public float DamageMultiplier => damageMultiplier;
-
+        public SoundData CastSound => castSound;
+        public SoundData ImpactSound => impactSound;
         // 지면 위치 지정(조준 모드)이 필요한 마법인지
         public abstract bool RequiresTargeting { get; }
 

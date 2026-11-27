@@ -13,6 +13,10 @@ namespace ProjectFantasy.Player
 
         public PlayerSpellTargetState(PlayerController controller) : base(controller) { }
 
+        public override void Enter()
+        {
+            if (MagicCaster.CurrentSpell is AreaSpellData spell) Controller.SpellCaster.NotifyCastStarted(spell);
+        }
         public override void Exit()
         {
             Controller.SpellCaster.HideIndicator();

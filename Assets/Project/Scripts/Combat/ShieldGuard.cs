@@ -1,3 +1,4 @@
+using System;
 using ProjectFantasy.Core;
 using ProjectFantasy.Weapon;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace ProjectFantasy.Combat
 
         public bool HasShield { get; private set; }
         public bool IsGuarding { get; private set; }
+        // 가드 중 양손검에 뚫렸을 때 알림 (소리·연출용)
+        public event Action GuardBroken;
 
         private void Awake()
         {
@@ -46,7 +49,11 @@ namespace ProjectFantasy.Combat
         {
             if (!IsGuarding) return false;
             // 양손검 공격은 막을 수 없음 (가드 파괴)
-            if (damageInfo.Instigator != null && damageInfo.Instigator.TryGetComponent(out IWeaponWielder wielder) && wielder.CurrentWeaponType == WeaponType.TwoHanded) return false;
+            if (damageInfo.IsFromWeapon(WeaponType.TwoHanded))
+            {
+                GuardBroken?.Invoke();
+                return false;
+            }
             // 가해자 방향 = 피격 방향의 반대
             Vector3 toAttacker = -damageInfo.Direction;
             toAttacker.y = 0f;

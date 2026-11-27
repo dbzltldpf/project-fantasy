@@ -25,6 +25,8 @@ GameObject:
   - component: {fileID: 5995462777874025709}
   - component: {fileID: 4298864222136715897}
   - component: {fileID: 6424520185704878638}
+  - component: {fileID: 7884233075055911654}
+  - component: {fileID: 2403549392245780635}
   m_Layer: 8
   m_Name: Warrior
   m_TagString: Untagged
@@ -290,6 +292,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.ProjectileStickBones
   skinnedMesh: {fileID: 6144141203623818688}
+--- !u!114 &7884233075055911654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc8080a0934430648a6cb10939510f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.HealthSoundEmitter
+  soundPlayer: {fileID: 0}
+  hitSound: {fileID: 11400000, guid: a3f6ff9c23400cb45a87e3834bebb23d, type: 2}
+  heavyHitSound: {fileID: 11400000, guid: 7c1bd58d706d18e4c9502598bcf14dc7, type: 2}
+  blockSound: {fileID: 11400000, guid: 453b6cd40799ac24abcba80de9359c9f, type: 2}
+  guardBreakSound: {fileID: 11400000, guid: c7fd7b843d924474bafbb81608d75a32, type: 2}
+  deathSound: {fileID: 11400000, guid: 9cb632ea31f604540aafd336847fbb05, type: 2}
+--- !u!114 &2403549392245780635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55ac674b62d6cfc4e8f96925ada3a8a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.AttackSoundEmitter
+  soundPlayer: {fileID: 0}
 --- !u!1001 &266613097006756205
 PrefabInstance:
   m_ObjectHideFlags: 0

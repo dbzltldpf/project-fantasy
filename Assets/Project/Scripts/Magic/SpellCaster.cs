@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Core;
@@ -34,7 +35,11 @@ namespace ProjectFantasy.Magic
 
         private IDamageable owner;
         private PooledEffect activeIndicator;
-
+        public event Action<AreaSpellData, Vector3> AreaCast;
+        public event Action<AreaSpellData, Vector3> AreaActivated;
+        // 시전 시작 알림 (모션 시작 시점, 소리·연출용)
+        public event Action<SpellData> CastStarted;
+        public void NotifyCastStarted(SpellData spell) => CastStarted?.Invoke(spell);
         private readonly struct PendingArea
         {
             public readonly AreaSpellData Spell;
@@ -106,11 +111,13 @@ namespace ProjectFantasy.Magic
             PooledEffect circle = effectPool.Spawn(spell.IndicatorPrefab, position, Quaternion.identity, spell.ActivationDelay);
             ApplyIndicatorScale(circle, spell);
             pendingAreas.Add(new PendingArea(spell, position, damage, Time.time + spell.ActivationDelay));
+            AreaCast?.Invoke(spell, position);
         }
 
         private void Activate(in PendingArea area)
         {
             effectPool.Spawn(area.Spell.AreaEffectPrefab, area.Position, Quaternion.identity, EffectPool.OneShot);
+            AreaActivated?.Invoke(area.Spell, area.Position);
 
             int hitCount = Physics.OverlapSphereNonAlloc(area.Position, area.Spell.Radius, overlapBuffer, areaDamageLayers, QueryTriggerInteraction.Ignore);
             damagedTargets.Clear();

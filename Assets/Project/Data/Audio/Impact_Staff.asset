@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faac2498a54a88c46af1702e7a43e33d, type: 3}
+  m_Name: Impact_Staff
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.SoundData
+  clips:
+  - {fileID: 8300000, guid: 41796ffab3111a44789d852b057a0abd, type: 3}
+  - {fileID: 8300000, guid: ce12293d97679844d8f1e4a881cb9f7c, type: 3}
+  - {fileID: 8300000, guid: 60f7dec6fc65fd741a2bb5c773e8c3f2, type: 3}
+  - {fileID: 8300000, guid: 45d7de44c76607146858781225bb78b3, type: 3}
+  - {fileID: 8300000, guid: f628003ad85f4284188ea0b02d524331, type: 3}
+  volume: 0.3
+  minPitch: 0.6
+  maxPitch: 0.7
+  spatialBlend: 1

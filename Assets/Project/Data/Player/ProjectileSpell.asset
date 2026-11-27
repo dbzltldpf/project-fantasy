@@ -18,6 +18,8 @@ MonoBehaviour:
   castDuration: 0.8
   cooldown: 1
   damageMultiplier: 1
+  castSound: {fileID: 11400000, guid: 91857cd2e0e5e5b4aba8bd0fc5814d12, type: 2}
+  impactSound: {fileID: 11400000, guid: 3e8cda2eff5fd924992fa34d1c8554b6, type: 2}
   projectilePrefab: {fileID: 907025890569955238, guid: 3fcb355d8c4b82f40acf4ad836bf546b, type: 3}
   speed: 30
   lifetime: 3

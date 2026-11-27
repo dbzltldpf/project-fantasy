@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using ProjectFantasy.Combat;
 using UnityEngine;
 
@@ -127,5 +128,6 @@ namespace ProjectFantasy.Enemy
 
         void IActionContext.OpenCancelWindow() { }
         void IActionContext.CloseCancelWindow() { }
+        void IActionContext.PlaySound(SoundData sound) => Attacker.CueSound(sound);
     }
 }

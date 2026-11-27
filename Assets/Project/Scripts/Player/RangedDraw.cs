@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 namespace ProjectFantasy.Player
 {
@@ -9,12 +10,15 @@ namespace ProjectFantasy.Player
         private float duration;
         private float elapsed;
         public float Elapsed => elapsed;
+        // 당기기 시작 알림 (활만, 소리용)
+        public event Action Started;
         public void Begin(float drawDuration)
         {
             duration = drawDuration;
             elapsed = 0;
             IsDrawing = drawDuration > 0f;
             Ratio = IsDrawing ? 0 : 1;
+            if (IsDrawing) Started?.Invoke();
         }
         public void Tick(float deltaTime)
         {

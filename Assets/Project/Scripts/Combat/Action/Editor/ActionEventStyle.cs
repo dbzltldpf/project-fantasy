@@ -1,4 +1,5 @@
 using System;
+using ProjectFantasy.Audio;
 using ProjectFantasy.Combat;
 using UnityEngine;
 
@@ -11,12 +12,14 @@ namespace ProjectFantasy.CombatEditor
         private static readonly Color ComboColor = new Color(0.3f, 0.55f, 0.9f);
         private static readonly Color MoveColor = new Color(0.35f, 0.75f, 0.4f);
         private static readonly Color DefaultColor = new Color(0.6f, 0.6f, 0.6f);
+        private static readonly Color SoundColor = new Color(0.9f, 0.75f, 0.3f);
 
         public static Color GetColor(Type eventType)
         {
             if (eventType == typeof(HitWindowEvent)) return HitColor;
             if (eventType == typeof(ComboWindowEvent)) return ComboColor;
             if (eventType == typeof(MoveEvent)) return MoveColor;
+            if (eventType == typeof(SoundEvent)) return SoundColor;
             return DefaultColor;
         }
     }
