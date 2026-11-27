@@ -23,6 +23,7 @@
 | [Settings](Features/Settings.md) | 플레이어 설정: 프레임 제한(모니터 주사율 기본, 일시정지 메뉴 드롭다운, PlayerPrefs 저장) |
 | [Dev](Features/Dev.md) | 테스트 패널(일시정지 메뉴 안): 다음 스테이지·무적·적 전멸·즉사·배속 |
 | [Camera](Features/Camera.md) | 3인칭 오빗 카메라, 휠 줌, 조준 숄더뷰 |
+| [Audio](Features/Audio.md) | 효과음·BGM: SoundData·SoundPlayer(풀), 이벤트 구독 Emitter(피격·공격·부위 파괴·플레이어 행동·게이트·창), 액션 타임라인 소리 트랙, MainMixer |
 | [UI](Features/UI.md) | 조준점, 데미지 숫자, 인벤토리·숙련도 창, 퀵슬롯 바·플레이어 상태바·HUD, 적 체력바, 일시정지 메뉴 |
 | [인스펙터 설정 가이드](InspectorGuide.md) | 에셋·컴포넌트별 필드 역할과 넣을 값, 새 무기 만들기 체크리스트 |
 | [Git 워크플로우](GitWorkflow.md) | 브랜치·커밋 규칙, `/feature-start` `/push` `/feature-finish` |
@@ -47,14 +48,15 @@ Assets/Project/Scripts/
 ├─ Dev/           DevCommand, DevCommands
 ├─ Narration/     NarrationPlayer, Data/
 ├─ Flow/          GameFlowPresenter, PlayRecord
-├─ Settings/      FrameRateSettings, Data/
+├─ Settings/      FrameRateSettings, DisplayModeSettings, Data/
+├─ Audio/         SoundData, SoundPlayer, Health·Attack·PartBreak·Player·Gate·WindowSoundEmitter
 ├─ Enemy/         EnemyController, EnemyEvents, Navigator, Perception, Animator, Loadout, Loot, Spawner, Territory, HealthBarPresenter, Combat/, PartBreak/, States/, Data/, Editor/
 └─ Utils/         TransformExtensions, RendererExtensions, AnimatorExtensions, AnimatorPoseHold, FloatRange, PrefabPool, PoolContainers, PoolContainerMap, SubclassSelectorAttribute, Editor/
 ```
-셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
+오디오 믹서는 `Assets/Project/Audio/MainMixer`, 소리 데이터는 `Data/Audio/`. 셰이더는 `Assets/Project/Shaders/` (`WeaponOutline`, 보스 부위 아웃라인은 같은 셰이더의 `Materials/Effects/PartBreakOutline`).
 
 ## 네임스페이스
-`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Stage` · `ProjectFantasy.Dev` · `ProjectFantasy.Narration` · `ProjectFantasy.Flow` · `ProjectFantasy.Settings` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
+`ProjectFantasy.Core` · `ProjectFantasy.Player` · `ProjectFantasy.Combat` · `ProjectFantasy.Weapon` · `ProjectFantasy.Items` · `ProjectFantasy.InventorySystem` · `ProjectFantasy.Mastery` · `ProjectFantasy.Enemy` · `ProjectFantasy.Objective` · `ProjectFantasy.World` · `ProjectFantasy.Stage` · `ProjectFantasy.Dev` · `ProjectFantasy.Narration` · `ProjectFantasy.Flow` · `ProjectFantasy.Settings` · `ProjectFantasy.Audio` · `ProjectFantasy.Magic` · `ProjectFantasy.CameraSystem` · `ProjectFantasy.UI` · `ProjectFantasy.Utils`
 (에디터 전용: `CombatEditor` · `WeaponEditor` · `ItemsEditor` · `EnemyEditor` · `UIEditor` · `UtilsEditor`)
 
 ## 변경 이력
@@ -94,3 +96,4 @@ Assets/Project/Scripts/
 | 2026-11-23 | Settings, UI, Combat, Enemy, Magic, Narration, InspectorGuide | 빌드·통플레이 튜닝: 프레임 제한 설정(`FrameRateSettings`, 일시정지 메뉴 드롭다운), 양손검 가드 파괴(`ShieldGuard`), 적 드랍 제거·시작 화살 60, Warrior 방어력 10, Staff 범위 마법 빠르게, 인트로 문구 정리, 렌더링 Forward·PC VSync·라이트 베이크·빌드 씬 Main |
 | 2026-11-25 | Settings, UI, Dev, Flow, RangedCombat, Player, Combat, Weapon, InspectorGuide | 빌드 전 다듬기: 화면 모드 설정(창모드 1280x720·Alt+Enter 차단·Canvas Scaler), 기본 조준점, 근접 공격 카메라 방향, 석궁 장전 취소(이동·회피·무기 교체)·데미지 상향, 활 당기기(게이지·속도·데미지), 착탄 마커, 조준 머리 디더 페이드, 화살 뼈 박힘, 플레이어 피격 경직 0.45, 테스트 패널 이전 스테이지·타이틀로(씬 다시 로드) |
 | 2026-11-25 | Weapon, Player, Inventory, UI, Narration, Flow, InspectorGuide | 플레이 안내: 맨손 마법서 장착 허용, 장비 설명 문구, 일시정지 메뉴 조작표, 인벤토리 키 I, 방패·마법책 인트로 안내, 한글 폰트 아틀라스 2048 |
+| 2026-11-27 | Audio(신규), Combat, RangedCombat, Magic, Enemy, World, Player, InspectorGuide | 사운드: SoundData·SoundPlayer(풀)·MainMixer(SFX/BGM), 피격·막기·가드 파괴·사망·휘두르기(SoundEvent)·발사·명중·시전·부위 파괴·활 당기기·장전 완료·장비 교체·줍기·게이트·인벤토리 소리, BGM 루프, Mage 공격 간격 완화 |

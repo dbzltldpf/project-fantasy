@@ -28,3 +28,5 @@ MonoBehaviour:
   lifetime: 5
   stickDuration: 10
   impactEffectPrefab: {fileID: 0}
+  fireSound: {fileID: 11400000, guid: b76035bfdb677104296e0f646a1c2563, type: 2}
+  impactSound: {fileID: 11400000, guid: f985204ddb301b342b87d48fa77a1c1e, type: 2}

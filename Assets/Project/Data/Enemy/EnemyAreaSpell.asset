@@ -16,8 +16,10 @@ MonoBehaviour:
   castStateName: Ranged_Magic_Spellcasting
   releaseTime: 0.3
   castDuration: 0.8
-  cooldown: 3
+  cooldown: 5
   damageMultiplier: 1.5
+  castSound: {fileID: 11400000, guid: 672d73322a51eb74caefbe5144c44100, type: 2}
+  impactSound: {fileID: 11400000, guid: 261dd11e7f5503442841c188c3181818, type: 2}
   maxRange: 15
   targetingIdleStateName: Ranged_Magic_Raise
   targetingHoldTime: 0.55

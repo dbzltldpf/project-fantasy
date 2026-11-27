@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faac2498a54a88c46af1702e7a43e33d, type: 3}
+  m_Name: PartBreak
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.SoundData
+  clips:
+  - {fileID: 8300000, guid: a0417637d8df33444825fd69843fb238, type: 3}
+  - {fileID: 8300000, guid: ac8a4c4a1c30bda4b974294b0e73732e, type: 3}
+  - {fileID: 8300000, guid: a4a4ff816a7aa0c4dbe0668dce635b8e, type: 3}
+  - {fileID: 8300000, guid: 4e1debf74a191ca43aecdde840ea43e4, type: 3}
+  - {fileID: 8300000, guid: c4bbf2cc8b362a841b924eaa587401bb, type: 3}
+  volume: 0.6
+  minPitch: 0.95
+  maxPitch: 1.05
+  spatialBlend: 1

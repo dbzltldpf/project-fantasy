@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faac2498a54a88c46af1702e7a43e33d, type: 3}
+  m_Name: Cast_Wand
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.SoundData
+  clips:
+  - {fileID: 8300000, guid: 5aeb5f0d22fe3ab4d84ae028c09dfe33, type: 3}
+  - {fileID: 8300000, guid: b679dd0c61d856c478b74a8ce0871b3e, type: 3}
+  - {fileID: 8300000, guid: 5edeed2fd342ef94b97f4666dbc42c99, type: 3}
+  - {fileID: 8300000, guid: 6894c173bd2ebe34aa0b7167043230cd, type: 3}
+  - {fileID: 8300000, guid: 515d9d2870202b942bc2ca979c13c6e5, type: 3}
+  volume: 0.07
+  minPitch: 0.6
+  maxPitch: 0.7
+  spatialBlend: 1

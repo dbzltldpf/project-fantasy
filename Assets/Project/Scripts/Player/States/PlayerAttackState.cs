@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using ProjectFantasy.Combat;
 using UnityEngine;
 
@@ -115,5 +116,6 @@ namespace ProjectFantasy.Player
 
         void IActionContext.OpenCancelWindow() => isCancelWindowOpen = true;
         void IActionContext.CloseCancelWindow() => isCancelWindowOpen = false;
+        void IActionContext.PlaySound(SoundData sound) => Attacker.CueSound(sound);
     }
 }

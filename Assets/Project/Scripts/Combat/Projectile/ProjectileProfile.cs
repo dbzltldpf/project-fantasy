@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using UnityEngine;
 
 namespace ProjectFantasy.Combat
@@ -12,9 +13,10 @@ namespace ProjectFantasy.Combat
         public readonly bool StickOnHit;
         public readonly float StickDuration;
         public readonly GameObject ImpactEffectPrefab;
-
+        public readonly SoundData FireSound;
+        public readonly SoundData ImpactSound;
         public ProjectileProfile(Projectile prefab, float speed, float gravity, float lifetime, bool stickOnHit, float stickDuration,
-            GameObject impactEffectPrefab)
+            GameObject impactEffectPrefab, SoundData fireSound, SoundData impactSound)
         {
             Prefab = prefab;
             Speed = speed;
@@ -23,7 +25,9 @@ namespace ProjectFantasy.Combat
             StickOnHit = stickOnHit;
             StickDuration = stickDuration;
             ImpactEffectPrefab = impactEffectPrefab;
+            FireSound = fireSound;
+            ImpactSound = impactSound;
         }
-        public ProjectileProfile WithSpeedScale(float scale) => new ProjectileProfile(Prefab, Speed * scale, Gravity, Lifetime, StickOnHit, StickDuration, ImpactEffectPrefab);
+        public ProjectileProfile WithSpeedScale(float scale) => new ProjectileProfile(Prefab, Speed * scale, Gravity, Lifetime, StickOnHit, StickDuration, ImpactEffectPrefab, FireSound, ImpactSound);
     }
 }

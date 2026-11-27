@@ -2202,6 +2202,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196186593}
   m_CullTransparentMesh: 1
+--- !u!1 &207277579
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 207277581}
+  - component: {fileID: 207277580}
+  m_Layer: 0
+  m_Name: SoundPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &207277580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207277579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f03d2c292f4d4174eac3ce0ad546cd13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.SoundPlayer
+  poolSize: 16
+  output: {fileID: 8727112035623722002, guid: cd5fd0064178d6145b3e2f1fdee90876, type: 2}
+  minDistance: 2
+  maxDistance: 30
+--- !u!4 &207277581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207277579}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &207800139
 GameObject:
   m_ObjectHideFlags: 0
@@ -2321,6 +2369,9 @@ GameObject:
   - component: {fileID: 214369312}
   - component: {fileID: 214369311}
   - component: {fileID: 214369313}
+  - component: {fileID: 214369314}
+  - component: {fileID: 214369315}
+  - component: {fileID: 214369316}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -2698,6 +2749,54 @@ MonoBehaviour:
   - {fileID: 984432821}
   - {fileID: 1417465821}
   fadeMaterial: {fileID: 2100000, guid: 3337f51f0458ad14d86d94df151d28ec, type: 2}
+--- !u!114 &214369314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc8080a0934430648a6cb10939510f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.HealthSoundEmitter
+  soundPlayer: {fileID: 207277580}
+  hitSound: {fileID: 11400000, guid: e962e12afb8ee8a439a5d3e3d1764f71, type: 2}
+  heavyHitSound: {fileID: 0}
+  blockSound: {fileID: 11400000, guid: 453b6cd40799ac24abcba80de9359c9f, type: 2}
+  guardBreakSound: {fileID: 11400000, guid: c7fd7b843d924474bafbb81608d75a32, type: 2}
+  deathSound: {fileID: 0}
+--- !u!114 &214369315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55ac674b62d6cfc4e8f96925ada3a8a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.AttackSoundEmitter
+  soundPlayer: {fileID: 207277580}
+--- !u!114 &214369316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214369288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a71a269c09fd654db1e045fa28a8cfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.PlayerSoundEmitter
+  soundPlayer: {fileID: 207277580}
+  drawSound: {fileID: 11400000, guid: 8241b59061bbb054a80d182ec60f94c1, type: 2}
+  reloadSound: {fileID: 11400000, guid: cc3b14b73eccb6148b79803c781f87fb, type: 2}
+  equipSound: {fileID: 11400000, guid: 38e3a0334b014b7479452442f5512774, type: 2}
+  pickUpSound: {fileID: 11400000, guid: 446c08a4f2874a74c9cbecf6ba8df840, type: 2}
 --- !u!1 &220313848
 GameObject:
   m_ObjectHideFlags: 0
@@ -7533,6 +7632,7 @@ GameObject:
   m_Component:
   - component: {fileID: 570273334}
   - component: {fileID: 570273335}
+  - component: {fileID: 570273336}
   m_Layer: 5
   m_Name: InventoryWindow
   m_TagString: Untagged
@@ -7603,6 +7703,21 @@ MonoBehaviour:
     unmetRequirementColor: {r: 1, g: 0.35, b: 0.35, a: 1}
   contextMenu: {fileID: 185554514}
   dragGhost: {fileID: 1628285450}
+--- !u!114 &570273336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570273333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4b59b9695c5f644987e308452af219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.WindowSoundEmitter
+  soundPlayer: {fileID: 207277580}
+  openSound: {fileID: 11400000, guid: e065ba5926f8c994e87ebea9938b8383, type: 2}
+  closeSound: {fileID: 11400000, guid: 15c57c136437a1a4b9054a92409b9802, type: 2}
 --- !u!1 &574804233
 GameObject:
   m_ObjectHideFlags: 0
@@ -15031,6 +15146,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 214369289}
     m_Modifications:
+    - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -0.19850408
+      objectReference: {fileID: 0}
+    - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 66.9701
+      objectReference: {fileID: 0}
+    - target: {fileID: 2125102990909016507, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0.16456324
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0.0000006003099
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -0.0000028414652
+      objectReference: {fileID: 0}
+    - target: {fileID: 4186887308830356384, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90.00001
+      objectReference: {fileID: 0}
     - target: {fileID: 5964241837311074526, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_Name
       value: Rogue
@@ -15074,6 +15213,30 @@ PrefabInstance:
     - target: {fileID: 6453358054145751652, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 7.4929256
+      objectReference: {fileID: 0}
+    - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -55.489162
+      objectReference: {fileID: 0}
+    - target: {fileID: 6714517662685268371, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -13.80955
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0.0000016541869
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0.0000048558372
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885899473665355147, guid: 8c81ca97251e1c947b769aebb8bcaf46, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90.00001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20503,6 +20666,135 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622387017}
   m_CullTransparentMesh: 1
+--- !u!1 &1627691774
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1627691776}
+  - component: {fileID: 1627691775}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &1627691775
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627691774}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 8176725433650702037, guid: cd5fd0064178d6145b3e2f1fdee90876, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: c22bef0bf6d576040ab19dc677327563, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 0
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &1627691776
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627691774}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1628285448
 GameObject:
   m_ObjectHideFlags: 0
@@ -25424,6 +25716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1983465095}
   - component: {fileID: 1983465096}
+  - component: {fileID: 1983465097}
   m_Layer: 2
   m_Name: GateField
   m_TagString: Untagged
@@ -25463,6 +25756,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.World.AreaGate
   blocker: {fileID: 411083778}
   openVisual: {fileID: 846481786}
+--- !u!114 &1983465097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983465094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1de6b46e9222b4b47b1979692ff3a7c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.GateSoundEmitter
+  soundPlayer: {fileID: 207277580}
+  openSound: {fileID: 11400000, guid: d78ad67d9316bd4459644f9b4910f32f, type: 2}
+  closeSound: {fileID: 11400000, guid: ac48ac6d2d72b524c9a52755ed6ec125, type: 2}
 --- !u!1 &1990411577
 GameObject:
   m_ObjectHideFlags: 0
@@ -27373,3 +27681,5 @@ SceneRoots:
   - {fileID: 1698112067}
   - {fileID: 70835008}
   - {fileID: 111528593}
+  - {fileID: 207277581}
+  - {fileID: 1627691776}

@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using ProjectFantasy.Combat;
 using ProjectFantasy.Items;
 using UnityEngine;
@@ -24,16 +25,17 @@ namespace ProjectFantasy.Weapon
         [Header("Impact")]
         [Tooltip("1회 재생 이펙트 (Looping 끈 Prefab Variant)")]
         [SerializeField] private GameObject impactEffectPrefab;
-
+        [Header("Sound")]
+        [SerializeField] private SoundData fireSound;
+        [SerializeField] private SoundData impactSound;
         public override ItemCategory Category => ItemCategory.Ammo;
         protected override int DefaultMaxStack => AmmoMaxStack;
 
         public Projectile ProjectilePrefab => projectilePrefab;
-
         // 화살은 중력 + 명중 시 박힘
         public ProjectileProfile ToProfile(float launchSpeed)
         {
-            return new ProjectileProfile(projectilePrefab, launchSpeed, gravity, lifetime, SticksOnHit, stickDuration, impactEffectPrefab);
+            return new ProjectileProfile(projectilePrefab, launchSpeed, gravity, lifetime, SticksOnHit, stickDuration, impactEffectPrefab, fireSound, impactSound);
         }
     }
 }

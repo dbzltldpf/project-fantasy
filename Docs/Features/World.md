@@ -55,3 +55,4 @@ GateField          ← AreaGate
 |---|---|
 | 2026-11-18 | 최초 작성: 장소 SO·도착 전역 알림·도착 트리거, 목표 완료 시 구역 개방(`AreaGate`) |
 | 2026-11-19 | 게이트 닫기·`IsOpen`, 열림 상태 반투명 문(`openVisual`), 트리거 반복 알림(`triggerOnce`), 게이트 개방을 `StageDirector`가 담당 |
+| 2026-11-27 | `AreaGate.Opened`·`Closed` 이벤트 (상태가 실제로 바뀔 때만, 게이트 소리 [Audio](Audio.md)) |

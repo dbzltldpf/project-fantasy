@@ -35,6 +35,7 @@ namespace ProjectFantasy.Player
             Motor.SnapRotation(isTargetedCast ? targetPosition - Controller.transform.position : Controller.GetAimFacingDirection());
             MagicCaster.StartCooldown();
             PlayerAnimator.PlayAction(spell.CastStateHash);
+            if (!spell.RequiresTargeting) Controller.SpellCaster?.NotifyCastStarted(spell);
         }
 
         public override void Exit()

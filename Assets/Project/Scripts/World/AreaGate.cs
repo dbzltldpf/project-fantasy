@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 namespace ProjectFantasy.World
 {
@@ -10,6 +11,8 @@ namespace ProjectFantasy.World
 
         private bool isOpen;
         public bool IsOpen => isOpen;
+        public event Action Opened;
+        public event Action Closed;
         private void Awake()
         {
             SetOpen(false);
@@ -24,11 +27,13 @@ namespace ProjectFantasy.World
         {
             if (isOpen) return;
             SetOpen(true);
+            Opened?.Invoke();
         }
         public void Close()
         {
             if (!isOpen) return;
             SetOpen(false);
+            Closed?.Invoke();
         }
     }
 

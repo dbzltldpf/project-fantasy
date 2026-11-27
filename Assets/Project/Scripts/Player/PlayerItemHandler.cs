@@ -47,6 +47,9 @@ namespace ProjectFantasy.Player
 
         public event Action<ItemNotice> Noticed;
         public event Action EquipmentChanged;
+        // 플레이어가 장비를 바꿈 / 아이템이 가방에 들어감 (소리용, 시작 장착 제외)
+        public event Action Equipped;
+        public event Action PickedUp;
 
         private void Awake()
         {
@@ -127,7 +130,7 @@ namespace ProjectFantasy.Player
             if (instance.Data is WeaponData) loadout.EquipWeapon(instance);
             else if (instance.Data is OffHandData) loadout.EquipOffHand(instance);
             else return false;
-
+            Equipped?.Invoke();
             return true;
         }
 
@@ -181,7 +184,7 @@ namespace ProjectFantasy.Player
             int remaining;
             if (target.Instance != null) remaining = Inventory.TryAdd(target.Instance) ? EmptyCount : target.Count;
             else Inventory.TryAdd(target.Item, target.Count, out remaining);
-
+            if (remaining < target.Count) PickedUp?.Invoke();
             if (remaining > EmptyCount) Noticed?.Invoke(ItemNotice.InventoryFull);
 
             target.SetRemaining(remaining);

@@ -31,7 +31,7 @@
 | [RangedAttacker.cs](../../Assets/Project/Scripts/Combat/RangedAttacker.cs) | 조준 지점 계산, 발사 속도, 경로 예측, 투사체 발사, 투사체·명중 이펙트 풀 |
 | [Ballistics.cs](../../Assets/Project/Scripts/Combat/Projectile/Ballistics.cs) | 포물선 위치/속도 공식, 경로 샘플링 (미리보기·비행 공용) |
 | [Projectile.cs](../../Assets/Project/Scripts/Combat/Projectile/Projectile.cs) | 범용 투사체: 비행, 구간 레이캐스트, 명중 시 피해·이펙트 후 박힘 또는 소멸, 대상 소멸 시 풀 반환 |
-| [ProjectileProfile.cs](../../Assets/Project/Scripts/Combat/Projectile/ProjectileProfile.cs) | 투사체 설정 값 타입 (속도, 중력, 수명, 박힘 여부, 명중 이펙트), 속도만 바꾼 복사본(`WithSpeedScale`, 당김 비율) |
+| [ProjectileProfile.cs](../../Assets/Project/Scripts/Combat/Projectile/ProjectileProfile.cs) | 투사체 설정 값 타입 (속도, 중력, 수명, 박힘 여부, 명중 이펙트, 발사·명중 소리), 속도만 바꾼 복사본(`WithSpeedScale`, 당김 비율) |
 | [NonStickSurface.cs](../../Assets/Project/Scripts/Combat/Projectile/NonStickSurface.cs) | 투사체가 박히지 않고 사라지는 표면 표시 (필드 없음) |
 | [TrajectoryPreview.cs](../../Assets/Project/Scripts/Combat/Projectile/TrajectoryPreview.cs) | LineRenderer 경로 표시 (버퍼 재사용), 착탄 마커(경로 끝, 카메라 쪽으로 당김·빌보드·화면상 크기 고정) |
 | [ProjectileStickBones.cs](../../Assets/Project/Scripts/Combat/Projectile/ProjectileStickBones.cs) | 화살이 박힐 뼈 찾기: 맞은 지점에서 가장 가까운 SkinnedMesh 뼈 (적 프리팹 루트) |
@@ -127,6 +127,7 @@ Release → 속도 × Lerp(minDrawSpeedMultiplier, 1, 비율)
 | lifetime | 5 | 비행 최대 시간 |
 | stickDuration | 10 | 박힌 뒤 사라질 때까지 |
 | impactEffectPrefab | — | 명중 이펙트 (Looping 끈 Prefab Variant) |
+| fireSound / impactSound | — | 발사음 / 명중음 (피격음은 대상의 `HealthSoundEmitter`, [Audio](Audio.md)) |
 
 ### 컴포넌트 인스펙터 값
 | 컴포넌트 | 필드 | 기본값 | 의미 |
@@ -168,3 +169,4 @@ Release → 속도 × Lerp(minDrawSpeedMultiplier, 1, 비율)
 | 2026-10-08 | 막힌 화살 미부착, 중력 보정 발사 각도 계산(`Ballistics.TrySolveLaunchVelocity`, 적 사수용) |
 | 2026-11-18 | 박히지 않는 표면 표시 컴포넌트(`NonStickSurface`, [World](World.md) 구역 문 벽) |
 | 2026-11-25 | 활 당기기(`RangedDraw`: 당김 비율로 속도·데미지, 조준 windup 게이트, 당김 게이지), 착탄 마커, 화살이 가장 가까운 뼈에 박힘(`ProjectileStickBones`), 석궁 장전을 이동·회피·무기 교체로 취소·멈췄을 때만 자동 장전, 발사 후 회피 캔슬, 석궁 데미지 상향(한손 20~26, 양손 36~46), 활 속도 50·화살 중력 10 |
+| 2026-11-27 | 발사·명중 소리: `AmmoData.fireSound·impactSound` → `ProjectileProfile.FireSound·ImpactSound`, `RangedAttacker.ShotFired`(프로필 포함)·`Impacted`, 활 당기기 시작 알림(`RangedDraw.Started`) ([Audio](Audio.md)) |

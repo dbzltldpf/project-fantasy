@@ -27,6 +27,9 @@ GameObject:
   - component: {fileID: 7022007504373310120}
   - component: {fileID: 2520733362312511176}
   - component: {fileID: 9099077257921385173}
+  - component: {fileID: 1835970750533648992}
+  - component: {fileID: 4478548985444571486}
+  - component: {fileID: 8075277396752897492}
   m_Layer: 8
   m_Name: Warrior_Boss
   m_TagString: Untagged
@@ -360,6 +363,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Combat.ProjectileStickBones
   skinnedMesh: {fileID: 654467629694292819}
+--- !u!114 &1835970750533648992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc8080a0934430648a6cb10939510f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.HealthSoundEmitter
+  soundPlayer: {fileID: 0}
+  hitSound: {fileID: 11400000, guid: a3f6ff9c23400cb45a87e3834bebb23d, type: 2}
+  heavyHitSound: {fileID: 11400000, guid: 7c1bd58d706d18e4c9502598bcf14dc7, type: 2}
+  blockSound: {fileID: 11400000, guid: 453b6cd40799ac24abcba80de9359c9f, type: 2}
+  guardBreakSound: {fileID: 11400000, guid: c7fd7b843d924474bafbb81608d75a32, type: 2}
+  deathSound: {fileID: 11400000, guid: 9cb632ea31f604540aafd336847fbb05, type: 2}
+--- !u!114 &4478548985444571486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55ac674b62d6cfc4e8f96925ada3a8a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.AttackSoundEmitter
+  soundPlayer: {fileID: 0}
+--- !u!114 &8075277396752897492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4170531701318803243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d4ac91d5a09bb45a8c1fc59a89ff47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectFantasy.Audio.PartBreakSoundEmitter
+  soundPlayer: {fileID: 0}
+  breakSound: {fileID: 11400000, guid: 43f33d5972d5495419e1159657d383e6, type: 2}
 --- !u!1001 &5915890007787152090
 PrefabInstance:
   m_ObjectHideFlags: 0

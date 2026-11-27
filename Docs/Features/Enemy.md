@@ -236,3 +236,4 @@ Dead: 콜라이더·에이전트 끔, 사망 모션 → corpseDuration 후 비�
 | 2026-11-19 | 스포너 리스폰 여부(`respawn`), Warrior 반격 확률 0·보스 0.3 (난이도 완화) |
 | 2026-11-23 | 튜닝: 적 4종·보스 드랍 표 비움(드랍 없음), Warrior 방어력 20 → 10 |
 | 2026-11-18 | 무기 제한: `EnemyData.allowedWeapons`·`AllowsWeapon`, 허용되지 않은 무기 공격 무효(`IWeaponWielder`), 적 4종 무기 지정 |
+| 2026-11-27 | 튜닝: Mage 공격 쿨타임 1~1.5 → 2.5~3.5 (플레이어가 지팡이를 쓸 틈), 적 범위 마법 쿨타임 5. 적 프리팹에 소리 Emitter ([Audio](Audio.md)) |

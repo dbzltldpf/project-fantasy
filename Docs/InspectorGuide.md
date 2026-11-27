@@ -153,6 +153,7 @@
 | Lifetime | 최대 비행 시간 | 5 |
 | Stick Duration | 박힌 뒤 사라지는 시간 | 10 |
 | Impact Effect Prefab | 명중 이펙트 | Looping 끈 Prefab Variant |
+| Fire Sound / Impact Sound | 발사음 / 명중음 | 활 `Fire_Bow`·석궁 `Fire_CrossBow` / `Arrow_Impact` ([Audio](Features/Audio.md)) |
 
 ## 마법 (SpellData)
 | 에셋 | 필드 | 하는 일 | 넣을 값 |
@@ -378,6 +379,8 @@
 | HitStop | Animator | 멈출 애니메이터 | 자동 |
 | EquipmentVisual | Right / Left Hand Slot | 손 소켓 | 자동 (`handslot.r/l`) |
 | PlayerAmmoVisual · PlayerRangedWeapon · PlayerMagicCaster · PlayerMasteryRewarder · QuickSlots | — | 설정 없음 | — |
+| HealthSoundEmitter | Hit / Heavy Hit / Block / Guard Break / Death Sound | 맞을 때 소리 | `Hit_Player` / 비움 / `Block` / `GuardBreak` / 비움 |
+| AttackSoundEmitter · PlayerSoundEmitter | Sound Player / Draw·Reload·Equip·Pick Up Sound | 공격 소리(데이터에서) / 플레이어 행동 소리 | 비움(자동) / `Draw_Bow`·`Reload_CrossBow`·`Equip`·`PickUp` |
 
 ## 적 프리팹 컴포넌트
 레이어는 **Enemy**. 루트에 `EnemyController`를 붙이면 Navigator(NavMeshAgent)·Animator·Perception·Loadout(EquipmentVisual·MeleeAttacker·ShieldGuard)·Health·HitStop·KillReward가 자동 추가된다.
@@ -397,6 +400,8 @@
 | 자식: Skeleton 모델 | Animator Controller | 상태 재생 | `Create Enemy Animator` 결과 |
 | 자식: EnemyHealthBar | Hide Delay | 전투 종료 후 체력바 유지 | 4 |
 | ProjectileStickBones (직접 추가) | Skinned Mesh | 화살이 박힐 뼈 탐색 (사망 모션을 따라감) | 비움 (자식 자동) |
+| HealthSoundEmitter · AttackSoundEmitter (직접 추가) | Hit / Heavy Hit / Block / Guard Break / Death Sound | 맞을 때·공격 소리 | `Hit_Skeleton` / `Hit_Heavy` / `Block` / `GuardBreak` / `Death_Skeleton` ([Audio](Features/Audio.md)) |
+| PartBreakSoundEmitter (보스, 직접 추가) | Break Sound | 부위 파괴음 | `PartBreak` |
 | BreakablePartManager (보스, 직접 추가) | Breakable Parts | 부위별 이름·히트박스·렌더러·내구도 비율·배율 | 히트박스 = 뼈 아래 콜라이더, 렌더러 = 부위 메시, 비율 합계는 1보다 충분히 낮게 ([Part Break](Features/PartBreak.md)) |
 | PartBreakGroggy (보스, 직접 추가) | Groggy Duration | 부위 파괴 시 그로기 시간 | 3 |
 | BrokenPartOutline (보스, 직접 추가) | Outline Material / Flash Duration / Flash · Idle Color | 파괴 부위 아웃라인 번쩍임 → 약하게 유지 | `PartBreakOutline` / 짧게 / 밝은 HDR 빨강 · 어두운 빨강 |
@@ -453,3 +458,7 @@
 | GateField / OpenVisual | Cube (콜라이더 제거) | Material | `Gate`(반투명) |
 | GateField / TriggerGate | LocationTrigger + BoxCollider | **Location Data** / **Target Layers** / Trigger Once / Is Trigger / Layer | `LocationGate` / `Player` / 끔 / 켬 / `Ignore Raycast`, 벽 바로 뒤 |
 | PlayerSpawn | Transform | 위치 / 회전 | 바닥에서 0.1 위 / Z축이 맵 안쪽 |
+| SoundPlayer | SoundPlayer | Pool Size / **Output** / Min · Max Distance | 16 / `MainMixer` SFX / 2 · 30 ([Audio](Features/Audio.md)) |
+| Music | AudioSource | Clip / **Output** / Play On Awake · Loop / Spatial Blend / Priority | `CHIPTUNE_Loop_The_Bards_Tale` / `MainMixer` BGM / 켬 · 켬 / 0 / 0 |
+| GateField | GateSoundEmitter | Open / Close Sound | `Gate_Open` / `Gate_Close` |
+| Canvas / 인벤토리 창 | WindowSoundEmitter | Open / Close Sound | `UI_Open` / `UI_Close` |

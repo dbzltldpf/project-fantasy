@@ -1,3 +1,4 @@
+using ProjectFantasy.Audio;
 using ProjectFantasy.Combat;
 using UnityEngine;
 
@@ -24,10 +25,9 @@ namespace ProjectFantasy.Magic
         [SerializeField] private GameObject impactEffectPrefab;
 
         public override bool RequiresTargeting => false;
-
         public ProjectileProfile ToProfile()
         {
-            return new ProjectileProfile(projectilePrefab, speed, NoGravity, lifetime, SticksOnHit, NoStickDuration, impactEffectPrefab);
+            return new ProjectileProfile(projectilePrefab, speed, NoGravity, lifetime, SticksOnHit, NoStickDuration, impactEffectPrefab, null, ImpactSound);
         }
     }
 }

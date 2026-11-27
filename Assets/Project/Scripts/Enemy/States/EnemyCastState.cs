@@ -41,6 +41,7 @@ namespace ProjectFantasy.Enemy
 
             Navigator.Stop();
             EnemyAnimator.PlayState(spell.CastStateHash, true);
+            Controller.SpellCaster?.NotifyCastStarted(spell);
         }
 
         public override void Tick(float deltaTime)
